@@ -14,15 +14,9 @@ const deleteIcon = require("assets/icons/home/delete.png");
 const Alarm = ({}) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <Header
-        left={backIcon}
-        title={"알림"}
-        right={deleteIcon}
-        leftClick={"Home"}
-        rightClick={"Alarm"}
-      />
+      <Header left={backIcon} title={"댓글 수정"} right={"확인"} />
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Alarm</Text>
+        <Text>댓글 수정</Text>
       </View>
     </SafeAreaView>
   );
