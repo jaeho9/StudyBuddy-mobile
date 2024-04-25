@@ -27,7 +27,11 @@ const header = ({ left, title, right, leftClick, rightClick }) => {
       }}
     >
       <TouchableOpacity onPress={() => navigation.navigate(leftClick)}>
-        <Image source={left} style={{ width: 24, height: 24 }} />
+        {left ? (
+          <Image source={left} style={{ width: 24, height: 24 }} />
+        ) : (
+          <View style={{ width: 24, height: 24 }}></View>
+        )}
       </TouchableOpacity>
       <TouchableOpacity>
         {typeof title === "string" ? (
@@ -46,7 +50,11 @@ const header = ({ left, title, right, leftClick, rightClick }) => {
         )}
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate(rightClick)}>
-        <Image source={right} style={{ width: 24, height: 24 }} />
+        {right ? (
+          <Image source={right} style={{ width: 24, height: 24 }} />
+        ) : (
+          <View style={{ width: 24, height: 24 }}></View>
+        )}
       </TouchableOpacity>
     </View>
   );
