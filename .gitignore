@@ -59,3 +59,4 @@ buck-out/
 /ios/Pods/
 
 vendor/bundle
+vendor/bundle/ruby/3.3.0
