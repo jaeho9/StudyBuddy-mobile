@@ -1,0 +1,16 @@
+current directory: /Users/hajihye/Desktop/Programmers/-1-Project4-Final-team5/studybuddy/vendor/bundle/ruby/3.3.0/gems/json-2.7.2/ext/json
+/Users/hajihye/.rbenv/versions/3.3.0/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/hajihye/Desktop/Programmers/-1-Project4-Final-team5/studybuddy/vendor/bundle/ruby/3.3.0/gems/json-2.7.2/ext/json
+make DESTDIR\= sitearchdir\=./.gem.20240425-2367-5rodzh sitelibdir\=./.gem.20240425-2367-5rodzh clean
+
+current directory: /Users/hajihye/Desktop/Programmers/-1-Project4-Final-team5/studybuddy/vendor/bundle/ruby/3.3.0/gems/json-2.7.2/ext/json
+make DESTDIR\= sitearchdir\=./.gem.20240425-2367-5rodzh sitelibdir\=./.gem.20240425-2367-5rodzh
+make: Nothing to be done for `all'.
+
+current directory: /Users/hajihye/Desktop/Programmers/-1-Project4-Final-team5/studybuddy/vendor/bundle/ruby/3.3.0/gems/json-2.7.2/ext/json
+make DESTDIR\= sitearchdir\=./.gem.20240425-2367-5rodzh sitelibdir\=./.gem.20240425-2367-5rodzh install
+
+current directory: /Users/hajihye/Desktop/Programmers/-1-Project4-Final-team5/studybuddy/vendor/bundle/ruby/3.3.0/gems/json-2.7.2/ext/json
+make DESTDIR\= sitearchdir\=./.gem.20240425-2367-5rodzh sitelibdir\=./.gem.20240425-2367-5rodzh clean
