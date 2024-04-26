@@ -8,6 +8,7 @@ import Community from "./pages/Community";
 import Archives from "./pages/Archives";
 import Mypage from "./pages/Mypage";
 import Alarm from "pages/Alarm";
+import Add from "pages/Add";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -39,6 +40,7 @@ const Router = () => {
     >
       <Stack.Screen name="MainTab" component={MainTab} />
       <Stack.Screen name="Alarm" component={Alarm} />
+      <Stack.Screen name="Add" component={Add} />
     </Stack.Navigator>
   );
 };
