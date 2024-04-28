@@ -1,13 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Image, KeyboardAvoidingView, SafeAreaView, Text, TextInput, TouchableOpacity, View, Dimensions, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View, Dimensions } from "react-native";
+// Keyboard Aware Scroll View
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+// Import Pages
 import Header from '../components/header';
 import DownModal from '../components/DownModal';
 import MidModal from "../components/MidModal";
-import Calendar from "pages/Calendar";
 import CalendarModal from "components/CalendarModal";
 
+// Images
 const clear = require('../assets/icons/add/clear.png');
 const feedAdd = require('../assets/icons/add/feed_add.png');
 const arrowDown = require('../assets/icons/add/arrow_down.png');
@@ -25,31 +27,38 @@ const attachFile = require('../assets/icons/add/attach_file.png');
 const { width, height } = Dimensions.get("window");
 
 const Add = ({ navigation, route }) => {
-    const [text, setText] = useState(''); // 공부 방법
-    const [communityVisible, setCommunityVisible] = useState(false); // 커뮤니티
+    // 커뮤니티 선택
+    const [communityVisible, setCommunityVisible] = useState(false);
     const [selectedCommunity, setSelectedCommunity] = useState(null);
-    const [resultVisible, setResultVisible] = useState(false);  // 결과
-    const [selectedResult, setSelectedResult] = useState(null);
-    const { book } = route.params ? route.params : {};
-    const { date } = route.params ? route.params : {};
-    const [dateVisible, setDateVisible] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(null);
-
-
-    const onChangeText = (inputText) => {
-        setText(inputText);
-    };
 
     const onSelectCommunity = (community) => {
         setSelectedCommunity(community);
     };
 
+    // 준비 기간
+    const [dateVisible, setDateVisible] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
+
+    const onSelectDate = (startDate, endDate) => {
+        setSelectedDate({ startDate, endDate });
+    };
+
+    // 교재
+    const { book } = route.params ? route.params : {};
+
+    // 결과
+    const [resultVisible, setResultVisible] = useState(false);
+    const [selectedResult, setSelectedResult] = useState(null);
+
     const onSelectResult = (result) => {
         setSelectedResult(result);
     };
 
-    const onSelectDate = (startDate, endDate) => {
-        setSelectedDate({ startDate, endDate });
+    // 공부 방법
+    const [text, setText] = useState('');
+
+    const onChangeText = (inputText) => {
+        setText(inputText);
     };
 
     return (
@@ -61,75 +70,73 @@ const Add = ({ navigation, route }) => {
                 right={feedAdd}
             />
             <KeyboardAwareScrollView style={{ marginHorizontal: 20, marginVertical: 16 }}>
-                <View>
-                    <TouchableOpacity
-                        onPress={() => setCommunityVisible(!communityVisible)}
-                        style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
-                    >
-                        {selectedCommunity ? (
-                            <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedCommunity.name}</Text>
-                        ) : (
-                            <Text style={{ fontSize: 16, color: '#BDBDBD' }}>커뮤니티 선택</Text>
-                        )}
-                        <Image source={arrowDown} style={{ width: 24, height: 24 }} />
-                    </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => setCommunityVisible(!communityVisible)}
+                    style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
+                >
+                    {selectedCommunity ? (
+                        <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedCommunity.name}</Text>
+                    ) : (
+                        <Text style={{ fontSize: 16, color: '#BDBDBD' }}>커뮤니티 선택</Text>
+                    )}
+                    <Image source={arrowDown} style={{ width: 24, height: 24 }} />
+                </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => setDateVisible(!dateVisible)}
-                        style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
-                    >
-                        {selectedDate ? (
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image source={calendarOn} style={{ width: 24, height: 24, marginRight: 8 }} />
-                                <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedDate.startDate} ~ {selectedDate.endDate}</Text>
-                            </View>
-                        ) : (
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image source={calendarOff} style={{ width: 24, height: 24, marginRight: 8 }} />
-                                <Text style={{ fontSize: 16, color: '#BDBDBD' }}>준비 기간</Text>
-                            </View>
-                        )}
+                <TouchableOpacity
+                    onPress={() => setDateVisible(!dateVisible)}
+                    style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
+                >
+                    {selectedDate ? (
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={calendarOn} style={{ width: 24, height: 24, marginRight: 8 }} />
+                            <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedDate.startDate} ~ {selectedDate.endDate}</Text>
+                        </View>
+                    ) : (
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={calendarOff} style={{ width: 24, height: 24, marginRight: 8 }} />
+                            <Text style={{ fontSize: 16, color: '#BDBDBD' }}>준비 기간</Text>
+                        </View>
+                    )}
 
-                        <Image source={arrowRight} style={{ width: 24, height: 24 }} />
-                    </TouchableOpacity>
+                    <Image source={arrowRight} style={{ width: 24, height: 24 }} />
+                </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('Book')}
-                        style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
-                    >
-                        {book ? (
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image source={storiesOn} style={{ width: 24, height: 24, marginRight: 8 }} />
-                                <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{book.name}</Text>
-                            </View>
-                        ) : (
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image source={storiesOff} style={{ width: 24, height: 24, marginRight: 8 }} />
-                                <Text style={{ fontSize: 16, color: '#BDBDBD' }}>교재</Text>
-                            </View>
-                        )}
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Book')}
+                    style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
+                >
+                    {book ? (
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={storiesOn} style={{ width: 24, height: 24, marginRight: 8 }} />
+                            <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{book.name}</Text>
+                        </View>
+                    ) : (
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={storiesOff} style={{ width: 24, height: 24, marginRight: 8 }} />
+                            <Text style={{ fontSize: 16, color: '#BDBDBD' }}>교재</Text>
+                        </View>
+                    )}
 
-                        <Image source={arrowRight} style={{ width: 24, height: 24 }} />
-                    </TouchableOpacity>
+                    <Image source={arrowRight} style={{ width: 24, height: 24 }} />
+                </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => setResultVisible(!resultVisible)}
-                        style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
-                    >
-                        {selectedResult ? (
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image source={pasteOn} style={{ width: 24, height: 24, marginRight: 8 }} />
-                                <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedResult}</Text>
-                            </View>
-                        ) : (
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image source={pasteOff} style={{ width: 24, height: 24, marginRight: 8 }} />
-                                <Text style={{ fontSize: 16, color: '#BDBDBD' }}>결과</Text>
-                            </View>
-                        )}
-                        <Image source={arrowRight} style={{ width: 24, height: 24 }} />
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                    onPress={() => setResultVisible(!resultVisible)}
+                    style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
+                >
+                    {selectedResult ? (
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={pasteOn} style={{ width: 24, height: 24, marginRight: 8 }} />
+                            <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedResult}</Text>
+                        </View>
+                    ) : (
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={pasteOff} style={{ width: 24, height: 24, marginRight: 8 }} />
+                            <Text style={{ fontSize: 16, color: '#BDBDBD' }}>결과</Text>
+                        </View>
+                    )}
+                    <Image source={arrowRight} style={{ width: 24, height: 24 }} />
+                </TouchableOpacity>
 
                 <View style={{ marginTop: 4 }}>
                     {text ? (
@@ -163,11 +170,8 @@ const Add = ({ navigation, route }) => {
                 </View>
 
                 <DownModal isVisible={communityVisible} setIsVisible={setCommunityVisible} onSelectCommunity={onSelectCommunity} />
-
                 <MidModal isVisible={resultVisible} setIsVisible={setResultVisible} onSelectResult={onSelectResult} />
-
                 <CalendarModal isVisible={dateVisible} setIsVisible={setDateVisible} onSelectDate={onSelectDate} />
-
 
             </KeyboardAwareScrollView>
         </SafeAreaView>

@@ -1,13 +1,16 @@
-import React, { useCallback, useState } from "react";
-import { View, Keyboard, Dimensions, Text, TextInput, KeyboardAvoidingView, Image, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState } from "react";
+import { View, Keyboard, Dimensions, Text, TextInput, Image, TouchableOpacity, FlatList } from 'react-native';
+// Modal
 import Modal from 'react-native-modal';
 
+//Images
 const search = require('../assets/icons/add/search.png');
 const selectOn = require('../assets/icons/add/select_on.png');
 const selectOff = require('../assets/icons/add/select_off.png');
 
 const { width, height } = Dimensions.get("window");
 
+// Dummy_data
 const dummy_data = [
     {
         id: 1,
@@ -28,9 +31,7 @@ const dummy_data = [
 ]
 
 const CustomModal = ({ isVisible, setIsVisible, onSelectCommunity }) => {
-
     const [keyword, setKeyword] = useState('');
-    const [community, setCommunity] = useState();
     const [selectIndex, setSelectIndex] = useState();
 
     const ModalItem = ({ item, index }) => {
@@ -40,10 +41,9 @@ const CustomModal = ({ isVisible, setIsVisible, onSelectCommunity }) => {
                     <Text style={{ fontSize: 16, fontWeight: 700, color: '#717171' }}>{item.name}</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            setCommunity(item)
+                            onSelectCommunity(item)
                             setSelectIndex(index)
                             setIsVisible(false)
-                            onSelectCommunity(item)
                         }}>
                         {
                             selectIndex === index && (
@@ -64,7 +64,7 @@ const CustomModal = ({ isVisible, setIsVisible, onSelectCommunity }) => {
             animationIn={'slideInUp'}
             animationInTiming={300}
             animationOut={'slideOutDown'}
-            animationOutTiming={300}
+            animationOutTiming={500}
             backdropColor='#000'
             backdropOpacity={0.4}
             style={{ margin: 0, alignItems: 'center', justifyContent: 'flex-end' }}

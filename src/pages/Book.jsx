@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, FlatList, Dimensions } from "react-native";
-
+import { SafeAreaView, View, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, FlatList, Dimensions } from "react-native";
+// Header
 import Header from '../components/header';
 
+// Imgaes
 const arrowLeft = require('../assets/icons/add/arrow_left.png');
 const search = require('../assets/icons/add/search.png');
 const select = require('../assets/icons/add/select.png');
 
 const { width, height } = Dimensions.get("window");
 
+// Dummy_data
 const dummy_data = [
     {
         id: 1,
@@ -37,7 +39,6 @@ const Book = ({ navigation }) => {
     const [selectBook, setSelectBook] = useState();
     const [selectIndex, setSelectIndex] = useState();
 
-
     const renderItem = ({ item, index }) => {
         return (
             <TouchableOpacity
@@ -52,7 +53,6 @@ const Book = ({ navigation }) => {
                         <View style={{ alignItems: 'center' }}>
                             <View style={{ position: 'absolute', zIndex: 2, width: (width / 3) - 10, height: width / 3, backgroundColor: '#D9D9D9', opacity: 0.8 }} />
                         </View>
-
                     )
                 }
                 <Image source={item.img} style={{ width: width / 3, height: width / 3 }} resizeMode="contain" />
@@ -108,7 +108,6 @@ const Book = ({ navigation }) => {
                     </View>
                 </View>
             </TouchableWithoutFeedback>
-
         </SafeAreaView>
     )
 }

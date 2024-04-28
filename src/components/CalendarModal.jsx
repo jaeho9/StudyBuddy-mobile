@@ -1,17 +1,13 @@
-import React, { useCallback, useState } from "react";
-import { View, Keyboard, Dimensions, Text, TextInput, KeyboardAvoidingView, Image, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState } from "react";
+import { View, Dimensions, Text, TouchableOpacity } from 'react-native';
+// Modal
 import Modal from 'react-native-modal';
+// Calendar
 import { Calendar } from 'react-native-calendars';
-
-const search = require('../assets/icons/add/search.png');
-const selectOn = require('../assets/icons/add/select_on.png');
-const selectOff = require('../assets/icons/add/select_off.png');
 
 const { width, height } = Dimensions.get("window");
 
-const CalendarModal = ({ isVisible, setIsVisible, onSelectDate, selectedResult }) => {
-
-    const date = [startDate, endDate];
+const CalendarModal = ({ isVisible, setIsVisible, onSelectDate }) => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
@@ -100,9 +96,7 @@ const CalendarModal = ({ isVisible, setIsVisible, onSelectDate, selectedResult }
                         textDisabledColor: '#000',
                         arrowColor: '#FF7474'
                     }}
-                    // 이전 달, 다음 달 날짜 숨기기
                     hideExtraDays={true}
-                    // 달 포맷 지정
                     monthFormat={'yyyy년 M월'}
                 />
             </View>

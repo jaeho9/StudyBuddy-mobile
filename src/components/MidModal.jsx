@@ -1,15 +1,11 @@
-import React, { useCallback, useState } from "react";
-import { View, Keyboard, Dimensions, Text, TextInput, KeyboardAvoidingView, Image, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState } from "react";
+import { View, Dimensions, Text, TouchableOpacity } from 'react-native';
+// Modal
 import Modal from 'react-native-modal';
-
-const search = require('../assets/icons/add/search.png');
-const selectOn = require('../assets/icons/add/select_on.png');
-const selectOff = require('../assets/icons/add/select_off.png');
 
 const { width, height } = Dimensions.get("window");
 
 const MidModal = ({ isVisible, setIsVisible, onSelectResult, selectedResult }) => {
-
     const [result, setResult] = useState(selectedResult);
 
     const handleSelectResult = (selected) => {
@@ -69,7 +65,6 @@ const MidModal = ({ isVisible, setIsVisible, onSelectResult, selectedResult }) =
                         <Text style={{ fontSize: 18, fontWeight: 700, color: result === "탈락" ? '#FF7474' : '#8A8A8A' }}>탈락</Text>
                     </TouchableOpacity>
                 </View>
-
             </View>
         </Modal>
     )
