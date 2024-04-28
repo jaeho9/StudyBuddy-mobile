@@ -5,6 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Header from '../components/header';
 import DownModal from '../components/DownModal';
 import MidModal from "../components/MidModal";
+import Calendar from "pages/Calendar";
 
 const clear = require('../assets/icons/add/clear.png');
 const feedAdd = require('../assets/icons/add/feed_add.png');
@@ -22,14 +23,13 @@ const attachFile = require('../assets/icons/add/attach_file.png');
 
 const { width, height } = Dimensions.get("window");
 
-const Add = ({ navigation }) => {
+const Add = ({ navigation, route }) => {
     const [text, setText] = useState(''); // 공부 방법
     const [communityVisible, setCommunityVisible] = useState(false); // 커뮤니티
     const [selectedCommunity, setSelectedCommunity] = useState(null);
     const [resultVisible, setResultVisible] = useState(false);  // 결과
     const [selectedResult, setSelectedResult] = useState(null);
-
-
+    const { book } = route.params ? route.params : {};
 
     const onChangeText = (inputText) => {
         setText(inputText);
@@ -65,7 +65,10 @@ const Add = ({ navigation }) => {
                         <Image source={arrowDown} style={{ width: 24, height: 24 }} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('Calendar')}
+                        style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
+                    >
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={calendarOff} style={{ width: 24, height: 24, marginRight: 8 }} />
                             <Text style={{ fontSize: 16, color: '#BDBDBD' }}>준비 기간</Text>
@@ -74,12 +77,21 @@ const Add = ({ navigation }) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity
+                        onPress={() => navigation.navigate('Book')}
                         style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
                     >
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Image source={storiesOff} style={{ width: 24, height: 24, marginRight: 8 }} />
-                            <Text style={{ fontSize: 16, color: '#BDBDBD' }}>교재</Text>
-                        </View>
+                        {book ? (
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Image source={storiesOn} style={{ width: 24, height: 24, marginRight: 8 }} />
+                                <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{book.name}</Text>
+                            </View>
+                        ) : (
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Image source={storiesOff} style={{ width: 24, height: 24, marginRight: 8 }} />
+                                <Text style={{ fontSize: 16, color: '#BDBDBD' }}>교재</Text>
+                            </View>
+                        )}
+
                         <Image source={arrowRight} style={{ width: 24, height: 24 }} />
                     </TouchableOpacity>
 

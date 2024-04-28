@@ -49,9 +49,9 @@ const header = ({ left, title, right, leftClick, rightClick }) => {
           <Image source={title} style={{ width: 40, height: 40 }} />
         )}
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate(rightClick)}>
+      <TouchableOpacity onPress={() => navigation.navigate(rightClick[0], rightClick[1])}>
         {right ? (
-          <Image source={right} style={{ width: 24, height: 24 }} />
+          <Image source={right} style={{ width: 24, height: 24 }} resizeMode="contain" />
         ) : (
           <View style={{ width: 24, height: 24 }}></View>
         )}

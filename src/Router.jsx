@@ -9,6 +9,8 @@ import Archives from "./pages/Archives";
 import Mypage from "./pages/Mypage";
 import Alarm from "pages/Alarm";
 import Add from "pages/Add";
+import Calendar from "pages/Calendar";
+import Book from "pages/Book";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -41,6 +43,8 @@ const Router = () => {
       <Stack.Screen name="MainTab" component={MainTab} />
       <Stack.Screen name="Alarm" component={Alarm} />
       <Stack.Screen name="Add" component={Add} />
+      <Stack.Screen name="Calendar" component={Calendar} />
+      <Stack.Screen name="Book" component={Book} />
     </Stack.Navigator>
   );
 };
