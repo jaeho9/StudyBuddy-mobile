@@ -6,6 +6,7 @@ import Header from '../components/header';
 import DownModal from '../components/DownModal';
 import MidModal from "../components/MidModal";
 import Calendar from "pages/Calendar";
+import CalendarModal from "components/CalendarModal";
 
 const clear = require('../assets/icons/add/clear.png');
 const feedAdd = require('../assets/icons/add/feed_add.png');
@@ -30,6 +31,10 @@ const Add = ({ navigation, route }) => {
     const [resultVisible, setResultVisible] = useState(false);  // 결과
     const [selectedResult, setSelectedResult] = useState(null);
     const { book } = route.params ? route.params : {};
+    const { date } = route.params ? route.params : {};
+    const [dateVisible, setDateVisible] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
+
 
     const onChangeText = (inputText) => {
         setText(inputText);
@@ -41,6 +46,10 @@ const Add = ({ navigation, route }) => {
 
     const onSelectResult = (result) => {
         setSelectedResult(result);
+    };
+
+    const onSelectDate = (startDate, endDate) => {
+        setSelectedDate({ startDate, endDate });
     };
 
     return (
@@ -66,13 +75,21 @@ const Add = ({ navigation, route }) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('Calendar')}
+                        onPress={() => setDateVisible(!dateVisible)}
                         style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
                     >
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Image source={calendarOff} style={{ width: 24, height: 24, marginRight: 8 }} />
-                            <Text style={{ fontSize: 16, color: '#BDBDBD' }}>준비 기간</Text>
-                        </View>
+                        {selectedDate ? (
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Image source={calendarOn} style={{ width: 24, height: 24, marginRight: 8 }} />
+                                <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedDate.startDate} ~ {selectedDate.endDate}</Text>
+                            </View>
+                        ) : (
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Image source={calendarOff} style={{ width: 24, height: 24, marginRight: 8 }} />
+                                <Text style={{ fontSize: 16, color: '#BDBDBD' }}>준비 기간</Text>
+                            </View>
+                        )}
+
                         <Image source={arrowRight} style={{ width: 24, height: 24 }} />
                     </TouchableOpacity>
 
@@ -149,6 +166,7 @@ const Add = ({ navigation, route }) => {
 
                 <MidModal isVisible={resultVisible} setIsVisible={setResultVisible} onSelectResult={onSelectResult} />
 
+                <CalendarModal isVisible={dateVisible} setIsVisible={setDateVisible} onSelectDate={onSelectDate} />
 
 
             </KeyboardAwareScrollView>
