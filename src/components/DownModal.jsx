@@ -7,6 +7,7 @@ import Modal from 'react-native-modal';
 const search = require('../assets/icons/add/search.png');
 const selectOn = require('../assets/icons/add/select_on.png');
 const selectOff = require('../assets/icons/add/select_off.png');
+const cancel = require('../assets/icons/add/cancel.png');
 
 const { width, height } = Dimensions.get("window");
 
@@ -102,7 +103,7 @@ const CustomModal = ({ isVisible, setIsVisible, onSelectCommunity }) => {
                 </View>
 
                 <View style={{ flex: 1, marginTop: 16 }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 8, backgroundColor: '#F1F1F1', borderRadius: 12 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, backgroundColor: '#F1F1F1', borderRadius: 12 }}>
                         <TouchableOpacity>
                             <Image source={search} style={{ width: 24, height: 24 }} />
                         </TouchableOpacity>
@@ -123,8 +124,16 @@ const CustomModal = ({ isVisible, setIsVisible, onSelectCommunity }) => {
                                 backgroundColor: '#F1F1F1',
                                 borderRadius: 12,
                                 fontSize: 16,
+                                letterSpacing: 0.6
                             }}
                         />
+                        {keyword ? (
+                            <TouchableOpacity onPress={() => setBook('')}>
+                                <Image source={cancel} style={{ width: 24, height: 24 }} />
+                            </TouchableOpacity>
+                        ) : (
+                            <View />
+                        )}
                     </View>
                 </View>
 

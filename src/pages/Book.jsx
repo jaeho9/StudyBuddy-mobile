@@ -7,6 +7,7 @@ import Header from '../components/header';
 const arrowLeft = require('../assets/icons/add/arrow_left.png');
 const search = require('../assets/icons/add/search.png');
 const select = require('../assets/icons/add/select.png');
+const cancel = require('../assets/icons/add/cancel.png');
 
 const { width, height } = Dimensions.get("window");
 
@@ -72,7 +73,7 @@ const Book = ({ navigation }) => {
 
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={{ marginTop: 16, justifyContent: 'center' }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 8, paddingLeft: 8, backgroundColor: '#F1F1F1', borderRadius: 12 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 8, paddingHorizontal: 8, backgroundColor: '#F1F1F1', borderRadius: 12 }}>
                         <TouchableOpacity>
                             <Image source={search} style={{ width: 24, height: 24 }} />
                         </TouchableOpacity>
@@ -93,8 +94,17 @@ const Book = ({ navigation }) => {
                                 backgroundColor: '#F1F1F1',
                                 borderRadius: 12,
                                 fontSize: 16,
+                                letterSpacing: 0.6
                             }}
                         />
+                        {book ? (
+                            <TouchableOpacity onPress={() => setBook('')}>
+                                <Image source={cancel} style={{ width: 24, height: 24 }} />
+                            </TouchableOpacity>
+                        ) : (
+                            <View />
+                        )}
+
                     </View>
                     <View style={{ marginTop: 16, justifyContent: 'center', alignItems: 'center' }}>
                         <FlatList

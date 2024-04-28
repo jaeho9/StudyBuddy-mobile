@@ -163,7 +163,9 @@ const Add = ({ navigation, route }) => {
                         }}
                     />
 
-                    <TouchableOpacity style={{ height: 40, flexDirection: 'row', alignItems: 'center', marginTop: 20, padding: 8, borderRadius: 4, borderWidth: 1, borderColor: '#BDBDBD' }}>
+                    <TouchableOpacity
+                        style={{ height: 40, flexDirection: 'row', alignItems: 'center', marginTop: 20, padding: 8, borderRadius: 4, borderWidth: 1, borderColor: '#BDBDBD' }}
+                    >
                         <Image source={attachFile} style={{ width: 24, height: 24 }} />
                         <Text style={{ fontSize: 16, color: '#BDBDBD' }}>자료</Text>
                     </TouchableOpacity>
