@@ -8,6 +8,7 @@ import Header from '../components/header';
 import DownModal from '../components/DownModal';
 import MidModal from "../components/MidModal";
 import CalendarModal from "components/CalendarModal";
+import FileModal from "components/FileModal";
 
 // Images
 const clear = require('../assets/icons/add/clear.png');
@@ -23,6 +24,7 @@ const pasteOff = require('../assets/icons/add/paste_off.png');
 const reviewsOn = require('../assets/icons/add/reviews_on.png');
 const reviewsOff = require('../assets/icons/add/reviews_off.png');
 const attachFile = require('../assets/icons/add/attach_file.png');
+const attachFileOn = require('../assets/icons/add/attach_file_on.png');
 
 const { width, height } = Dimensions.get("window");
 
@@ -59,6 +61,14 @@ const Add = ({ navigation, route }) => {
 
     const onChangeText = (inputText) => {
         setText(inputText);
+    };
+
+    // 자료
+    const [fileVisible, setFileVisible] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const onSelectFile = (file) => {
+        setSelectedFile(file);
     };
 
     return (
@@ -164,16 +174,37 @@ const Add = ({ navigation, route }) => {
                     />
 
                     <TouchableOpacity
-                        style={{ height: 40, flexDirection: 'row', alignItems: 'center', marginTop: 20, padding: 8, borderRadius: 4, borderWidth: 1, borderColor: '#BDBDBD' }}
+                        onPress={() => setFileVisible(!fileVisible)}
+                        style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, padding: 8, borderRadius: 4, borderWidth: 1, borderColor: '#BDBDBD', flex: 1 }}
                     >
-                        <Image source={attachFile} style={{ width: 24, height: 24 }} />
-                        <Text style={{ fontSize: 16, color: '#BDBDBD' }}>자료</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
+                            {selectedFile ? (
+                                <>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Image source={attachFileOn} style={{ width: 24, height: 24 }} />
+                                        <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedFile.name}</Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        onPress={() => setSelectedFile(null)}
+                                        style={{ justifyContent: 'flex-end' }}
+                                    >
+                                        <Image source={clear} style={{ width: 24, height: 24 }} />
+                                    </TouchableOpacity>
+                                </>
+                            ) : (
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Image source={attachFile} style={{ width: 24, height: 24 }} />
+                                    <Text style={{ fontSize: 16, color: '#BDBDBD' }}>자료</Text>
+                                </View>
+                            )}
+                        </View>
                     </TouchableOpacity>
                 </View>
 
                 <DownModal isVisible={communityVisible} setIsVisible={setCommunityVisible} onSelectCommunity={onSelectCommunity} />
                 <MidModal isVisible={resultVisible} setIsVisible={setResultVisible} onSelectResult={onSelectResult} />
                 <CalendarModal isVisible={dateVisible} setIsVisible={setDateVisible} onSelectDate={onSelectDate} />
+                <FileModal isVisible={fileVisible} setIsVisible={setFileVisible} onSelectFile={onSelectFile} />
 
             </KeyboardAwareScrollView>
         </SafeAreaView>
