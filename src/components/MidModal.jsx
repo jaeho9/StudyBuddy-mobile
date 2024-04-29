@@ -40,7 +40,6 @@ const MidModal = ({ isVisible, setIsVisible, onSelectResult, selectedResult }) =
             <View
                 style={{
                     width: width - 40,
-                    height: height / 6,
                     paddingTop: 20,
                     paddingHorizontal: 16,
                     backgroundColor: '#FFF',
@@ -57,7 +56,7 @@ const MidModal = ({ isVisible, setIsVisible, onSelectResult, selectedResult }) =
                     </TouchableOpacity>
                 </View>
 
-                <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 24, gap: 20 }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 24, gap: 20 }}>
                     <TouchableOpacity onPress={() => handleSelectResult("합격")}>
                         <Text style={{ fontSize: 18, fontWeight: 700, color: result === "합격" ? '#FF7474' : '#8A8A8A' }}>합격</Text>
                     </TouchableOpacity>
