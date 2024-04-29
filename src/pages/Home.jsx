@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  Dimensions
 } from "react-native";
 import Header from "components/header";
 
@@ -13,7 +14,9 @@ const studybuddyIcon = require("assets/icons/home/studybuddy.png");
 const alarmOffIcon = require("assets/icons/home/alarm_off.png");
 const add = require('../assets/icons/home/add.png');
 
-const Home = ({ navigation }) => {
+const { width, height } = Dimensions.get("window");
+
+const Home = ({ navigation, route }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <Header
@@ -22,12 +25,9 @@ const Home = ({ navigation }) => {
         right={alarmOffIcon}
         rightClick={"Alarm"}
       />
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <TouchableOpacity>
-          <Text>Home</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Add')}>
-            <Image source={add} style={{ width: 62, height: 62 }} />
-          </TouchableOpacity>
+      <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end', marginBottom: 50, marginRight: 12 }}>
+        <TouchableOpacity onPress={() => navigation.navigate('Add')}>
+          <Image source={add} style={{ width: 68, height: 68 }} />
         </TouchableOpacity>
       </View>
     </SafeAreaView>

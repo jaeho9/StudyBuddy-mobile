@@ -32,7 +32,6 @@ const Add = ({ navigation, route }) => {
     // 커뮤니티 선택
     const [communityVisible, setCommunityVisible] = useState(false);
     const [selectedCommunity, setSelectedCommunity] = useState(null);
-
     const onSelectCommunity = (community) => {
         setSelectedCommunity(community);
     };
@@ -40,7 +39,6 @@ const Add = ({ navigation, route }) => {
     // 준비 기간
     const [dateVisible, setDateVisible] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
-
     const onSelectDate = (startDate, endDate) => {
         setSelectedDate({ startDate, endDate });
     };
@@ -51,14 +49,12 @@ const Add = ({ navigation, route }) => {
     // 결과
     const [resultVisible, setResultVisible] = useState(false);
     const [selectedResult, setSelectedResult] = useState(null);
-
     const onSelectResult = (result) => {
         setSelectedResult(result);
     };
 
     // 공부 방법
     const [text, setText] = useState('');
-
     const onChangeText = (inputText) => {
         setText(inputText);
     };
@@ -66,7 +62,6 @@ const Add = ({ navigation, route }) => {
     // 자료
     const [fileVisible, setFileVisible] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
-
     const onSelectFile = (file) => {
         setSelectedFile(file);
     };
@@ -78,6 +73,7 @@ const Add = ({ navigation, route }) => {
                 leftClick={"Home"}
                 title={"새 게시물"}
                 right={feedAdd}
+                rightClick={["Home", { selectedCommunity }]}
             />
             <KeyboardAwareScrollView style={{ marginHorizontal: 20, marginVertical: 16 }}>
                 <TouchableOpacity
