@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
-
+// Header
 import Header from "../components/header";
-
+// Images
 const backIcon = require("assets/icons/home/back.png");
 const deleteIcon = require("assets/icons/home/delete.png");
 const writeOn = require('../assets/icons/home/write_on.png');
@@ -11,6 +11,8 @@ const heartOn = require('../assets/icons/home/heart_on.png');
 const heartOff = require('../assets/icons/home/heart_off.png');
 const commentOn = require('../assets/icons/home/comment_on.png');
 const commentOff = require('../assets/icons/home/comment_off.png');
+const close = require('../assets/icons/home/close.png');
+const complete = require('../assets/icons/home/complete.png');
 
 const { width, height } = Dimensions.get("window");
 
@@ -49,13 +51,20 @@ const dummy_data = [
 ]
 
 const Alarm = () => {
-  const [alarm, setAlarm] = useState(false);
+  const [deleteMode, setDeleteMode] = useState(false);
+  // 삭제
+  const handleDeleteClick = () => {
+    setDeleteMode(true);
+  };
+  // 완료
+  const handleCompleteClick = () => {
+    setDeleteMode(false);
+  };
 
   const renderItem = ({ item, index }) => {
     return (
-
       <TouchableOpacity
-        style={{ justifyContent: 'center', paddingVertical: 16, paddingHorizontal: 24, borderBottomWidth: 1, borderBottomColor: '#DDDDDD' }}
+        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 16, paddingHorizontal: 24, borderBottomWidth: 1, borderBottomColor: '#DDDDDD' }}
       >
         {item.content === 'heart' ? (
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -83,7 +92,12 @@ const Alarm = () => {
           </View>
         )
         }
-
+        {/* 삭제모드 */}
+        {deleteMode && (
+          <TouchableOpacity>
+            <Image source={close} style={{ width: 24, height: 24 }} />
+          </TouchableOpacity>
+        )}
       </TouchableOpacity>
     )
   }
@@ -93,8 +107,9 @@ const Alarm = () => {
       <Header
         left={backIcon}
         title={"알림"}
-        right={deleteIcon}
+        right={deleteMode ? complete : deleteIcon}
         leftClick={"Home"}
+        rightClick={deleteMode ? handleCompleteClick : handleDeleteClick}
       />
       <FlatList
         data={dummy_data}
