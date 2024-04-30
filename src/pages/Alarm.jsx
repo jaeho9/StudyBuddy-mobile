@@ -1,17 +1,93 @@
-import React, { useEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  SafeAreaView,
-} from "react-native";
-import Header from "components/header";
+import React, { useState } from "react";
+import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
+
+import Header from "../components/header";
 
 const backIcon = require("assets/icons/home/back.png");
 const deleteIcon = require("assets/icons/home/delete.png");
+const writeOn = require('../assets/icons/home/write_on.png');
+const writeOff = require('../assets/icons/home/write_off.png');
+const heartOn = require('../assets/icons/home/heart_on.png');
+const heartOff = require('../assets/icons/home/heart_off.png');
+const commentOn = require('../assets/icons/home/comment_on.png');
+const commentOff = require('../assets/icons/home/comment_off.png');
 
-const Alarm = ({}) => {
+const { width, height } = Dimensions.get("window");
+
+// Dummy_data
+const dummy_data = [
+  {
+    id: 1,
+    name: '정보처리기사',
+    nickname: '김도영',
+    content: 'heart'
+  },
+  {
+    id: 2,
+    name: '정보보안기사',
+    nickname: '하지혜',
+    content: 'heart'
+  },
+  {
+    id: 3,
+    name: '정보처리기사',
+    nickname: '이재호',
+    content: 'feed'
+  },
+  {
+    id: 4,
+    name: '컴퓨터활용능력',
+    nickname: '김지형',
+    content: 'heart'
+  },
+  {
+    id: 5,
+    name: 'TOEIC',
+    nickname: '김상우',
+    content: 'feed'
+  }
+]
+
+const Alarm = () => {
+  const [alarm, setAlarm] = useState(false);
+
+  const renderItem = ({ item, index }) => {
+    return (
+
+      <TouchableOpacity
+        style={{ justifyContent: 'center', paddingVertical: 16, paddingHorizontal: 24, borderBottomWidth: 1, borderBottomColor: '#DDDDDD' }}
+      >
+        {item.content === 'heart' ? (
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image source={heartOn} style={{ width: 32, height: 32 }} />
+            <View style={{ marginLeft: 12, gap: 6 }}>
+              <Text style={{ fontSize: 14, fontWeight: 700, color: '#FF7474' }}>{item.name}</Text>
+              <Text style={{ fontSize: 14, color: '#7A7A7A' }}>{item.nickname}님이 회원님의 게시물을 좋아합니다.</Text>
+            </View>
+          </View>
+        ) : item.content === 'comment' ? (
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image source={commentOn} style={{ width: 32, height: 32 }} />
+            <View style={{ marginLeft: 12, gap: 6 }}>
+              <Text style={{ fontSize: 14, fontWeight: 700, color: '#FF7474' }}>{item.name}</Text>
+              <Text style={{ fontSize: 14, color: '#7A7A7A' }}>{item.nickname}님이 댓글을 남겼습니다.</Text>
+            </View>
+          </View>
+        ) : (
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image source={writeOn} style={{ width: 32, height: 32 }} />
+            <View style={{ marginLeft: 12, gap: 6 }}>
+              <Text style={{ fontSize: 14, fontWeight: 700, color: '#FF7474' }}>{item.name}</Text>
+              <Text style={{ fontSize: 14, color: '#7A7A7A' }}>{item.nickname}님이 새 게시물을 작성했습니다.</Text>
+            </View>
+          </View>
+        )
+        }
+
+      </TouchableOpacity>
+    )
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <Header
@@ -19,11 +95,14 @@ const Alarm = ({}) => {
         title={"알림"}
         right={deleteIcon}
         leftClick={"Home"}
-        rightClick={"Alarm"}
       />
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Alarm</Text>
-      </View>
+      <FlatList
+        data={dummy_data}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+        showsVerticalScrollIndicator={false}
+        removeClippedSubviews
+      />
     </SafeAreaView>
   );
 };

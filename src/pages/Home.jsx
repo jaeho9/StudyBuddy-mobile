@@ -1,13 +1,7 @@
 import React, { useEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  SafeAreaView,
-  Dimensions
-} from "react-native";
-import Header from "components/header";
+import { View, Image, TouchableOpacity, SafeAreaView, Dimensions } from "react-native";
+
+import Header from '../components/header';
 
 const menuIcon = require("assets/icons/home/menu.png");
 const studybuddyIcon = require("assets/icons/home/studybuddy.png");
@@ -23,7 +17,9 @@ const Home = ({ navigation, route }) => {
         left={menuIcon}
         title={"새 게시물"}
         right={alarmOffIcon}
-        rightClick={"Alarm"}
+        rightClick={() => navigation.navigate('Alarm')}
+        leftClick={"Alarm"}
+
       />
       <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end', marginBottom: 50, marginRight: 12 }}>
         <TouchableOpacity onPress={() => navigation.navigate('Add')}>

@@ -73,7 +73,7 @@ const Add = ({ navigation, route }) => {
                 leftClick={"Home"}
                 title={"새 게시물"}
                 right={feedAdd}
-                rightClick={["Home", { selectedCommunity }]}
+                rightClick={() => navigation.navigate("Home", { selectedCommunity })}
             />
             <KeyboardAwareScrollView style={{ marginHorizontal: 20, marginVertical: 16 }}>
                 {/* 커뮤니티 선택 */}

@@ -68,7 +68,7 @@ const Book = ({ navigation }) => {
                 leftClick={"Add"}
                 title={"교재 검색"}
                 right={select}
-                rightClick={['Add', { book: selectBook }]}
+                rightClick={() => navigation.navigate('Add', { book: selectBook })}
             />
 
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
