@@ -76,6 +76,7 @@ const Add = ({ navigation, route }) => {
                 rightClick={["Home", { selectedCommunity }]}
             />
             <KeyboardAwareScrollView style={{ marginHorizontal: 20, marginVertical: 16 }}>
+                {/* 커뮤니티 선택 */}
                 <TouchableOpacity
                     onPress={() => setCommunityVisible(!communityVisible)}
                     style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
@@ -88,6 +89,7 @@ const Add = ({ navigation, route }) => {
                     <Image source={arrowDown} style={{ width: 24, height: 24 }} />
                 </TouchableOpacity>
 
+                {/* 준비 기간 */}
                 <TouchableOpacity
                     onPress={() => setDateVisible(!dateVisible)}
                     style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
@@ -103,10 +105,10 @@ const Add = ({ navigation, route }) => {
                             <Text style={{ fontSize: 16, color: '#BDBDBD' }}>준비 기간</Text>
                         </View>
                     )}
-
                     <Image source={arrowRight} style={{ width: 24, height: 24 }} />
                 </TouchableOpacity>
 
+                {/* 교재 */}
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Book')}
                     style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
@@ -122,10 +124,10 @@ const Add = ({ navigation, route }) => {
                             <Text style={{ fontSize: 16, color: '#BDBDBD' }}>교재</Text>
                         </View>
                     )}
-
                     <Image source={arrowRight} style={{ width: 24, height: 24 }} />
                 </TouchableOpacity>
 
+                {/* 결과 */}
                 <TouchableOpacity
                     onPress={() => setResultVisible(!resultVisible)}
                     style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
@@ -144,6 +146,7 @@ const Add = ({ navigation, route }) => {
                     <Image source={arrowRight} style={{ width: 24, height: 24 }} />
                 </TouchableOpacity>
 
+                {/* 공부 방법 */}
                 <View style={{ marginTop: 4 }}>
                     {text ? (
                         <View style={{ height: 40, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8 }}>
@@ -169,6 +172,7 @@ const Add = ({ navigation, route }) => {
                         }}
                     />
 
+                    {/* 자료 */}
                     <TouchableOpacity
                         onPress={() => setFileVisible(!fileVisible)}
                         style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, padding: 8, borderRadius: 4, borderWidth: 1, borderColor: '#BDBDBD', flex: 1 }}
@@ -197,11 +201,11 @@ const Add = ({ navigation, route }) => {
                     </TouchableOpacity>
                 </View>
 
+                {/* Modal */}
                 <DownModal isVisible={communityVisible} setIsVisible={setCommunityVisible} onSelectCommunity={onSelectCommunity} />
                 <MidModal isVisible={resultVisible} setIsVisible={setResultVisible} onSelectResult={onSelectResult} />
                 <CalendarModal isVisible={dateVisible} setIsVisible={setDateVisible} onSelectDate={onSelectDate} />
                 <FileModal isVisible={fileVisible} setIsVisible={setFileVisible} onSelectFile={onSelectFile} />
-
             </KeyboardAwareScrollView>
         </SafeAreaView>
     )

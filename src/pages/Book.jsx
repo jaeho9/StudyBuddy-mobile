@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, FlatList, Dimensions } from "react-native";
+import { SafeAreaView, View, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, FlatList, Dimensions, Text } from "react-native";
 // Header
 import Header from '../components/header';
 
@@ -106,7 +106,7 @@ const Book = ({ navigation }) => {
                         )}
 
                     </View>
-                    <View style={{ marginTop: 16, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ marginTop: 16, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                         <FlatList
                             data={dummy_data}
                             renderItem={renderItem}
