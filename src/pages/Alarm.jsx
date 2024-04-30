@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 // Header
 import Header from "../components/header";
+import DeleteModal from "components/DeleteModal";
 // Images
 const backIcon = require("assets/icons/home/back.png");
 const deleteIcon = require("assets/icons/home/delete.png");
@@ -52,6 +53,7 @@ const dummy_data = [
 
 const Alarm = () => {
   const [deleteMode, setDeleteMode] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   // 삭제
   const handleDeleteClick = () => {
     setDeleteMode(true);
@@ -94,7 +96,7 @@ const Alarm = () => {
         }
         {/* 삭제모드 */}
         {deleteMode && (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
             <Image source={close} style={{ width: 24, height: 24 }} />
           </TouchableOpacity>
         )}
@@ -118,6 +120,8 @@ const Alarm = () => {
         showsVerticalScrollIndicator={false}
         removeClippedSubviews
       />
+
+      <DeleteModal isVisible={isVisible} setIsVisible={setIsVisible} />
     </SafeAreaView>
   );
 };
