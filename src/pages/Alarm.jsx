@@ -29,7 +29,7 @@ const dummy_data = [
     id: 2,
     name: '정보보안기사',
     nickname: '하지혜',
-    content: 'heart'
+    content: 'comment'
   },
   {
     id: 3,

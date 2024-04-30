@@ -11,6 +11,8 @@ import Alarm from "pages/Alarm";
 import Add from "pages/Add";
 import Calendar from "pages/Calendar";
 import Book from "pages/Book";
+import Search from "pages/Search";
+import SearchResult from "pages/SearchResult";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -45,6 +47,8 @@ const Router = () => {
       <Stack.Screen name="Add" component={Add} />
       <Stack.Screen name="Calendar" component={Calendar} />
       <Stack.Screen name="Book" component={Book} />
+      <Stack.Screen name="Search" component={Search} />
+      <Stack.Screen name="SearchResult" component={SearchResult} />
     </Stack.Navigator>
   );
 };
