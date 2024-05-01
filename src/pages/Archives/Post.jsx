@@ -68,7 +68,7 @@ const Post = ({ route }) => {
         setModalSelectorPopupVisible(copiedModal);
       }
     });
-  }, [isFocused]);
+  }, [isFocused, dummy_comment]);
 
   goodsMoreButtonClicked = (id) => {
     more.current[id].measure((fx, fy, width, height, px, py) => {
@@ -87,6 +87,47 @@ const Post = ({ route }) => {
     let copiedModal = [...ModalSelectorPopupVisible];
     copiedModal[id] = false;
     setModalSelectorPopupVisible(copiedModal);
+  };
+
+  const handleClickHeart = (item) => {
+    setDetailClick((i) => {
+      if (i.heartClick) {
+        return {
+          ...i,
+          heart: detailClick.heart - 1,
+          heartClick: !detailClick.heartClick,
+        };
+      } else {
+        return {
+          ...i,
+          heart: detailClick.heart + 1,
+          heartClick: !detailClick.heartClick,
+        };
+      }
+    });
+    item.heartClick = detailClick.heartClick;
+    item.heart = detailClick.heart;
+  };
+
+  const handleClickBookmark = (index) => {
+    setDetailClick(
+      dummy_communityDetail.map((v, i) => {
+        if (v.id === index) {
+          v.bookmark = !v.bookmark;
+        }
+        return v;
+      })
+    );
+  };
+
+  const onPressInput = () => {
+    dummy_comment.push({
+      id: 7,
+      profileImg: require("assets/icons/archives/profile.png"),
+      name: "KimDdong",
+      date: "2023.02.05",
+      comment: comment,
+    });
   };
 
   const renderComment = ({ item, index }) => {
@@ -155,13 +196,11 @@ const Post = ({ route }) => {
     );
   };
 
-  const handleClickBookmark = () => {
-    console.log(commentId);
-  };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f1f1f1" }}>
       <CustomHeader left={backIcon} title={"게시물"} leftClick={"Archives"} />
       <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{
           flex: 1,
           backgroundColor: "#fff",
@@ -335,7 +374,10 @@ const Post = ({ route }) => {
             padding: 8,
           }}
         />
-        <TouchableOpacity style={{ paddingRight: 8 }}>
+        <TouchableOpacity
+          style={{ paddingRight: 8 }}
+          onPress={() => onPressInput()}
+        >
           <Text>등록</Text>
         </TouchableOpacity>
       </View>

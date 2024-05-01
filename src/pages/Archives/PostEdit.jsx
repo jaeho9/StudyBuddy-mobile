@@ -48,6 +48,8 @@ const PostEdit = ({ navigation, route }) => {
   const [dateVisible, setDateVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const onSelectDate = (startDate, endDate) => {
+    item.startDate = startDate;
+    item.endDate = endDate;
     setSelectedDate({ startDate, endDate });
   };
 
@@ -58,6 +60,7 @@ const PostEdit = ({ navigation, route }) => {
   const [resultVisible, setResultVisible] = useState(false);
   const [selectedResult, setSelectedResult] = useState(null);
   const onSelectResult = (result) => {
+    item.result = result;
     setSelectedResult(result);
   };
 
@@ -83,7 +86,13 @@ const PostEdit = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <CustomHeader left={backIcon} title={"게시물 수정"} right={editIcon} />
+      <CustomHeader
+        left={backIcon}
+        title={"게시물 수정"}
+        right={editIcon}
+        rightClick={"Archives"}
+        item={item}
+      />
       <KeyboardAwareScrollView
         style={{ marginHorizontal: 20, marginVertical: 16 }}
       >

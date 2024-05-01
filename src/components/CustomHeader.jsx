@@ -76,17 +76,16 @@ const header = ({
         )}
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={
-          () =>
-            rightClick && item
-              ? navigation.navigate(rightClick, {
-                  commentId: id,
-                  item: item,
-                  commentEdit: comment,
-                })
-              : navigation.goBack()
-
-          // rightClick && navigation.navigate(rightClick)
+        onPress={() =>
+          rightClick && comment
+            ? navigation.navigate(rightClick, {
+                commentId: id,
+                item: item.item,
+                commentEdit: comment,
+              })
+            : navigation.navigate(rightClick, {
+                item: item.item,
+              })
         }
       >
         {right ? (

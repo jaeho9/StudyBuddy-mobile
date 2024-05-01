@@ -97,6 +97,24 @@ const Archives = ({ navigation }) => {
     setDeleteVisible(true);
   };
 
+  changeDate = (item) => {
+    var startDateArr = item.startDate.split("-");
+    var endDateArr = item.endDate.split("-");
+
+    var startDateCompare = new Date(
+      startDateArr[0],
+      startDateArr[1],
+      startDateArr[2]
+    );
+    var endDateCompare = new Date(endDateArr[0], endDateArr[1], endDateArr[2]);
+
+    const diffDate = endDateCompare.getTime() - startDateCompare.getTime();
+    const diffDateCalc = Math.abs(diffDate / (1000 * 60 * 60 * 24));
+
+    // console.log(diffDateCalc, "일");
+    return diffDateCalc + "일";
+  };
+
   const handleClickList = (index) => {
     setListClick(
       dummy_communityList.map((v, i) => {
@@ -150,6 +168,8 @@ const Archives = ({ navigation }) => {
     );
   };
 
+  const handelClickComment = (item) => {};
+
   const handleClickBookmark = (index) => {
     setDetailClick(
       dummy_communityDetail.map((v, i) => {
@@ -200,7 +220,7 @@ const Archives = ({ navigation }) => {
             </View>
             <View style={{ marginHorizontal: 40, gap: 7 }}>
               <Text style={{ fontSize: 12, color: "#000000" }}>
-                1. 준비 기간 : {item.period}
+                1. 준비 기간 : {changeDate(item)}
               </Text>
               <Text style={{ fontSize: 12, color: "#000000" }}>
                 2. 교재 : {item.book}
@@ -228,6 +248,7 @@ const Archives = ({ navigation }) => {
               <ModalSelectorPopup
                 x={modalX[item.id]}
                 y={modalY[item.id]}
+                id={item.id}
                 item={item}
                 navigation={navigation}
                 visible={ModalSelectorPopupVisible[item.id]}
@@ -294,7 +315,7 @@ const Archives = ({ navigation }) => {
                 gap: 3,
               }}
             >
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => handelClickComment(item)}>
                 <Image
                   source={item.commentClick ? commentOnIcon : commentOffIcon}
                   style={{ width: 18, height: 18 }}

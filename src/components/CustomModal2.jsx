@@ -34,20 +34,18 @@ export class ModalSelectorPopup extends Component {
   }
 
   onPressEdit() {
-    this.props.navigation.navigate("CommentEdit", {
-      id: this.props.id,
-      item: this.props.item,
-      comment: this.props.comment,
-    });
-    // if (this.props.item) {
-    //   this.props.navigation.navigate("PostEdit", {
-    //     item: this.props.item,
-    //   });
-    // } else {
-    //   this.props.navigation.navigate("CommentEdit", {
-    //     comment: this.props.comment,
-    //   });
-    // }
+    if (this.props.comment) {
+      this.props.navigation.navigate("CommentEdit", {
+        id: this.props.id,
+        item: this.props.item,
+        comment: this.props.comment,
+      });
+    } else {
+      this.props.navigation.navigate("PostEdit", {
+        id: this.props.id,
+        item: this.props.item,
+      });
+    }
   }
 
   render() {
