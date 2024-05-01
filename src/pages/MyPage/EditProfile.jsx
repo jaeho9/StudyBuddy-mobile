@@ -11,6 +11,7 @@ import {
 import { useNavigation } from "@react-navigation/native"; // 네비게이션 훅 가져오기
 import Header from "components/header";
 import MyPageModal from "components/MyPageModal"; // MyPageModal 컴포넌트 임포트
+import CalendarModal from "components/CalendarModal";
 
 const backIcon = require("assets/icons/home/back.png");
 const settings = require("assets/mypage/settings.png");
@@ -20,29 +21,37 @@ const MyPageProfile = require("assets/mypage/Image/MyPageProfile.png");
 
 const EditProfile = () => {
   const navigation = useNavigation();
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [isDuplicate, setDuplicate] = useState(false); // 중복 상태 추가
+  const [isMyPageModalVisible, setMyPageModalVisible] = useState(false);
+  const [isCalendarModalVisible, setCalendarModalVisible] = useState(false);
+  const [isDuplicate, setDuplicate] = useState(false);
+  const [birthdate, setBirthdate] = useState("");
 
   const handleEditProfilePress = () => {
-    setModalVisible(true);
+    setMyPageModalVisible(true);
+    setCalendarModalVisible(false); // CalendarModal이 열려있을 경우 닫기
+  };
+
+  const handleSaveDate = (selectedDate) => {
+    setBirthdate(selectedDate);
   };
 
   const handleLibrarySelect = () => {
-    setModalVisible(false);
+    setMyPageModalVisible(false);
     navigation.navigate("Library");
-    // 라이브러리에서 선택하는 동작 추가
   };
 
   const handleTakePhoto = () => {
-    setModalVisible(false);
+    setMyPageModalVisible(false);
     navigation.navigate("Camera");
-    // 사진 찍는 동작 추가
   };
 
   const handleDuplicateCheck = () => {
-    // 여기에 중복 확인 로직 추가
-    // 중복이면 setDuplicate(true), 중복이 아니면 setDuplicate(false)
-    setDuplicate(true); // 임시
+    setDuplicate(true);
+  };
+
+  const handleCalendarModalOpen = () => {
+    setCalendarModalVisible(true);
+    setMyPageModalVisible(false); // MyPageModal이 열려있을 경우 닫기
   };
 
   return (
@@ -52,6 +61,7 @@ const EditProfile = () => {
         title={"프로필 수정"}
         right={"저장"}
         leftClick={"MyPage"}
+        isDuplicate={isDuplicate}
       />
       <View style={styles.ProfileContainer}>
         <View>
@@ -65,9 +75,15 @@ const EditProfile = () => {
         </TouchableOpacity>
       </View>
 
+      <CalendarModal
+        isVisible={isCalendarModalVisible}
+        setIsVisible={setCalendarModalVisible}
+        onSelectDate={handleSaveDate}
+      />
+
       <MyPageModal
-        isVisible={isModalVisible}
-        onClose={() => setModalVisible(false)}
+        isVisible={isMyPageModalVisible}
+        onClose={() => setMyPageModalVisible(false)}
         onSelectLibrary={handleLibrarySelect}
         onTakePhoto={handleTakePhoto}
       />
@@ -87,7 +103,7 @@ const EditProfile = () => {
             <Text style={styles.ButtonText}>중복 확인</Text>
           </TouchableOpacity>
         </View>
-        {isDuplicate ? ( // 중복일 경우에만 중복 안내 메시지 보이기
+        {/* {isDuplicate ? ( // 중복일 경우에만 중복 안내 메시지 보이기
           <View style={[styles.checkContainer, { marginLeft: 45 }]}>
             <Image source={error_red} />
             <Text style={styles.checkText_red}>
@@ -102,7 +118,7 @@ const EditProfile = () => {
               사용 가능한 닉네임 입니다.
             </Text>
           </View>
-        )}
+        )} */}
         <View style={styles.EditText}>
           <Text style={[styles.Label, { marginRight: 31 }]}>자기소개 </Text>
           <TextInput
@@ -114,12 +130,14 @@ const EditProfile = () => {
         </View>
         <View style={styles.EditText}>
           <Text style={[styles.Label, { marginRight: 31 }]}>생년월일 </Text>
-          <TextInput
-            style={styles.Input}
-            placeholder="생년월일 추가"
-            placeholderTextColor="#BDBDBD"
-            keyboardType="numeric"
-          />
+          <TouchableOpacity
+            style={[styles.Input, { borderBottomColor: "#7A7A7A" }]}
+            onPress={handleCalendarModalOpen} // 캘린더 모달 열기
+          >
+            <Text style={{ color: "#BDBDBD" }}>
+              {birthdate ? birthdate : "생년월일 추가"}
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.EditText}>
           <Text style={[styles.Label, { marginRight: 57 }]}>링크 </Text>

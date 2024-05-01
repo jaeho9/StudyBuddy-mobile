@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-const header = ({ left, title, right, leftClick, rightClick }) => {
+const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -58,7 +58,8 @@ const header = ({ left, title, right, leftClick, rightClick }) => {
               style={{
                 fontSize: 16,
                 fontWeight: "bold",
-                color: "#bdbdbd",
+                color: isDuplicate ? "#FF7474" : "#bdbdbd", // isDuplicate 상태에 따라 색상 변경
+                // color: "#bdbdbd",
               }}
             >
               {right}
