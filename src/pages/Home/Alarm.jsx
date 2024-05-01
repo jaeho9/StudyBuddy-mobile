@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-import Header from "components/header";
+import Header from "components/CustomHeader";
 
 const backIcon = require("assets/icons/home/back.png");
 const deleteIcon = require("assets/icons/home/delete.png");
@@ -14,7 +14,12 @@ const deleteIcon = require("assets/icons/home/delete.png");
 const Alarm = ({}) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <Header left={backIcon} title={"댓글 수정"} right={"확인"} />
+      <Header
+        left={backIcon}
+        title={"댓글 수정"}
+        right={"확인"}
+        leftClick={"Home"}
+      />
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text>댓글 수정</Text>
       </View>

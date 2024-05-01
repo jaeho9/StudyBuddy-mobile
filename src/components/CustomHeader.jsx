@@ -7,11 +7,20 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-const header = ({ left, title, right, leftClick, rightClick }) => {
+const header = ({
+  left,
+  title,
+  right,
+  leftClick,
+  rightClick,
+  id,
+  item,
+  comment,
+}) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    console.log("rightClick", typeof rightClick);
+    console.log("id!!", id);
   }, []);
 
   return (
@@ -24,9 +33,14 @@ const header = ({ left, title, right, leftClick, rightClick }) => {
         paddingHorizontal: 18,
         borderBottomWidth: 1,
         borderBottomColor: "#dddddd",
+        backgroundColor: "#fff",
       }}
     >
-      <TouchableOpacity onPress={() => navigation.navigate(leftClick)}>
+      <TouchableOpacity
+        onPress={() =>
+          leftClick ? navigation.navigate(leftClick) : navigation.goBack()
+        }
+      >
         {left ? (
           typeof left === "string" ? (
             <Text
@@ -61,7 +75,20 @@ const header = ({ left, title, right, leftClick, rightClick }) => {
           <Image source={title} style={{ width: 40, height: 40 }} />
         )}
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate(rightClick)}>
+      <TouchableOpacity
+        onPress={
+          () =>
+            rightClick && item
+              ? navigation.navigate(rightClick, {
+                  commentId: id,
+                  item: item,
+                  commentEdit: comment,
+                })
+              : navigation.goBack()
+
+          // rightClick && navigation.navigate(rightClick)
+        }
+      >
         {right ? (
           typeof right === "string" ? (
             <Text
