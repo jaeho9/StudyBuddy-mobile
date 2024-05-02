@@ -5,12 +5,11 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
-  StyleSheet,
 } from "react-native";
-import Header from "components/header";
+import Header from "components/Tab/header";
 import { useNavigation } from "@react-navigation/native";
-import MiddleTab from "components/MiddleTab"; // MiddleTab 컴포넌트 임포트
-import { PostList } from "components/PostList";
+import MiddleTab from "components/Tab/MiddleTab"; // MiddleTab 컴포넌트 임포트
+import { MyPagePostList } from "components/List/MyPagePostList";
 
 const menuIcon = require("assets/icons/home/menu.png");
 const settings = require("assets/mypage/settings.png");
@@ -126,7 +125,7 @@ const Mypage = ({}) => {
       </View>
 
       <View style={styles.cardListContainer}>
-        <PostList />
+        <MyPagePostList />
       </View>
     </SafeAreaView>
   );

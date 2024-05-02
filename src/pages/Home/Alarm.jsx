@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-import Header from "components/header";
+import Header from "components/Tab/header";
 
 const backIcon = require("assets/icons/home/back.png");
 const deleteIcon = require("assets/icons/home/delete.png");

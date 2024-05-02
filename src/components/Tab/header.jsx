@@ -59,7 +59,6 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
                 fontSize: 16,
                 fontWeight: "bold",
                 color: isDuplicate ? "#FF7474" : "#bdbdbd", // isDuplicate 상태에 따라 색상 변경
-                // color: "#bdbdbd",
               }}
             >
               {right}

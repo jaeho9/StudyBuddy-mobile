@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import Header from "components/header";
+import Header from "components/Tab/header";
 
 const backIcon = require("assets/icons/home/back.png");
 const phone = require("assets/mypage/SettingsIcon/phone.png");

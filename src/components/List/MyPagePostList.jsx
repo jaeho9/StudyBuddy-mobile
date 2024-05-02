@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Modal,
 } from "react-native";
-import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import DeleteConfirmationModal from "components/Modal/DeleteConfirmationModal";
 
 const dummy_data = [
   {
@@ -23,9 +23,21 @@ const dummy_data = [
     favorites: "123",
     comments: "123",
   },
+  // {
+  //   id: "2", // 고유 ID 추가
+  //   category: "정보처리기사", // MyPage용? 추가 <<<<<<< 더미 데이터를 페이지에서 적용하는 방법..?
+  //   name: "김도영",
+  //   date: "2023.02.04",
+  //   length: "2주", // 오타 수정 ('legnth' -> 'length')
+  //   content1: "1. 준비 기간 : 2주",
+  //   content2: "2. 교재 : X",
+  //   content3: "3. 결과: 합격!",
+  //   favorites: "123",
+  //   comments: "123",
+  // },
 ];
 
-export function PostList() {
+export function MyPagePostList() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 
@@ -34,13 +46,13 @@ export function PostList() {
     setDeleteModalVisible(true); // Open the delete confirmation modal
   };
 
-  const BookmarkBorder = require("../assets/PostListIcon/bookmark_border.png");
-  const FavoriteIcon = require("../assets/PostListIcon/favorite_border.png");
-  const SmsIcon = require("../assets/PostListIcon/sms.png");
-  const ProfileImage = require("../assets/PostListIcon/Profile.png");
-  const morehoriz = require("../assets/PostListIcon/morehoriz.png");
-  const close = require("../assets/PostListIcon/close.png");
-  const mode = require("../assets/PostListIcon/mode.png");
+  const BookmarkBorder = require("assets/mypage/PostListIcon/bookmark_border.png");
+  const FavoriteIcon = require("assets/mypage/PostListIcon/favorite_border.png");
+  const SmsIcon = require("assets/mypage/PostListIcon/sms.png");
+  const ProfileImage = require("assets/mypage/PostListIcon/Profile.png");
+  const morehoriz = require("assets/mypage/PostListIcon/morehoriz.png");
+  const close = require("assets/mypage/PostListIcon/close.png");
+  const mode = require("assets/mypage/PostListIcon/mode.png");
 
   const renderItem = ({ item }) => (
     <View style={styles.root}>
@@ -76,6 +88,7 @@ export function PostList() {
         </View>
         <Image source={BookmarkBorder} />
       </View>
+
       <Modal visible={isModalVisible} transparent={true}>
         {/* 모달 내용 */}
         <View style={styles.modalContent}>
@@ -108,6 +121,7 @@ export function PostList() {
           </TouchableOpacity>
         </View>
       </Modal>
+
       <DeleteConfirmationModal
         isVisible={isDeleteModalVisible}
         onClose={() => setDeleteModalVisible(false)}
@@ -211,8 +225,12 @@ const styles = StyleSheet.create({
     columnGap: 7,
   },
   modalContent: {
-    top: 335,
-    left: 220,
+    // 모달 위치 수정중######################################################
+    // top: 335,
+    // left: 220,
+    position: "absolute",
+    top: 1,
+    right: 1,
     width: 129,
     height: 60,
     justifyContent: "center",

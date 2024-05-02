@@ -9,9 +9,9 @@ import {
   TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // 네비게이션 훅 가져오기
-import Header from "components/header";
-import MyPageModal from "components/MyPageModal"; // MyPageModal 컴포넌트 임포트
-import CalendarModal from "components/CalendarModal";
+import Header from "components/Tab/header";
+import MyPageModal from "components/Modal/MyPageModal"; // MyPageModal 컴포넌트 임포트
+import BirthdateModal from "components/Modal/BirthdateModal";
 
 const backIcon = require("assets/icons/home/back.png");
 const settings = require("assets/mypage/settings.png");
@@ -22,17 +22,12 @@ const MyPageProfile = require("assets/mypage/Image/MyPageProfile.png");
 const EditProfile = () => {
   const navigation = useNavigation();
   const [isMyPageModalVisible, setMyPageModalVisible] = useState(false);
-  const [isCalendarModalVisible, setCalendarModalVisible] = useState(false);
   const [isDuplicate, setDuplicate] = useState(false);
-  const [birthdate, setBirthdate] = useState("");
+  const [birthdate, setBirthdate] = useState(null); // 기본값으로 현재 날짜 설정
+  const [isBirthdateModalVisible, setBirthdateModalVisible] = useState(false);
 
   const handleEditProfilePress = () => {
     setMyPageModalVisible(true);
-    setCalendarModalVisible(false); // CalendarModal이 열려있을 경우 닫기
-  };
-
-  const handleSaveDate = (selectedDate) => {
-    setBirthdate(selectedDate);
   };
 
   const handleLibrarySelect = () => {
@@ -49,9 +44,24 @@ const EditProfile = () => {
     setDuplicate(true);
   };
 
-  const handleCalendarModalOpen = () => {
-    setCalendarModalVisible(true);
-    setMyPageModalVisible(false); // MyPageModal이 열려있을 경우 닫기
+  const handleOpenBirthdateModal = () => {
+    setBirthdateModalVisible(true);
+  };
+
+  const handleCloseBirthdateModal = () => {
+    setBirthdateModalVisible(false);
+  };
+
+  const handleSaveBirthdate = (selectedDate) => {
+    setBirthdate(selectedDate);
+    handleCloseBirthdateModal();
+  };
+  const formatDate = (date) => {
+    if (!date) return "생년월일 추가"; // 선택된 날짜가 없을 경우의 기본 문구
+    const year = date.substring(0, 4);
+    const month = date.substring(5, 7);
+    const day = date.substring(8, 10);
+    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -75,19 +85,17 @@ const EditProfile = () => {
         </TouchableOpacity>
       </View>
 
-      <CalendarModal
-        isVisible={isCalendarModalVisible}
-        setIsVisible={setCalendarModalVisible}
-        onSelectDate={handleSaveDate}
-      />
-
       <MyPageModal
         isVisible={isMyPageModalVisible}
         onClose={() => setMyPageModalVisible(false)}
         onSelectLibrary={handleLibrarySelect}
         onTakePhoto={handleTakePhoto}
       />
-
+      <BirthdateModal
+        isVisible={isBirthdateModalVisible}
+        onClose={handleCloseBirthdateModal}
+        onSelectDate={handleSaveBirthdate}
+      />
       <View style={styles.EditContainer}>
         <View style={[styles.EditText, { marginBottom: 6 }]}>
           <Text style={[styles.Label, { marginRight: 44 }]}>닉네임 </Text>
@@ -131,11 +139,20 @@ const EditProfile = () => {
         <View style={styles.EditText}>
           <Text style={[styles.Label, { marginRight: 31 }]}>생년월일 </Text>
           <TouchableOpacity
-            style={[styles.Input, { borderBottomColor: "#7A7A7A" }]}
-            onPress={handleCalendarModalOpen} // 캘린더 모달 열기
+            style={[
+              styles.Input,
+              styles.BirthdateInput,
+              { borderBottomColor: "#7A7A7A" },
+            ]}
+            onPress={handleOpenBirthdateModal}
           >
-            <Text style={{ color: "#BDBDBD" }}>
-              {birthdate ? birthdate : "생년월일 추가"}
+            <Text
+              style={[
+                styles.BirthdateText,
+                { color: birthdate ? "#7A7A7A" : "#BDBDBD" },
+              ]}
+            >
+              {formatDate(birthdate)}
             </Text>
           </TouchableOpacity>
         </View>
@@ -231,5 +248,16 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     lineHeight: 22,
     marginLeft: 10,
+  },
+  BirthdateInput: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flex: 1,
+  },
+  BirthdateText: {
+    flex: 1,
+    paddingVertical: 8,
+    color: "#000",
   },
 });
