@@ -8,21 +8,21 @@ import Header from '../../components/header';
 import ModalSelectorPopup from "../../components/CustomModal2";
 
 // Images
-const logo = require('../assets/icons/home/logo.png');
-const add = require('../assets/icons/home/add.png');
-const menuIcon = require("../assets/icons/archives/menu.png");
-const profileImg = require("../assets/icons/archives/profile.png");
-const searchIcon = require("../assets/icons/archives/search.png");
-const sortIcon = require("../assets/icons/archives/down.png");
-const moreIcon = require("../assets/icons/archives/more.png");
-const alarmOffIcon = require("../assets/icons/archives/alarm_off.png");
-const alarmOnIcon = require("../assets/icons/archives/alarm_on.png");
-const heartOffIcon = require("../assets/icons/archives/heart_off.png");
-const heartOnIcon = require("../assets/icons/archives/heart_on.png");
-const commentOffIcon = require("../assets/icons/archives/comment_off.png");
-const commentOnIcon = require("../assets/icons/archives/comment_on.png");
-const bookmarkOnIcon = require("../assets/icons/archives/bookmark_on.png");
-const bookmarkOffIcon = require("../assets/icons/archives/bookmark_off.png");
+const logo = require('assets/icons/home/logo.png');
+const add = require('assets/icons/home/add.png');
+const menuIcon = require("assets/icons/archives/menu.png");
+const profileImg = require("assets/icons/archives/profile.png");
+const searchIcon = require("assets/icons/archives/search.png");
+const sortIcon = require("assets/icons/archives/down.png");
+const moreIcon = require("assets/icons/archives/more.png");
+const alarmOffIcon = require("assets/icons/archives/alarm_off.png");
+const alarmOnIcon = require("assets/icons/archives/alarm_on.png");
+const heartOffIcon = require("assets/icons/archives/heart_off.png");
+const heartOnIcon = require("assets/icons/archives/heart_on.png");
+const commentOffIcon = require("assets/icons/archives/comment_off.png");
+const commentOnIcon = require("assets/icons/archives/comment_on.png");
+const bookmarkOnIcon = require("assets/icons/archives/bookmark_on.png");
+const bookmarkOffIcon = require("assets/icons/archives/bookmark_off.png");
 
 const { width, height } = Dimensions.get("window");
 

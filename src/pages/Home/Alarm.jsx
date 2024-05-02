@@ -6,14 +6,14 @@ import DeleteModal from "components/DeleteModal";
 // Images
 const backIcon = require("assets/icons/home/back.png");
 const deleteIcon = require("assets/icons/home/delete.png");
-const writeOn = require('../assets/icons/home/write_on.png');
-const writeOff = require('../assets/icons/home/write_off.png');
-const heartOn = require('../assets/icons/home/heart_on.png');
-const heartOff = require('../assets/icons/home/heart_off.png');
-const commentOn = require('../assets/icons/home/comment_on.png');
-const commentOff = require('../assets/icons/home/comment_off.png');
-const close = require('../assets/icons/home/close.png');
-const complete = require('../assets/icons/home/complete.png');
+const writeOn = require('assets/icons/home/write_on.png');
+const writeOff = require('assets/icons/home/write_off.png');
+const heartOn = require('assets/icons/home/heart_on.png');
+const heartOff = require('assets/icons/home/heart_off.png');
+const commentOn = require('assets/icons/home/comment_on.png');
+const commentOff = require('assets/icons/home/comment_off.png');
+const close = require('assets/icons/home/close.png');
+const complete = require('assets/icons/home/complete.png');
 
 const { width, height } = Dimensions.get("window");
 

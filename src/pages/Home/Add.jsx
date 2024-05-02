@@ -4,27 +4,27 @@ import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View, Dimension
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 // Import Pages
-import Header from '../components/header';
-import DownModal from '../components/DownModal';
-import MidModal from "../components/MidModal";
+import Header from '../../components/header';
+import DownModal from '../../components/DownModal';
+import MidModal from "../../components/MidModal";
 import CalendarModal from "components/CalendarModal";
 import FileModal from "components/FileModal";
 
 // Images
-const clear = require('../assets/icons/add/clear.png');
-const feedAdd = require('../assets/icons/add/feed_add.png');
-const arrowDown = require('../assets/icons/add/arrow_down.png');
-const arrowRight = require('../assets/icons/add/arrow_right.png');
-const calendarOn = require('../assets/icons/add/calendar_on.png');
-const calendarOff = require('../assets/icons/add/calendar_off.png');
-const storiesOn = require('../assets/icons/add/stories_on.png');
-const storiesOff = require('../assets/icons/add/stories_off.png');
-const pasteOn = require('../assets/icons/add/paste_on.png');
-const pasteOff = require('../assets/icons/add/paste_off.png');
-const reviewsOn = require('../assets/icons/add/reviews_on.png');
-const reviewsOff = require('../assets/icons/add/reviews_off.png');
-const attachFile = require('../assets/icons/add/attach_file.png');
-const attachFileOn = require('../assets/icons/add/attach_file_on.png');
+const clear = require('assets/icons/add/clear.png');
+const feedAdd = require('assets/icons/add/feed_add.png');
+const arrowDown = require('assets/icons/add/arrow_down.png');
+const arrowRight = require('assets/icons/add/arrow_right.png');
+const calendarOn = require('assets/icons/add/calendar_on.png');
+const calendarOff = require('assets/icons/add/calendar_off.png');
+const storiesOn = require('assets/icons/add/stories_on.png');
+const storiesOff = require('assets/icons/add/stories_off.png');
+const pasteOn = require('assets/icons/add/paste_on.png');
+const pasteOff = require('assets/icons/add/paste_off.png');
+const reviewsOn = require('assets/icons/add/reviews_on.png');
+const reviewsOff = require('assets/icons/add/reviews_off.png');
+const attachFile = require('assets/icons/add/attach_file.png');
+const attachFileOn = require('assets/icons/add/attach_file_on.png');
 
 const { width, height } = Dimensions.get("window");
 

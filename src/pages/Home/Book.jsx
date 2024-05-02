@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, FlatList, Dimensions, Text } from "react-native";
 // Header
-import Header from '../components/header';
+import Header from '../../components/header';
 
 // Imgaes
-const arrowLeft = require('../assets/icons/add/arrow_left.png');
-const search = require('../assets/icons/add/search.png');
-const select = require('../assets/icons/add/select.png');
-const cancel = require('../assets/icons/add/cancel.png');
+const arrowLeft = require('../../assets/icons/add/arrow_left.png');
+const search = require('../../assets/icons/add/search.png');
+const select = require('../../assets/icons/add/select.png');
+const cancel = require('../../assets/icons/add/cancel.png');
 
 const { width, height } = Dimensions.get("window");
 
@@ -16,22 +16,22 @@ const dummy_data = [
     {
         id: 1,
         name: '정보처리기사',
-        img: require('../assets/icons/add/book1.png')
+        img: require('assets/icons/add/book1.png')
     },
     {
         id: 2,
         name: '정보보안기사',
-        img: require('../assets/icons/add/book2.png')
+        img: require('assets/icons/add/book2.png')
     },
     {
         id: 3,
         name: '컴퓨터활용능력',
-        img: require('../assets/icons/add/book3.png')
+        img: require('assets/icons/add/book3.png')
     },
     {
         id: 4,
         name: 'TOEIC',
-        img: require('../assets/icons/add/book2.png')
+        img: require('assets/icons/add/book2.png')
     }
 ]
 

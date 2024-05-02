@@ -1,9 +1,9 @@
 import React from "react";
 import { SafeAreaView } from "react-native";
 
-import Header from '../components/header';
+import Header from '../../components/header';
 
-const arrowLeft = require('../assets/icons/add/arrow_left.png');
+const arrowLeft = require('assets/icons/add/arrow_left.png');
 
 const SearchResult = ({ route }) => {
     const { text } = route.params ? route.params : {};

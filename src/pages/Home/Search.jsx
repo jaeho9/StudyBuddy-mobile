@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { SafeAreaView, Text, TouchableWithoutFeedback, View, TouchableOpacity, Image, TextInput, Dimensions, Keyboard, FlatList } from "react-native";
 
 // Header
-import Header from '../components/header';
+import Header from '../../components/header';
 
 // Imgaes
-const arrowLeft = require('../assets/icons/add/arrow_left.png');
-const search = require('../assets/icons/add/search.png');
-const select = require('../assets/icons/add/select.png');
-const cancel = require('../assets/icons/add/cancel.png');
-const logo = require('../assets/icons/home/logo.png');
-const close = require('../assets/icons/home/close.png');
+const arrowLeft = require('assets/icons/add/arrow_left.png');
+const search = require('assets/icons/add/search.png');
+const select = require('assets/icons/add/select.png');
+const cancel = require('assets/icons/add/cancel.png');
+const logo = require('assets/icons/home/logo.png');
+const close = require('assets/icons/home/close.png');
 
 
 // Dummy_data
