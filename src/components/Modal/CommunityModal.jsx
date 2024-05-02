@@ -4,10 +4,10 @@ import { View, Keyboard, Dimensions, Text, TextInput, Image, TouchableOpacity, F
 import Modal from 'react-native-modal';
 
 //Images
-const search = require('../assets/icons/add/search.png');
-const selectOn = require('../assets/icons/add/select_on.png');
-const selectOff = require('../assets/icons/add/select_off.png');
-const cancel = require('../assets/icons/add/cancel.png');
+const search = require('assets/icons/add/search.png');
+const selectOn = require('assets/icons/add/select_on.png');
+const selectOff = require('assets/icons/add/select_off.png');
+const cancel = require('assets/icons/add/cancel.png');
 
 const { width, height } = Dimensions.get("window");
 

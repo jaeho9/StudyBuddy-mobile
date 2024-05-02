@@ -5,7 +5,9 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 // Header
 import Header from '../../components/header';
 
-import ModalSelectorPopup from "../../components/CustomModal2";
+import ModalSelectorPopup from "../../components/Modal/CustomModal2";
+
+import SelectPicker from "components/SelectPicker";
 
 // Images
 const logo = require('assets/icons/home/logo.png');
@@ -208,6 +210,9 @@ const dummy_comment = [
 ];
 
 const Home = ({ navigation, route }) => {
+  const [sort, setSort] = useState("");
+  const onChangeSort = (value) => setSort(value);
+
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [listclick, setListClick] = useState(dummy_communityList);
   const [detailClick, setDetailClick] = useState(dummy_communityDetail);
@@ -446,9 +451,9 @@ const Home = ({ navigation, route }) => {
           style={{
             flexDirection: "row",
             position: "absolute",
-            right: 11,
-            bottom: 9,
-            gap: 11,
+            right: 12,
+            bottom: 10,
+            gap: 12,
           }}
         >
           <View
@@ -548,18 +553,11 @@ const Home = ({ navigation, route }) => {
       </View>
 
       {/* 게시판 배열 목록 */}
-      <View style={{ marginTop: 8, marginRight: 14, marginBottom: 30 }}>
-        <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            position: "absolute",
-            alignItems: 'center',
-            right: 0,
-          }}
-        >
-          <Text>좋아요순</Text>
-          <Image source={sortIcon} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginTop: 8, marginRight: 18, marginBottom: 10 }}>
+        <SelectPicker
+          onChangeSort={onChangeSort}
+        />
+        <Image source={sortIcon} style={{ width: 24, height: 24 }} />
       </View>
 
       {/* 게시판 */}
@@ -576,7 +574,7 @@ const Home = ({ navigation, route }) => {
           <Image source={add} style={{ width: 68, height: 68 }} />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 export default Home;

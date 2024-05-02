@@ -4,11 +4,11 @@ import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View, Dimension
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 // Import Pages
-import Header from '../../components/header';
-import DownModal from '../../components/DownModal';
-import MidModal from "../../components/MidModal";
-import CalendarModal from "components/CalendarModal";
-import FileModal from "components/FileModal";
+import Header from 'components/header';
+import DownModal from 'components/Modal/CommunityModal';
+import MidModal from "components/Modal/ResultModal";
+import CalendarModal from "components/Modal/CalendarModal";
+import FileModal from "components/Modal/FileModal";
 
 // Images
 const clear = require('assets/icons/add/clear.png');

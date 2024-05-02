@@ -2,11 +2,11 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import CustomBottomTab from "./components/CustomBottomTab";
-import Home from "./pages/Home/Home";
-import Community from "./pages/Community/Community";
-import Archives from "./pages/Archives/Archives";
-import Mypage from "./pages/MyPage/Mypage";
+import CustomBottomTab from "components/Tab/CustomBottomTab";
+import Home from "pages/Home/Home";
+import Community from "pages/Community/Community";
+import Archives from "pages/Archives/Archives";
+import Mypage from "pages/MyPage/Mypage";
 import Alarm from "pages/Home/Alarm";
 import Add from "pages/Home/Add";
 import Book from "pages/Home/Book";

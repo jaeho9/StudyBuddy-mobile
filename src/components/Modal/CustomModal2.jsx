@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, Modal, StyleSheet, Dimensions, } from "react-native";
-import DeleteModal from "../components/DeleteModal";
+import DeleteModal from "./RemoveModal";
 
 const { width, height } = Dimensions.get("window");
 
