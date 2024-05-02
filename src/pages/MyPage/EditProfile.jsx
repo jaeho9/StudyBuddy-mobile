@@ -162,7 +162,6 @@ const EditProfile = () => {
             style={styles.Input}
             placeholder="링크 추가"
             placeholderTextColor="#BDBDBD"
-            // keyboardType="url"
           />
         </View>
       </View>
