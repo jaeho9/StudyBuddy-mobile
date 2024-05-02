@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 // Header
-import Header from "../components/header";
+import Header from "../../components/header";
 import DeleteModal from "components/DeleteModal";
 // Images
 const backIcon = require("assets/icons/home/back.png");
@@ -94,6 +94,7 @@ const Alarm = () => {
           </View>
         )
         }
+
         {/* 삭제모드 */}
         {deleteMode && (
           <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>

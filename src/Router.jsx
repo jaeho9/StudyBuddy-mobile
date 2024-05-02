@@ -3,11 +3,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import CustomBottomTab from "./components/CustomBottomTab";
-import Home from "./pages/Home";
+import Home from "./pages/Home/Home";
 import Community from "./pages/Community";
 import Archives from "./pages/Archives";
 import Mypage from "./pages/Mypage";
-import Alarm from "pages/Alarm";
+import Alarm from "pages/Home/Alarm";
 import Add from "pages/Add";
 import Calendar from "pages/Calendar";
 import Book from "pages/Book";
