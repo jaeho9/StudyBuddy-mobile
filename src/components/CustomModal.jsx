@@ -6,81 +6,84 @@ import {
   TouchableOpacity,
   Modal,
   StyleSheet,
+  Dimensions,
+  Pressable,
 } from "react-native";
+import { DeleteModal } from "components/DeleteModal";
+
+const { width, height } = Dimensions.get("window");
 
 const deleteIcon = require("assets/icons/archives/delete.png");
 const editIcon = require("assets/icons/archives/edit.png");
 const moreIcon = require("assets/icons/archives/more.png");
 
-const CustomModal = ({}) => {
-  const more = useRef();
-  const [ModalSelectorPopupVisible, setModalSelectorPopupVisible] =
-    useState(false);
-  const [modalX, setModalX] = useState();
-  const [modalY, setModalY] = useState();
-  useEffect(() => {
-    getViewSize();
-  }, []);
-  goodsMoreButtonClicked = () => {
-    setModalSelectorPopupVisible(true);
-  };
-  const getViewSize = () => {
-    more.current.measure((fx, fy, width, height, px, py) => {
-      setModalX(px + width / 4.5);
-      setModalY(py + height);
-      console.log("location:", fx, fy, width, height, px, py);
-    });
-  };
-  return (
-    <View>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={ModalSelectorPopupVisible}
-        onRequestClose={() => setModalSelectorPopupVisible(false)}
-      >
-        <ModalSelectorPopup
-          x={modalX}
-          y={modalY}
-          closeModalPopupMenu={() => setModalSelectorPopupVisible(false)}
-        />
-      </Modal>
-      <TouchableOpacity
-        ref={more}
-        onPress={this.goodsMoreButtonClicked}
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Image source={moreIcon} style={{ width: 24, height: 24 }} />
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-export class ModalSelectorPopup extends Component {
+export class ModalSelect extends Component {
   constructor(props) {
     super(props);
   }
+
+  state = {
+    deleteVisible: false,
+    editVisible: false,
+  };
+
+  async onPressDelete() {
+    // await this.props.modalVisible();
+    // await this.props.deleteTrueVisible();
+  }
+
+  onPressEdit() {
+    if (this.props.comment) {
+      this.props.navigation.navigate("CommentEdit", {
+        id: this.props.id,
+      });
+    } else {
+      this.props.navigation.navigate("PostEdit", {
+        id: this.props.post,
+      });
+    }
+  }
+
   render() {
-    const layout = { flex: 1, left: this.props.x, top: this.props.y };
+    const layout = {
+      left: this.props.x,
+      top: this.props.y,
+    };
+
     return (
-      <TouchableOpacity
-        onPress={this.props.closeModalPopupMenu}
-        style={{ flex: 1 }}
-      >
-        <View style={layout}>
-          <TouchableOpacity style={styles.deleteModal}>
-            <Text style={{ color: "#fff" }}>삭제하기</Text>
-            <Image source={deleteIcon} style={{ width: 14, height: 14 }} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.editModal}>
-            <Text style={{ color: "#fff" }}>수정하기</Text>
-            <Image source={editIcon} style={{ width: 14, height: 14 }} />
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
+      <>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          // visible={this.props.deleteVisible.current}
+          visible={false}
+          onRequestClose={() => this.props.deleteFalseVisible()}
+        >
+          <DeleteModal
+            x={0}
+            y={height - 80}
+            closeModalPopupMenu={() => this.props.deleteFalseVisible()}
+          />
+        </Modal>
+        <TouchableOpacity
+          onPress={this.props.closeModalPopupMenu}
+          style={{ flex: 1 }}
+        >
+          <View style={layout}>
+            <TouchableOpacity style={styles.deleteModal}>
+              <Text style={{ color: "#fff" }}>삭제하기</Text>
+              <Image source={deleteIcon} style={{ width: 14, height: 14 }} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.onPressEdit()}
+              style={styles.editModal}
+            >
+              <Text style={{ color: "#fff" }}>수정하기</Text>
+              <Image source={editIcon} style={{ width: 14, height: 14 }} />
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </>
     );
   }
 }
@@ -113,5 +116,3 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 8,
   },
 });
-
-export default CustomModal;

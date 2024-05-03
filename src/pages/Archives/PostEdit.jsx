@@ -14,6 +14,7 @@ import DownModal from "components/DownModal";
 import MidModal from "components/MidModal";
 import CalendarModal from "components/CalendarModal";
 import FileModal from "components/FileModal";
+import firestore from "@react-native-firebase/firestore";
 
 const { width, height } = Dimensions.get("window");
 
@@ -35,7 +36,7 @@ const attachFile = require("assets/icons/add/attach_file.png");
 const attachFileOn = require("assets/icons/add/attach_file_on.png");
 
 const PostEdit = ({ navigation, route }) => {
-  const { item } = route.params;
+  const { id } = route.params;
 
   // 커뮤니티 선택
   const [communityVisible, setCommunityVisible] = useState(false);
@@ -48,8 +49,6 @@ const PostEdit = ({ navigation, route }) => {
   const [dateVisible, setDateVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const onSelectDate = (startDate, endDate) => {
-    item.startDate = startDate;
-    item.endDate = endDate;
     setSelectedDate({ startDate, endDate });
   };
 
@@ -60,7 +59,6 @@ const PostEdit = ({ navigation, route }) => {
   const [resultVisible, setResultVisible] = useState(false);
   const [selectedResult, setSelectedResult] = useState(null);
   const onSelectResult = (result) => {
-    item.result = result;
     setSelectedResult(result);
   };
 
@@ -77,12 +75,47 @@ const PostEdit = ({ navigation, route }) => {
     setSelectedFile(file);
   };
 
+  //post
+  const [post, setPost] = useState([]);
+  const [editPost, setEditPost] = useState([]);
+  const postCollection = firestore().collection("post");
   useEffect(() => {
-    setSelectedCommunity({ name: item.community_name });
-    setSelectedDate({ startDate: item.startDate, endDate: item.endDate });
-    setSelectedResult(item.result);
-    setText(item.study);
+    post_api();
   }, []);
+
+  useEffect(() => {
+    post?.map((v, i) => {
+      if (v.id === id) {
+        setEditPost(v);
+      }
+    });
+  }, [post.length]);
+
+  const post_api = async () => {
+    try {
+      const post_data = await postCollection.get();
+      setPost(post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    } catch (error) {
+      console.log("post error", error.message);
+    }
+  };
+
+  changeDate = (e) => {
+    let date = e.toDate();
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    if (month < 10) {
+      if (day < 10) {
+        return year + "-0" + month + "-0" + day;
+      } else {
+        return year + "-0" + month + "-" + day;
+      }
+    } else {
+      return year + "-" + month + "-" + day;
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -91,7 +124,6 @@ const PostEdit = ({ navigation, route }) => {
         title={"게시물 수정"}
         right={editIcon}
         rightClick={"Archives"}
-        item={item}
       />
       <KeyboardAwareScrollView
         style={{ marginHorizontal: 20, marginVertical: 16 }}
@@ -332,20 +364,20 @@ const PostEdit = ({ navigation, route }) => {
         </View>
 
         <DownModal
-          community_name={item.community_name}
+          // community_name={item.community_name}
           isVisible={communityVisible}
           setIsVisible={setCommunityVisible}
           onSelectCommunity={onSelectCommunity}
         />
         <MidModal
-          community_result={item.result}
+          community_result={editPost.result}
           isVisible={resultVisible}
           setIsVisible={setResultVisible}
           onSelectResult={onSelectResult}
         />
         <CalendarModal
-          community_startDate={item.startDate}
-          community_endDate={item.endDate}
+          // community_startDate={changeDate(editPost?.start_date)}
+          // community_endDate={changeDate(editPost?.end_date)}
           isVisible={dateVisible}
           setIsVisible={setDateVisible}
           onSelectDate={onSelectDate}

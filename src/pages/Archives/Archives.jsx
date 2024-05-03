@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import ActionButton from "react-native-action-button";
 import CustomHeader from "components/CustomHeader";
-import { ModalSelectorPopup } from "components/CustomModal2";
+import { ModalSelectorPopup } from "components/CustomModal";
 import { dummy_communityList, dummy_communityDetail } from "dummy_data";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 
@@ -79,6 +79,7 @@ const Archives = ({ navigation }) => {
   }, [isFocused]);
 
   goodsMoreButtonClicked = (id) => {
+    console.log(ModalSelectorPopupVisible);
     more.current[id].measure((fx, fy, width, height, px, py) => {
       let copiedY = [...modalY];
       copiedY[id] = py + height;
