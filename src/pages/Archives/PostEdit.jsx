@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -76,25 +76,36 @@ const PostEdit = ({ navigation, route }) => {
   };
 
   //post
-  const [post, setPost] = useState([]);
-  const [editPost, setEditPost] = useState([]);
+  const start = useRef(0);
+  const end = useRef(0);
+  const edit_post = useRef({});
   const postCollection = firestore().collection("post");
+
   useEffect(() => {
     post_api();
   }, []);
 
-  useEffect(() => {
-    post?.map((v, i) => {
-      if (v.id === id) {
-        setEditPost(v);
-      }
-    });
-  }, [post.length]);
-
   const post_api = async () => {
     try {
       const post_data = await postCollection.get();
-      setPost(post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      post_data._docs.map((doc) => {
+        if (doc._data.id === id) {
+          edit_post.current = {
+            ...doc.data(),
+            id: doc.id,
+            start_date: changeDate(doc._data.start_date).replaceAll(".", "-"),
+            end_date: changeDate(doc._data.end_date).replaceAll(".", "-"),
+          };
+        }
+      });
+      // console.log(edit_post.current);
+      console.log("date", edit_post.current.end_date);
+      setSelectedDate({
+        startDate: edit_post.current.start_date,
+        endDate: edit_post.current.end_date,
+      });
+      setSelectedResult(edit_post.current.result);
+      setText(edit_post.current.study);
     } catch (error) {
       console.log("post error", error.message);
     }
@@ -370,14 +381,14 @@ const PostEdit = ({ navigation, route }) => {
           onSelectCommunity={onSelectCommunity}
         />
         <MidModal
-          community_result={editPost.result}
+          community_result={edit_post.current.result}
           isVisible={resultVisible}
           setIsVisible={setResultVisible}
           onSelectResult={onSelectResult}
         />
         <CalendarModal
-          // community_startDate={changeDate(editPost?.start_date)}
-          // community_endDate={changeDate(editPost?.end_date)}
+          community_startDate={edit_post.current.start_date}
+          community_endDate={edit_post.current.end_date}
           isVisible={dateVisible}
           setIsVisible={setDateVisible}
           onSelectDate={onSelectDate}

@@ -33,8 +33,11 @@ const CalendarModal = ({
   };
 
   useEffect(() => {
-    setStartDate(community_startDate);
-    setEndDate(community_endDate);
+    // setStartDate(community_startDate);
+    // setEndDate(community_endDate);
+    setStartDate("2023-05-05");
+    setEndDate("2023-05-30");
+    onSelectDate("2023-05-05", "2023-05-30");
   }, []);
 
   const generateMarkedDates = () => {

@@ -25,9 +25,11 @@ const MidModal = ({
 
   useEffect(() => {
     if (community_result) {
+      console.log(community_result);
       setResult(community_result);
+      handleSelectResult(community_result);
     }
-  }, []);
+  }, [community_result]);
 
   return (
     <Modal
