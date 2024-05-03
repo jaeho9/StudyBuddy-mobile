@@ -3,7 +3,7 @@ import { View, Image, TouchableOpacity, SafeAreaView, Dimensions, FlatList, Text
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 
 // Header
-import Header from '../../components/header';
+import Header from '../../components/Tab/header';
 
 import ModalSelectorPopup from "../../components/Modal/CustomModal2";
 

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SafeAreaView, Text, TouchableWithoutFeedback, View, TouchableOpacity, Image, TextInput, Dimensions, Keyboard, FlatList } from "react-native";
 
 // Header
-import Header from '../../components/header';
+import Header from '../../components/Tab/header';
 
 // Imgaes
 const arrowLeft = require('assets/icons/add/arrow_left.png');
@@ -100,5 +100,6 @@ const Search = ({ navigation }) => {
         </SafeAreaView>
     )
 }
+
 
 export default Search;

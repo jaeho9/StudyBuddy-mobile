@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 // Header
-import Header from "../../components/header";
+import Header from "../../components/Tab/header";
 import DeleteModal from "components/Modal/RemoveModal";
 // Images
 const backIcon = require("assets/icons/home/back.png");

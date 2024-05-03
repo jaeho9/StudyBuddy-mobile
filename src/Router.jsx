@@ -18,6 +18,7 @@ const Tab = createBottomTabNavigator();
 
 const renderTabBar = (props) => <CustomBottomTab {...props} />
 
+
 const MainTab = () => {
   return (
     <Tab.Navigator

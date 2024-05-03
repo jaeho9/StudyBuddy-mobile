@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, FlatList, Dimensions, Text } from "react-native";
 // Header
-import Header from '../../components/header';
+import Header from '../../components/Tab/header';
 
 // Imgaes
 const arrowLeft = require('../../assets/icons/add/arrow_left.png');
