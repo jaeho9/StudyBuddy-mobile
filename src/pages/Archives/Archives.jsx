@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState, useRef } from "react";
 import {
   View,
@@ -404,6 +405,16 @@ const Archives = ({ navigation }) => {
         onPress={() => navigation.navigate("AddPost")}
       />
     </SafeAreaView>
+=======
+import React from "react";
+import { Text, View } from "react-native";
+
+const Archives = () => {
+  return (
+    <View>
+      <Text>Archives 화면</Text>
+    </View>
+>>>>>>> origin/dev
   );
 };
 

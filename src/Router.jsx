@@ -4,7 +4,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import CustomBottomTab from "components/CustomBottomTab";
 
+import CustomBottomTab from "./components/Tab/CustomBottomTab";
 import Home from "pages/Home/Home";
+import Community from "./pages/Community/Community";
+import Archives from "./pages/Archives/Archives";
+import MyPage from "pages/MyPage/MyPage";
 import Alarm from "pages/Home/Alarm";
 import Community from "pages/Community/Community";
 import Archives from "pages/Archives/Archives";
@@ -18,23 +22,12 @@ import PostEdit from "pages/Archives/PostEdit";
 import comments from "pages/Archives/comments";
 import commentss from "pages/Archives/commentss";
 
+import EditProfile from "pages/MyPage/EditProfile";
+import Settings from "pages/MyPage/Settings";
+import Library from "pages/MyPage/Library";
+import Camera from "pages/MyPage/Camera";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
-const renderTabBar = (props) => <CustomBottomTab {...props} />;
-
-const ArchivesTab = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="Archives" component={Archives} />
-      <Stack.Screen name="Post" component={Post} />
-    </Stack.Navigator>
-  );
-};
 
 const MainTab = () => {
   return (
@@ -44,24 +37,21 @@ const MainTab = () => {
         headerShown: false,
       }}
     >
-      <Tab.Screen name="Home" component={comments} />
-      <Tab.Screen name="Community" component={commentss} />
-      {/* <Tab.Screen name="ArchivesTab" component={ArchivesTab} /> */}
-      <Tab.Screen name="Archives" component={Archives_Firebase} />
-      <Tab.Screen name="MyPage" component={MyPage} />
+      <Tab.Screen name="홈" component={Alarm} />
     </Tab.Navigator>
   );
 };
 
 const Router = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Alarm" component={Alarm} />
       <Stack.Screen name="MainTab" component={MainTab} />
-      <Stack.Screen name="Post" component={Post} />
-      <Stack.Screen name="Post_Firebase" component={Post_Firebase} />
-      <Stack.Screen name="AddPost" component={AddPost} />
-      <Stack.Screen name="CommentEdit" component={CommentEdit} />
-      <Stack.Screen name="PostEdit" component={PostEdit} />
     </Stack.Navigator>
   );
 };
