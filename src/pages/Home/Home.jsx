@@ -552,14 +552,6 @@ const Home = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
 
-      {/* 게시판 배열 목록 */}
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginTop: 8, marginRight: 18, marginBottom: 10 }}>
-        <SelectPicker
-          onChangeSort={onChangeSort}
-        />
-        <Image source={sortIcon} style={{ width: 24, height: 24 }} />
-      </View>
-
       {/* 게시판 */}
       <FlatList
         data={dummy_communityDetail}
@@ -567,6 +559,14 @@ const Home = ({ navigation, route }) => {
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         removeClippedSubviews
+        ListHeaderComponent={() => (
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginTop: 8, marginRight: 18, marginBottom: 10 }}>
+            <SelectPicker
+              onChangeSort={onChangeSort}
+            />
+            <Image source={sortIcon} style={{ width: 24, height: 24 }} />
+          </View>
+        )}
       />
 
       <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end', right: 0, bottom: 80, position: 'absolute', zIndex: 10, marginRight: 12 }}>
