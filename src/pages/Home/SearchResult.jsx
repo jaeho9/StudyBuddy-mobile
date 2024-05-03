@@ -1,38 +1,21 @@
-import React, { useState, useRef, useEffect } from "react";
-import { SafeAreaView, ScrollView, Text, View, Dimensions, FlatList, Modal, TouchableOpacity, TextInput, Image } from "react-native"; // View 추가
+import React, { useState } from "react";
+import { SafeAreaView, Text, View, FlatList, TouchableOpacity, Image } from "react-native";
+// Top Tab
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { useNavigation, useIsFocused } from "@react-navigation/native";
-import Header from '../../components/Tab/header';
-
-const arrowLeft = require('assets/icons/add/arrow_left.png');
-const { width, height } = Dimensions.get("window");
 const Tab = createMaterialTopTabNavigator();
-
+// Header
+import Header from '../../components/Tab/header';
 // Images
-const logo = require('assets/icons/home/logo.png');
-const add = require('assets/icons/home/add.png');
-const menuIcon = require("assets/icons/archives/menu.png");
+const arrowLeft = require('assets/icons/add/arrow_left.png');
 const profileImg = require("assets/icons/archives/profile.png");
-const searchIcon = require("assets/icons/archives/search.png");
-const sortIcon = require("assets/icons/archives/down.png");
 const moreIcon = require("assets/icons/archives/more.png");
-const alarmOffIcon = require("assets/icons/archives/alarm_off.png");
-const alarmOnIcon = require("assets/icons/archives/alarm_on.png");
 const heartOffIcon = require("assets/icons/archives/heart_off.png");
 const heartOnIcon = require("assets/icons/archives/heart_on.png");
 const commentOffIcon = require("assets/icons/archives/comment_off.png");
 const commentOnIcon = require("assets/icons/archives/comment_on.png");
 const bookmarkOnIcon = require("assets/icons/archives/bookmark_on.png");
 const bookmarkOffIcon = require("assets/icons/archives/bookmark_off.png");
-
-
-const dummy_profile = [
-    {
-        id: 0,
-        nickname: "김도영",
-    },
-];
-
+// Dummy Data
 const dummy_communityList = [
     {
         id: 0,
@@ -60,7 +43,6 @@ const dummy_communityList = [
         isClick: false,
     },
 ];
-
 const dummy_communityDetail = [
     {
         id: 0,
@@ -154,61 +136,8 @@ const dummy_communityDetail = [
     },
 ];
 
-const dummy_comment = [
-    {
-        id: 0,
-        profileImg: require("assets/icons/archives/profile.png"),
-        name: "김도영",
-        date: "2023.02.04",
-        comment: "이 자료 덕분에 합격했어요! 감사합니다 :)",
-    },
-    {
-        id: 1,
-        profileImg: require("assets/icons/archives/profile.png"),
-        name: "김똥",
-        date: "2023.02.04",
-        comment: "이 자료 덕분에 합격했어요! 감사합니다 :)",
-    },
-    {
-        id: 2,
-        profileImg: require("assets/icons/archives/profile.png"),
-        name: "김똥",
-        date: "2023.02.04",
-        comment: "이 자료 덕분에 합격했어요! 감사합니다 :)",
-    },
-    {
-        id: 3,
-        profileImg: require("assets/icons/archives/profile.png"),
-        name: "김똥",
-        date: "2023.02.04",
-        comment: "이 자료 덕분에 합격했어요! 감사합니다 :)",
-    },
-    {
-        id: 4,
-        profileImg: require("assets/icons/archives/profile.png"),
-        name: "김똥",
-        date: "2023.02.04",
-        comment: "이 자료 덕분에 합격했어요! 감사합니다 :)",
-    },
-    {
-        id: 5,
-        profileImg: require("assets/icons/archives/profile.png"),
-        name: "김똥",
-        date: "2023.02.04",
-        comment: "이 자료 덕분에 합격했어요! 감사합니다 :)",
-    },
-    {
-        id: 6,
-        profileImg: require("assets/icons/archives/profile.png"),
-        name: "김똥",
-        date: "2023.02.04",
-        comment: "이 자료 덕분에 합격했어요! 감사합니다 :)",
-    },
-];
-
-
-const LikeTab = ({ text }) => {
-    const [deleteVisible, setDeleteVisible] = useState(false);
+// 인기 게시물
+const LikeTab = () => {
     const [listclick, setListClick] = useState(dummy_communityList);
     const [detailClick, setDetailClick] = useState(dummy_communityDetail);
     const detailLastIndex = dummy_communityDetail.length - 1;
@@ -367,12 +296,8 @@ const LikeTab = ({ text }) => {
     };
 
     const renderCommunityListClick = ({ item, index }) => {
-        if (text && item.community_name === text) {
-            return renderCommunityDetail(item);
-        } else {
-            return null;
-        }
-    };
+        return renderCommunityDetail(item);
+    }
 
     return (
         <View style={{ marginTop: 20 }}>
@@ -387,14 +312,183 @@ const LikeTab = ({ text }) => {
     )
 }
 
+// 최근 게시물
 const NewTab = ({ item }) => {
+    const [listclick, setListClick] = useState(dummy_communityList);
+    const [detailClick, setDetailClick] = useState(dummy_communityDetail);
+    const detailLastIndex = dummy_communityDetail.length - 1;
+
+    const handleClickList = (index) => {
+        setListClick(
+            dummy_communityList.map((v, i) => {
+                if (v.isClick === true) {
+                    v.isClick = false;
+                }
+                if (v.id === index) {
+                    v.isClick = !v.isClick;
+                }
+                return v;
+            })
+        );
+    };
+
+    const handleClickHeart = (index) => {
+        setDetailClick(
+            dummy_communityDetail.map((v, i) => {
+                if (v.id === index) {
+                    v.heartClick = !v.heartClick;
+                    if (v.heartClick) {
+                        v.heart += 1;
+                    } else {
+                        v.heart -= 1;
+                    }
+                }
+                return v;
+            })
+        );
+    };
+
+    const handelClickComment = (item) => { };
+
+    const handleClickBookmark = (index) => {
+        setDetailClick(
+            dummy_communityDetail.map((v, i) => {
+                if (v.id === index) {
+                    v.bookmark = !v.bookmark;
+                }
+                return v;
+            })
+        );
+    };
+
+    const renderCommunityDetail = (item) => {
+        return (
+            <TouchableOpacity
+                style={{
+                    backgroundColor: "#fff",
+                    marginHorizontal: 20,
+                    marginBottom: detailLastIndex === item.id ? 80 : 12,
+                    paddingHorizontal: 16,
+                    paddingVertical: 20,
+                    borderRadius: 12,
+                }}
+            >
+                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#ff7474" }}>
+                    {item.community_name}
+                </Text>
+                <View style={{ marginTop: 12 }}>
+                    <View
+                        style={{ flexDirection: "row", alignItems: "center", gap: 6, }}>
+                        <Image
+                            source={item.profileImg}
+                            style={{ width: 32, height: 32 }}
+                        />
+                        <Text style={{ fontSize: 16, color: "#000000" }}>
+                            {item.name}
+                        </Text>
+                        <Text style={{ fontSize: 12, color: "#969696" }}>
+                            {item.date}
+                        </Text>
+                    </View>
+                    <View style={{ marginTop: 8, marginHorizontal: 40, gap: 8 }}>
+                        <Text style={{ fontSize: 14, color: "#000000" }}>
+                            1. 준비 기간 : {changeDate(item)}
+                        </Text>
+                        <Text style={{ fontSize: 14, color: "#000000" }}>
+                            2. 교재 : {item.book}
+                        </Text>
+                        <Text style={{ fontSize: 14, color: "#000000" }}>
+                            3. 결과 : {item.result}
+                        </Text>
+                    </View>
+                </View>
+
+                <View style={{ width: 24, height: 24 }} />
+                <View
+                    style={{
+                        flexDirection: "row",
+                        position: "absolute",
+                        right: 12,
+                        bottom: 10,
+                        gap: 12,
+                    }}
+                >
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: 3,
+                        }}
+                    >
+                        <TouchableOpacity onPress={() => handleClickHeart(item.id)}>
+                            <Image
+                                source={item.heartClick ? heartOnIcon : heartOffIcon}
+                                style={{ width: 18, height: 18 }}
+                            />
+                        </TouchableOpacity>
+                        <Text style={{ color: item.heartClick ? "#ff7474" : "#bdbdbd" }}>
+                            {item.heart}
+                        </Text>
+                    </View>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: 3,
+                        }}
+                    >
+                        <TouchableOpacity onPress={() => handelClickComment(item)}>
+                            <Image
+                                source={item.commentClick ? commentOnIcon : commentOffIcon}
+                                style={{ width: 18, height: 18 }}
+                            />
+                        </TouchableOpacity>
+                        <Text
+                            style={{ color: item.commentClick ? "#606060" : "#bdbdbd" }}
+                        >
+                            {item.comment}
+                        </Text>
+                    </View>
+                    <TouchableOpacity
+                        onPress={() => {
+                            handleClickBookmark(item.id);
+                        }}
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <Image
+                            source={item.bookmark ? bookmarkOnIcon : bookmarkOffIcon}
+                            style={{ width: 18, height: 18 }}
+                        />
+                    </TouchableOpacity>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
+    const renderCommunityListClick = ({ item, index }) => {
+        return renderCommunityDetail(item);
+    }
+
     return (
-        <View>
-            <Text>new</Text>
+        <View style={{ marginTop: 20 }}>
+            <FlatList
+                data={dummy_communityDetail}
+                renderItem={renderCommunityListClick}
+                keyExtractor={(item) => item.id}
+                showsVerticalScrollIndicator={false}
+                removeClippedSubviews
+            />
         </View>
     )
 }
 
+// SearchResult 화면
 const SearchResult = ({ route }) => {
     const { text } = route.params ? route.params : {};
 
@@ -423,7 +517,7 @@ const SearchResult = ({ route }) => {
                     }
                 }}
             >
-                <Tab.Screen name="인기" component={LikeTab} initialParams={{ text }} />
+                <Tab.Screen name="인기" component={LikeTab} />
                 <Tab.Screen name="최근" component={NewTab} />
             </Tab.Navigator>
         </SafeAreaView >
