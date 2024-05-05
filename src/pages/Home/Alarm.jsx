@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 // Header
 import Header from "../../components/Tab/header";
-import DeleteModal from "components/Modal/RemoveModal";
+import RemoveModal from "components/Modal/RemoveModal";
 // Images
 const backIcon = require("assets/icons/home/back.png");
 const deleteIcon = require("assets/icons/home/delete.png");
@@ -122,7 +122,7 @@ const Alarm = () => {
         removeClippedSubviews
       />
 
-      <DeleteModal isVisible={isVisible} setIsVisible={setIsVisible} />
+      <RemoveModal isVisible={isVisible} setIsVisible={setIsVisible} />
     </SafeAreaView>
   );
 };

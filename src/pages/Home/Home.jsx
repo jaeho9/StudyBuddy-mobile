@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, Image, TouchableOpacity, SafeAreaView, Dimensions, FlatList, Text, Modal } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
+// FireStore
+import firestore from '@react-native-firebase/firestore';
 
 // Header
 import Header from '../../components/Tab/header';
@@ -210,6 +212,7 @@ const dummy_comment = [
 ];
 
 const Home = ({ navigation, route }) => {
+
   const [sort, setSort] = useState("");
   const onChangeSort = (value) => setSort(value);
 

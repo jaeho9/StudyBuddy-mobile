@@ -5,7 +5,7 @@ import Modal from 'react-native-modal';
 
 const { width, height } = Dimensions.get("window");
 
-const DeleteModal = ({ isVisible, setIsVisible }) => {
+const RemoveModal = ({ isVisible, setIsVisible }) => {
 
     return (
         <Modal
@@ -47,4 +47,4 @@ const DeleteModal = ({ isVisible, setIsVisible }) => {
     )
 }
 
-export default DeleteModal;
+export default RemoveModal;

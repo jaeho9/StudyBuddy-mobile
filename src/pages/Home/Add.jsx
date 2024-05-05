@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { startTransition, useState } from "react";
 import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View, Dimensions } from "react-native";
 // Keyboard Aware Scroll View
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+// FireStore
+import firestore from '@react-native-firebase/firestore';
 
 // Import Pages
 import Header from 'components/Tab/header';
@@ -13,6 +15,7 @@ import FileModal from "components/Modal/FileModal";
 // Images
 const clear = require('assets/icons/add/clear.png');
 const feedAdd = require('assets/icons/add/feed_add.png');
+const feedAddOff = require('assets/icons/add/feed_add_off.png');
 const arrowDown = require('assets/icons/add/arrow_down.png');
 const arrowRight = require('assets/icons/add/arrow_right.png');
 const calendarOn = require('assets/icons/add/calendar_on.png');
@@ -66,14 +69,58 @@ const Add = ({ navigation, route }) => {
         setSelectedFile(file);
     };
 
+    // 현재 날짜와 시간을 가져오기
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
+
+    // API 연동
+    const addCollection = firestore().collection('post');
+
+    const addFeed = async () => {
+        try {
+            await addCollection.add({
+                book: book.name,
+                community_id: selectedCommunity.name,
+                data: '',
+                end_date: selectedDate.endDate,
+                id: '1',
+                reg_date: formattedDate,
+                result: selectedResult,
+                start_date: selectedDate.startDate,
+                study: text,
+                update_date: formattedDate,
+                user_id: ''
+            });
+            setSelectedCommunity('');
+            setSelectedDate('');
+            setSelectedResult('');
+            setText('');
+            console.log('Create Complete!');
+            console.log(selectedCommunity);
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
+    // 커뮤니티, 준비 기간, 교재, 결과, 공부 방법을 작성하면 버튼 활성화
+    const isReadyToAddFeed = selectedCommunity && selectedDate && book && selectedResult && text;
+
+    // rightClick 함수 정의
+    const rightClick = async () => {
+        if (isReadyToAddFeed) {
+            await addFeed();
+            navigation.navigate("Home", { selectedCommunity });
+        }
+    };
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
             <Header
                 left={clear}
                 leftClick={"Home"}
                 title={"새 게시물"}
-                right={feedAdd}
-                rightClick={() => navigation.navigate("Home", { selectedCommunity })}
+                right={isReadyToAddFeed ? feedAdd : feedAddOff}
+                rightClick={rightClick}
             />
             <KeyboardAwareScrollView style={{ marginHorizontal: 20, marginVertical: 16 }}>
                 {/* 커뮤니티 선택 */}

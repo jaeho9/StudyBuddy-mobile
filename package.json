@@ -10,6 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-firebase/app": "^19.2.2",
+    "@react-native-firebase/firestore": "^19.2.2",
     "@react-native-picker/picker": "^2.7.5",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/material-top-tabs": "^6.6.13",
