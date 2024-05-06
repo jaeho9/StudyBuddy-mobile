@@ -48,6 +48,7 @@ const Add = ({ navigation, route }) => {
 
     // 교재
     const { book } = route.params ? route.params : {};
+    console.log(book)
 
     // 결과
     const [resultVisible, setResultVisible] = useState(false);
@@ -79,7 +80,7 @@ const Add = ({ navigation, route }) => {
     const addFeed = async () => {
         try {
             await addCollection.add({
-                book: book.name,
+                book: book,
                 community_id: selectedCommunity.name,
                 data: '',
                 end_date: selectedDate.endDate,
@@ -96,7 +97,6 @@ const Add = ({ navigation, route }) => {
             setSelectedResult('');
             setText('');
             console.log('Create Complete!');
-            console.log(selectedCommunity);
         } catch (error) {
             console.log(error.message);
         }
@@ -163,7 +163,7 @@ const Add = ({ navigation, route }) => {
                     {book ? (
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={storiesOn} style={{ width: 24, height: 24, marginRight: 8 }} />
-                            <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{book.name}</Text>
+                            <Text numberOfLines={1} ellipsizeMode="tail" style={{ width: width - 120, fontSize: 16, color: '#7A7A7A' }}>{book}</Text>
                         </View>
                     ) : (
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>

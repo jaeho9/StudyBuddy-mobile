@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView, View, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, FlatList, Dimensions, Text } from "react-native";
 // Header
 import Header from '../../components/Tab/header';
+// Axios
+import axios from 'axios';
 
 // Imgaes
 const arrowLeft = require('../../assets/icons/add/arrow_left.png');
@@ -11,41 +13,39 @@ const cancel = require('../../assets/icons/add/cancel.png');
 
 const { width, height } = Dimensions.get("window");
 
-// Dummy_data
-const dummy_data = [
-    {
-        id: 1,
-        name: '정보처리기사',
-        img: require('assets/icons/add/book1.png')
-    },
-    {
-        id: 2,
-        name: '정보보안기사',
-        img: require('assets/icons/add/book2.png')
-    },
-    {
-        id: 3,
-        name: '컴퓨터활용능력',
-        img: require('assets/icons/add/book3.png')
-    },
-    {
-        id: 4,
-        name: 'TOEIC',
-        img: require('assets/icons/add/book2.png')
-    }
-]
-
 const Book = ({ navigation }) => {
+
+    const [bookApi, setBookApi] = useState([]); // 책 데이터 배열
     const [book, setBook] = useState('');
-    const [selectBook, setSelectBook] = useState();
+    const [selectBook, setSelectBook] = useState(); // 책 제목
     const [selectIndex, setSelectIndex] = useState();
+
+
+    const handleSearch = async () => {
+        try {
+            var client_id = 'iP8vsf1OqIrEPCAFwl5D';
+            var client_secret = 'Sky4wuUPmp';
+            const api_url = `https://openapi.naver.com/v1/search/book?query=${encodeURI(book)}`;
+            const options = {
+                headers: {
+                    'X-Naver-Client-Id': client_id,
+                    'X-Naver-Client-Secret': client_secret
+                }
+            };
+            const response = await axios.get(api_url, options);
+            const items = response.data.items.map(item => ({ id: item.isbn, image: item.image, title: item.title }));
+            setBookApi(items);
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 
     const renderItem = ({ item, index }) => {
         return (
             <TouchableOpacity
                 onPress={() => {
                     setSelectIndex(index)
-                    setSelectBook(item)
+                    setSelectBook(item.title)
                 }}
                 style={{ marginBottom: 12 }}
             >
@@ -56,7 +56,7 @@ const Book = ({ navigation }) => {
                         </View>
                     )
                 }
-                <Image source={item.img} style={{ width: width / 3, height: width / 3 }} resizeMode="contain" />
+                <Image source={{ uri: item.image }} style={{ width: width / 3, height: width / 3 }} resizeMode="contain" />
             </TouchableOpacity>
         )
     }
@@ -81,6 +81,7 @@ const Book = ({ navigation }) => {
                             placeholder="교재 검색"
                             placeholderTextColor='#9C9C9C'
                             returnKeyType='search'
+                            onSubmitEditing={handleSearch}
                             spellCheck={false}
                             autoCorrect={false}
                             autoCapitalize='none'
@@ -108,7 +109,7 @@ const Book = ({ navigation }) => {
                     </View>
                     <View style={{ marginTop: 16, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                         <FlatList
-                            data={dummy_data}
+                            data={bookApi}
                             renderItem={renderItem}
                             keyExtractor={item => item.id}
                             showsVerticalScrollIndicator={false}

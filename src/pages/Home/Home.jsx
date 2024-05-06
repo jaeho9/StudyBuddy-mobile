@@ -212,6 +212,24 @@ const dummy_comment = [
 ];
 
 const Home = ({ navigation, route }) => {
+  const [feedData, setFeedData] = useState();
+
+  // useEffect(() => {
+  //   const FeedCollection = firestore().collection('post');
+
+  //   const callApi = async () => {
+  //     try {
+  //       const data = await FeedCollection.get();
+  //       setFeedData(data._docs.map(doc => ({ ...doc.data(), result: doc.name })));
+  //       console.log(post);
+  //     } catch (error) {
+  //       console.log(error.message);
+  //     }
+  //   };
+
+  //   callApi();
+  // })
+
 
   const [sort, setSort] = useState("");
   const onChangeSort = (value) => setSort(value);
@@ -572,9 +590,10 @@ const Home = ({ navigation, route }) => {
         )}
       />
 
+      {/* Add 버튼 */}
       <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end', right: 0, bottom: 80, position: 'absolute', zIndex: 10, marginRight: 12 }}>
         <TouchableOpacity onPress={() => navigation.navigate('Add')}>
-          <Image source={add} style={{ width: 68, height: 68 }} />
+          <Image source={add} style={{ width: 72, height: 72 }} />
         </TouchableOpacity>
       </View>
     </SafeAreaView >
