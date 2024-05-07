@@ -24,6 +24,7 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
         paddingHorizontal: 18,
         borderBottomWidth: 1,
         borderBottomColor: "#dddddd",
+        backgroundColor: '#fff'
       }}
     >
       <TouchableOpacity onPress={() => navigation.navigate(leftClick)}>
