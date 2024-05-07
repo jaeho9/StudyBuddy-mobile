@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   Image,
   TouchableOpacity,
   SafeAreaView,
+  Button,
 } from "react-native";
 import Header from "components/Tab/header";
 import { useNavigation } from "@react-navigation/native";
 import MiddleTab from "components/Tab/MiddleTab"; // MiddleTab 컴포넌트 임포트
 import { MyPagePostList } from "components/List/MyPagePostList";
+
+import firestore from "@react-native-firebase/firestore"; // firestore
 
 const menuIcon = require("assets/icons/home/menu.png");
 const settings = require("assets/mypage/settings.png");
@@ -29,11 +32,43 @@ const dummyData = {
 };
 
 const Mypage = ({}) => {
+  //user
+  const [user, setUser] = useState([]);
+  const userCollection = firestore().collection("user");
+
+  const user_api = async () => {
+    try {
+      const user_data = await userCollection.get();
+      setUser(user_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    } catch (error) {
+      console.log("user error", error.message);
+    }
+  };
+  // const dummyData = {
+  //   id: user.id,
+  //   name: user.nickname,
+  //   email: user.email,
+  //   // profileImage: user.profile_img,
+  //   profileImage: MyPageProfile,
+  //   addtext: true,
+  //   introduction: user.about_me,
+  //   link: user.link,
+  //   date: user.birthday,
+  // };
+
+  useEffect(() => {
+    // 컴포넌트가 처음으로 렌더링될 때 사용자 데이터를 가져옴
+    user_api();
+  }, []); // 빈 배열을 전달하여 컴포넌트가 처음으로 렌더링될 때 한 번만 실행되도록 함
+
   const navigation = useNavigation();
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const handleTabPress = (index) => {
+  const handleTabPress = async (index) => {
     setSelectedTab(index);
+    if (index === 0) {
+      await user_api();
+    }
   };
 
   const handleEditProfile = () => {
@@ -123,7 +158,12 @@ const Mypage = ({}) => {
           onPress={() => handleTabPress(2)}
         />
       </View>
-
+      {/* <View> // test'''''''''''''''''''''''''''''''''''''
+        <Button title="데이터 불러오기" onPress={user_api} />
+        {user?.map((row, idx) => {
+          return <Text>{row.email}</Text>;
+        })}
+      </View> */}
       <View style={styles.cardListContainer}>
         <MyPagePostList />
       </View>

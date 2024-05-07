@@ -12,6 +12,8 @@
   "dependencies": {
     "@react-native-camera-roll/camera-roll": "^7.6.0",
     "@react-native-community/viewpager": "^5.0.11",
+    "@react-native-firebase/app": "^19.2.2",
+    "@react-native-firebase/firestore": "^19.2.2",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/material-top-tabs": "^6.6.13",
     "@react-navigation/native": "^6.1.17",
