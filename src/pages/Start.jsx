@@ -10,7 +10,7 @@ import {
 
 const studybuddyIcon = require("assets/icons/home/studybuddy.png");
 
-const Start = ({navigation}) => {
+const Start = ({ navigation }) => {
   const handleLogin = () => {
     navigation.navigate('Login');
   };
@@ -21,10 +21,10 @@ const Start = ({navigation}) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View style={styles.container}>
         <Image source={studybuddyIcon} style={styles.logo} />
-        <TouchableOpacity style={[styles.button, {width: '100%'}]} onPress={handleLogin} activeOpacity={0.5} >
+        <TouchableOpacity style={[styles.login_button, { width: '100%' }]} onPress={handleLogin} activeOpacity={0.5} >
           <Text style={styles.buttonText}>로그인</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, {width: '100%'}]} onPress={handleSignup} activeOpacity={0.5}>
+        <TouchableOpacity style={[styles.button, { width: '100%' }]} onPress={handleSignup} activeOpacity={0.5}>
           <Text style={styles.buttonText}>새로 시작하기</Text>
         </TouchableOpacity>
       </View>
@@ -45,6 +45,17 @@ const styles = StyleSheet.create({
     height: 70,
     marginBottom: 250,
   },
+  login_button: {
+    backgroundColor: '#FF7474',
+    opacity: 0.7,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 374,
+    height: 60,
+    borderRadius: 8,
+    marginBottom: 10,
+
+  },
   button: {
     backgroundColor: '#FF7474',
     alignItems: 'center',
@@ -53,7 +64,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 8,
     marginBottom: 10,
-    
+
   },
   buttonText: {
     fontSize: 16,

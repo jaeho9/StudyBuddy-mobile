@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import Header from 'components/Header';
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 const backIcon = require('assets/icons/home/back.png');
 const checkExistingData = async (nickname, email) => {
   const existingNickname = 'rlawlgud';
@@ -119,7 +121,7 @@ const Signup3 = ({ navigation }) => {
     }
   };
 
-  const handleSignup = async() => {
+  const handleSignup = async () => {
     let isValid = true;
     if (!nickname.trim()) {
       setNicknameError('닉네임을 입력하세요.');
@@ -154,55 +156,57 @@ const Signup3 = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <Header left={backIcon} leftClick={'Signup2'} />
-      <View style={styles.container}>
-        <View>
-          <Text style={styles.title}>스터디버디</Text>
-          <Text style={[styles.title, {color:'#ff7474'}]}>회원가입</Text>
-          <View style={{ marginTop: 80}} >
-            <View>
-              <Text style={{fontSize: 16, color: '#ff7474', fontWeight:'bold', marginBottom:20 }}>계정</Text>
+      <KeyboardAwareScrollView>
+        <View style={styles.container}>
+          <View>
+            <Text style={styles.title}>스터디버디</Text>
+            <Text style={[styles.title, { color: '#ff7474' }]}>회원가입</Text>
+            <View style={{ marginTop: 60 }} >
+              <View>
+                <Text style={{ fontSize: 16, color: '#ff7474', fontWeight: 'bold', marginBottom: 20 }}>계정</Text>
+              </View>
+              <TextInput
+                style={styles.input}
+                placeholder="닉네임 입력"
+                onChangeText={handleNicknameChange}
+                value={nickname}
+                onFocus={() => setCurrentFocus('nickname')}
+              />
+              {nicknameError && (currentFocus === 'nickname' || !email.trim()) ? <Text style={[styles.errorText, nicknameError === '사용 가능한 닉네임입니다.' ? styles.successText : null]}>{nicknameError}</Text> : null}
+              <TextInput
+                style={styles.input}
+                placeholder="이메일 입력"
+                onChangeText={handleEmailChange}
+                value={email}
+                onFocus={() => setCurrentFocus('email')}
+              />
+              {emailError && (currentFocus === 'email' || !nickname.trim()) ? <Text style={[styles.errorText, emailError === '사용 가능한 이메일입니다.' ? styles.successText : null]}>{emailError}</Text> : null}
+              <TextInput
+                style={styles.input}
+                placeholder="비밀번호 입력"
+                secureTextEntry={true}
+                onChangeText={handlePasswordChange}
+                value={password}
+              />
+              {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+              <TextInput
+                style={styles.input}
+                placeholder="비밀번호 확인"
+                secureTextEntry={true}
+                onChangeText={handleConfirmPasswordChange}
+                value={confirmPassword}
+              />
+              {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
             </View>
-            <TextInput
-              style={styles.input}
-              placeholder="닉네임 입력"
-              onChangeText={handleNicknameChange}
-              value={nickname}
-              onFocus={() => setCurrentFocus('nickname')}
-            />
-            {nicknameError && (currentFocus === 'nickname' || !email.trim()) ? <Text style={[styles.errorText, nicknameError === '사용 가능한 닉네임입니다.' ? styles.successText : null]}>{nicknameError}</Text> : null}
-            <TextInput
-              style={styles.input}
-              placeholder="이메일 입력"
-              onChangeText={handleEmailChange}
-              value={email}
-              onFocus={() => setCurrentFocus('email')}
-            />
-            {emailError && (currentFocus === 'email' || !nickname.trim()) ? <Text style={[styles.errorText, emailError === '사용 가능한 이메일입니다.' ? styles.successText : null]}>{emailError}</Text> : null}
-            <TextInput
-              style={styles.input}
-              placeholder="비밀번호 입력"
-              secureTextEntry={true}
-              onChangeText={handlePasswordChange}
-              value={password}
-            />
-            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
-            <TextInput
-              style={styles.input}
-              placeholder="비밀번호 확인"
-              secureTextEntry={true} 
-              onChangeText={handleConfirmPasswordChange}
-              value={confirmPassword}
-            />
-            {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
           </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleSignup}
+            activeOpacity={0.5}>
+            <Text style={styles.buttonText}>회원가입</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleSignup}
-          activeOpacity={0.5}>
-          <Text style={styles.buttonText}>회원가입</Text>
-        </TouchableOpacity>
-      </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
@@ -212,11 +216,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: 40
   },
   title: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#777777',
+    marginLeft: 10
   },
   input: {
     width: 337,
@@ -232,7 +239,7 @@ const styles = StyleSheet.create({
     width: 374,
     height: 60,
     borderRadius: 8,
-    marginBottom: 150,
+    marginTop: 12,
   },
   buttonText: {
     fontSize: 16,

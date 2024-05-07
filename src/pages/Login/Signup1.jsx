@@ -7,8 +7,11 @@ import {
   SafeAreaView,
   Image,
   Alert,
+  Dimensions
 } from 'react-native';
 import Header from 'components/Header';
+
+const { width, height } = Dimensions.get("window");
 
 const backIcon = require('assets/icons/home/back.png');
 const arrowIcon = require('assets/icons/signupandlogin/arrow.png');
@@ -52,8 +55,8 @@ const Signup1 = ({ navigation }) => {
       <View style={styles.container}>
         <View>
           <Text style={styles.title}>스터디버디</Text>
-          <Text style={[styles.title, {color:'#ff7474'}]}>약관 동의</Text>
-          <View style={{ marginTop: 80}} >
+          <Text style={[styles.title, { color: '#ff7474' }]}>약관 동의</Text>
+          <View style={{ marginTop: 70, width: width - 40 }} >
             <TouchableOpacity
               style={styles.checkboxContainer}
               onPress={toggleAllCheck}>
@@ -86,8 +89,10 @@ const Signup1 = ({ navigation }) => {
                   isTermsChecked && styles.checkedCheckbox,
                 ]}
               />
-              <Text style={styles.checkboxText}>[필수] 이용약관 동의</Text>
-              <Image source={arrowIcon} style={{ width: 7, height: 12, marginLeft: 172 }} />
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: width - 90 }}>
+                <Text style={styles.checkboxText}>[필수] 이용약관 동의</Text>
+                <Image source={arrowIcon} style={{ width: 7, height: 12 }} />
+              </View>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.checkboxContainer}
@@ -98,10 +103,10 @@ const Signup1 = ({ navigation }) => {
                   isPrivacyChecked && styles.checkedCheckbox,
                 ]}
               />
-              <Text style={styles.checkboxText}>
-                [필수] 개인정보 수집 및 이용동의
-              </Text>
-              <Image source={arrowIcon} style={{ width: 7, height: 12, marginLeft: 90 }} />
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: width - 90 }}>
+                <Text style={styles.checkboxText}>[필수] 개인정보 수집 및 이용동의</Text>
+                <Image source={arrowIcon} style={{ width: 7, height: 12 }} />
+              </View>
             </TouchableOpacity>
           </View>
         </View>
@@ -121,17 +126,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: 40,
   },
   title: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#777777',
+    marginLeft: 10
   },
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
-    marginTop: 10,
+    margin: 10
   },
   checkbox: {
     width: 15,

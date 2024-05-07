@@ -9,13 +9,13 @@ import {
 
 const onboardingIcon = require("assets/icons/onboarding/onboarding1.jpg");
 
-const Onboarding = ({navigation}) => {
+const Onboarding = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>스터디버디 사용법</Text>
       <Image source={onboardingIcon} style={styles.image} />
       <Text style={styles.description}>
-        다양 아티클을 만나 시간을 효율적으로{'\n'}활용하며 새로운 지식을 습득해보세요.
+        다양한 아티클을 만나 시간을 효율적으로{'\n'}활용하며 새로운 지식을 습득해보세요.
       </Text>
       <View style={styles.contentContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('Start')}>
@@ -47,17 +47,20 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     color: '#606060',
-    marginBottom: 50,
+    marginTop: 40,
+    marginBottom: 40
   },
   image: {
     width: 284,
     height: 284,
-    marginBottom: 50,
+    marginBottom: 40,
   },
   description: {
     fontSize: 18,
+    fontWeight: '400',
+    color: '#606060',
     textAlign: 'center',
-    marginBottom: 100,
+    marginBottom: 80,
   },
   contentContainer: {
     flexDirection: 'row',
