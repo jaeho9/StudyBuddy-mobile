@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-const header = ({ left, title, right, leftClick, rightClick }) => {
+const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -50,9 +50,23 @@ const header = ({ left, title, right, leftClick, rightClick }) => {
           <Image source={title} style={{ width: 40, height: 40 }} />
         )}
       </TouchableOpacity>
-      <TouchableOpacity onPress={rightClick}>
+      <TouchableOpacity
+        onPress={() => rightClick && navigation.navigate(rightClick)}
+      >
         {right ? (
-          <Image source={right} style={{ width: 24, height: 24 }} resizeMode="contain" />
+          typeof right === "string" ? (
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+                color: isDuplicate ? "#FF7474" : "#bdbdbd", // isDuplicate 상태에 따라 색상 변경
+              }}
+            >
+              {right}
+            </Text>
+          ) : (
+            <Image source={right} style={{ width: 24, height: 24 }} />
+          )
         ) : (
           <View style={{ width: 24, height: 24 }}></View>
         )}
