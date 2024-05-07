@@ -212,24 +212,6 @@ const dummy_comment = [
 ];
 
 const Home = ({ navigation, route }) => {
-  const [feedData, setFeedData] = useState();
-
-  // useEffect(() => {
-  //   const FeedCollection = firestore().collection('post');
-
-  //   const callApi = async () => {
-  //     try {
-  //       const data = await FeedCollection.get();
-  //       setFeedData(data._docs.map(doc => ({ ...doc.data(), result: doc.name })));
-  //       console.log(post);
-  //     } catch (error) {
-  //       console.log(error.message);
-  //     }
-  //   };
-
-  //   callApi();
-  // })
-
 
   const [sort, setSort] = useState("");
   const onChangeSort = (value) => setSort(value);

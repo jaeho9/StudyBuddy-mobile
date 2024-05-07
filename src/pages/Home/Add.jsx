@@ -90,7 +90,7 @@ const Add = ({ navigation, route }) => {
                 start_date: selectedDate.startDate,
                 study: text,
                 update_date: formattedDate,
-                user_id: ''
+                user_id: 'Gsh6TJg50rswXPGaA7Zk'
             });
             setSelectedCommunity('');
             setSelectedDate('');
