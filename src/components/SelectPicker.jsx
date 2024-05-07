@@ -4,6 +4,7 @@ export const SelectPicker = () => {
     return (
         <RNPickerSelect
             onValueChange={(value) => console.log(value)}
+            useNativeAndroidPickerStyle={false}
             placeholder={{
                 label: '정렬',
                 value: 'done'

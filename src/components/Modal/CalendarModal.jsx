@@ -83,7 +83,7 @@ const CalendarModal = ({ isVisible, setIsVisible, onSelectDate }) => {
                     onDayPress={handleDayPress}
                     markedDates={generateMarkedDates()}
                     style={{
-                        marginTop: 28
+                        marginTop: 20
                     }}
                     theme={{
                         backgroundColor: '#ffffff',

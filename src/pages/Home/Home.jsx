@@ -6,9 +6,9 @@ import firestore from '@react-native-firebase/firestore';
 
 // Header
 import Header from '../../components/Tab/header';
-
+// Modal
 import ModalSelectorPopup from "../../components/Modal/CustomModal2";
-
+// SelectPicker
 import SelectPicker from "components/SelectPicker";
 
 // Images
@@ -212,7 +212,7 @@ const dummy_comment = [
 ];
 
 const Home = ({ navigation, route }) => {
-
+  // Select Picker
   const [sort, setSort] = useState("");
   const onChangeSort = (value) => setSort(value);
 
@@ -329,6 +329,7 @@ const Home = ({ navigation, route }) => {
     );
   };
 
+  // 좋아요
   const handleClickHeart = (index) => {
     setDetailClick(
       dummy_communityDetail.map((v, i) => {
@@ -345,8 +346,10 @@ const Home = ({ navigation, route }) => {
     );
   };
 
+  // 댓글
   const handelClickComment = (item) => { };
 
+  // 북마크
   const handleClickBookmark = (index) => {
     setDetailClick(
       dummy_communityDetail.map((v, i) => {
@@ -358,6 +361,7 @@ const Home = ({ navigation, route }) => {
     );
   };
 
+  // 게시물
   const renderCommunityDetail = (item) => {
     return (
       <TouchableOpacity
@@ -517,7 +521,7 @@ const Home = ({ navigation, route }) => {
     );
   };
 
-  // 게시판
+  // 게시물 정렬
   const renderCommunityListClick = ({ item, index }) => {
     return dummy_communityList.map((v, i) => {
       if (v.isClick === true && v.community_name === "전체") {

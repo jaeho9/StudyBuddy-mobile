@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, FlatList, Dimensions, Text } from "react-native";
+import { SafeAreaView, View, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, FlatList, Dimensions, KeyboardAvoidingView, ScrollView } from "react-native";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 // Header
 import Header from '../../components/Tab/header';
 // Axios
@@ -16,11 +17,11 @@ const { width, height } = Dimensions.get("window");
 const Book = ({ navigation }) => {
 
     const [bookApi, setBookApi] = useState([]); // 책 데이터 배열
-    const [book, setBook] = useState('');
+    const [book, setBook] = useState('');   // 검색 텍스트
     const [selectBook, setSelectBook] = useState(); // 책 제목
     const [selectIndex, setSelectIndex] = useState();
 
-
+    // 네이버 검색 API
     const handleSearch = async () => {
         try {
             var client_id = 'iP8vsf1OqIrEPCAFwl5D';
@@ -40,6 +41,7 @@ const Book = ({ navigation }) => {
         }
     }
 
+    // FlatList
     const renderItem = ({ item, index }) => {
         return (
             <TouchableOpacity
