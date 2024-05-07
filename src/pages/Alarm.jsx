@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   FlatList,
 } from "react-native";
-import Header from "components/Header";
+import Header from "components/Tab/header";
 
 const backIcon = require("assets/icons/home/back.png");
 const deleteIcon = require("assets/icons/home/delete.png");
@@ -15,7 +15,7 @@ const pencilOnIcon = require("assets/icons/home/pencil_on.png");
 const heartOffIcon = require("assets/icons/home/heart_off.png");
 const commentOffIcon = require("assets/icons/home/comment_off.png");
 
-const Alarm = ({}) => {
+const Alarm = ({ }) => {
   const [notifications, setNotifications] = useState([
     {
       id: 1,
@@ -45,16 +45,16 @@ const Alarm = ({}) => {
         leftClick={"Home"}
         rightClick={"Alarm"}
       />
-      <View style={{ flex: 1}}>
+      <View style={{ flex: 1 }}>
         <FlatList
           data={notifications}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({item})=> (
-            <View style={{flexDirection:"row", alignItems:"center", padding: 10, borderBottomWidth: 1, borderBottomColor: "#e5e5e5", backgroundColor: item.id === 1 ? "#ffffff" : "#f1f1f1"}}>
-              <Image source={item.icon} style={{width:20, height:20, margin: 3, marginLeft: 20, }} />
-              <View style={{ margin:5, marginLeft: 20}}>
-                <Text style={{fontWeight: "bold", fontSize:14 }}>{item.title}</Text>
-                <Text style={{fontSize:14}}>{item.content}</Text>
+          renderItem={({ item }) => (
+            <View style={{ flexDirection: "row", alignItems: "center", padding: 10, borderBottomWidth: 1, borderBottomColor: "#e5e5e5", backgroundColor: item.id === 1 ? "#ffffff" : "#f1f1f1" }}>
+              <Image source={item.icon} style={{ width: 20, height: 20, margin: 3, marginLeft: 20, }} />
+              <View style={{ margin: 5, marginLeft: 20 }}>
+                <Text style={{ fontWeight: "bold", fontSize: 14 }}>{item.title}</Text>
+                <Text style={{ fontSize: 14 }}>{item.content}</Text>
               </View>
             </View>
           )}
