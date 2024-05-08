@@ -23,8 +23,20 @@ const dummy_data = [
     favorites: "123",
     comments: "123",
   },
+  {
+    id: "2", // 고유 ID 추가
+    category: "정보처리기사", // MyPage용? 추가 <<<<<<< 더미 데이터를 페이지에서 적용하는 방법..?
+    name: "김도영",
+    date: "2023.02.04",
+    length: "2주", // 오타 수정 ('legnth' -> 'length')
+    content1: "1. 준비 기간 : 2주",
+    content2: "2. 교재 : X",
+    content3: "3. 결과: 합격!",
+    favorites: "123",
+    comments: "123",
+  },
   // {
-  //   id: "2", // 고유 ID 추가
+  //   id: "3", // 고유 ID 추가
   //   category: "정보처리기사", // MyPage용? 추가 <<<<<<< 더미 데이터를 페이지에서 적용하는 방법..?
   //   name: "김도영",
   //   date: "2023.02.04",
@@ -135,6 +147,7 @@ export function MyPagePostList() {
       data={dummy_data}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
+      contentContainerStyle={{ paddingBottom: "10%" }}
     />
   );
 }

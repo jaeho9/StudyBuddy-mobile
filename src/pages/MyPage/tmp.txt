@@ -22,7 +22,7 @@ Mypage
 
 1. 로그인한 id 의 프로필 을 보여줘야 함
 
-프로필
+프로필  -------------------------(완)-------------------------
 user.profile_img
 user.email
 user.about_me
@@ -30,14 +30,27 @@ user.link
 user.birthday
 
 
+2.
 게시글
 community.name (ex 정보처리기사)
 user.profile_img (프로필 사진)
 user.nickname (이름)
-user.reg_date (게시글 등록일) -> YYYY.MM.DD
+post.reg_date (게시글 등록일) -> YYYY.MM.DD
 1. post./// 준비기간 .......... 생각좀
 2. post.book /// 교재 없으면 X
 3. post.result /// 합 , 불 
+
+3.
+하트
+
+4.
+댓글
+
+
+5.
+수정
+
+
 
 
 

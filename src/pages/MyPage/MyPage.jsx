@@ -20,30 +20,45 @@ const link = require("assets/mypage/link.png");
 const calendar = require("assets/mypage/calendar.png");
 const MyPageProfile = require("assets/mypage/Image/MyPageProfile.png");
 
-const dummyData = {
-  id: 1,
-  name: "김도영",
-  email: "rlaehdud159@gmail.com",
-  profileImage: MyPageProfile,
-  addtext: true,
-  introduction: "정처기 필기를 2주만에 꼭 합격하겠어!",
-  link: "www.naver.com",
-  date: "1999년 1월 1일",
-};
+// const dummyData = {
+//   id: 1,
+//   name: "김도영",
+//   email: "rlaehdud159@gmail.com",
+//   profileImage: MyPageProfile,
+//   addtext: true,
+//   introduction: "정처기 필기를 2주만에 꼭 합격하겠어!",
+//   link: "www.naver.com",
+//   date: "1999년 1월 1일",
+// };
 
 const Mypage = ({}) => {
   //user
   const [user, setUser] = useState([]);
+  const [dummyData, setDummyData] = useState({});
   const userCollection = firestore().collection("user");
 
   const user_api = async () => {
     try {
       const user_data = await userCollection.get();
+      const userData = user_data._docs
+        .find((doc) => doc.id === "test_id") // 로그인 한 아이디 별 데이터 프로필 불러오기
+        .data(); // id가 '1vfLu0QlpF6ZVigXb1GE'인 사용자 데이터 가져오기
+      setDummyData({
+        id: userData.id,
+        name: userData.nickname,
+        email: userData.email,
+        profileImage: userData.profile_img,
+        addtext: link || birthday ? true : false,
+        introduction: userData.about_me,
+        link: userData.link,
+        date: userData.birthday,
+      });
       setUser(user_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.log("user error", error.message);
     }
   };
+
   // const dummyData = {
   //   id: user.id,
   //   name: user.nickname,
@@ -92,7 +107,8 @@ const Mypage = ({}) => {
         }}
       >
         <View style={styles.Profilecontainer}>
-          <Image source={dummyData.profileImage} />
+          {/* <Image source={dummyData.profileImage} /> */}
+          <Image source={MyPageProfile} />
         </View>
         <View style={styles.ProfileTextcontainer}>
           <Text style={styles.ProfileName}>{dummyData.name}</Text>
