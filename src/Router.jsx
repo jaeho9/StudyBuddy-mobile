@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import CustomBottomTab from "components/Tab/CustomBottomTab";
 import Home from "pages/Home/Home";
-import Community from "pages/Community/Community";
+import Community from "pages/Community/pages/Community/Community";
 import Archives from "pages/Archives/Archives";
 import Mypage from "pages/MyPage/MyPage";
 import Alarm from "pages/Home/Alarm";
@@ -26,12 +26,14 @@ import EditProfile from "pages/MyPage/EditProfile";
 import Settings from "pages/MyPage/Settings";
 import Library from "pages/MyPage/Library";
 import Camera from "pages/MyPage/Camera";
-
+import CommunityPost from "pages/Community/CommunityPost";
+import CommunityAdd from "pages/Community/CommunityAdd";
+import CommunitySearch from "pages/Community/CommunitySearch";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const renderTabBar = (props) => <CustomBottomTab {...props} />
+const renderTabBar = (props) => <CustomBottomTab {...props} />;
 
 const MainTab = () => {
   return (
@@ -51,7 +53,10 @@ const MainTab = () => {
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      initialRouteName="Splash"
+      screenOptions={{ headerShown: false }}
+    >
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name='Onboarding' component={Onboarding} />
       <Stack.Screen name="Start" component={Start} />
@@ -71,6 +76,9 @@ const Router = () => {
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="Library" component={Library} />
       <Stack.Screen name="Camera" component={Camera} />
+      <Stack.Screen name="CommunityPost" component={CommunityPost} />
+      <Stack.Screen name="CommunityAdd" component={CommunityAdd} />
+      <Stack.Screen name="CommunitySearch" component={CommunitySearch} />
     </Stack.Navigator>
   );
 };
