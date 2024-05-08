@@ -16,11 +16,12 @@ export const SelectPicker = () => {
             ]}
             style={{
                 inputAndroidContainer: {
-                    width: '20%',
-                    alignItems: 'flex-end'
+                    width: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center'
                 },
                 inputAndroid: {
-                    fontSize: 14, height: 30, color: '#7A7575'
+                    fontSize: 14, height: 30, color: '#7A7575', textAlign: 'center', textAlignVertical: 'center', paddingVertical: 2
                 },
                 inputIOSContainer: {
                     width: '20%',

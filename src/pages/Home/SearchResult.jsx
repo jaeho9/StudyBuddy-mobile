@@ -4,7 +4,7 @@ import { SafeAreaView, Text, View, FlatList, TouchableOpacity, Image } from "rea
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
 // Header
-import Header from '../../components/Tab/header';
+import Header from '../../components/Tab/Header';
 // Images
 const arrowLeft = require('assets/icons/add/arrow_left.png');
 const profileImg = require("assets/icons/archives/profile.png");
@@ -489,14 +489,14 @@ const NewTab = ({ item }) => {
 }
 
 // SearchResult 화면
-const SearchResult = ({ route }) => {
+const SearchResult = ({ route, navigation }) => {
     const { text } = route.params ? route.params : {};
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <Header
                 left={arrowLeft}
-                leftClick={"Search"}
+                leftClick={() => navigation.goBack()}
                 title={text}
             />
             <Tab.Navigator

@@ -9,12 +9,16 @@ import {
   StyleSheet,
   Modal,
 } from "react-native";
-import ActionButton from "react-native-action-button";
-import CustomHeader from "components/CustomHeader";
-import { ModalSelect } from "components/CustomModal";
-import { useNavigation, useIsFocused } from "@react-navigation/native";
-import firestore from "@react-native-firebase/firestore";
 
+import { useNavigation, useIsFocused } from "@react-navigation/native";
+// FireStore
+import firestore from "@react-native-firebase/firestore";
+// Components
+import Header from "components/Tab/Header";
+import { ModalSelect } from "components/Modal/CustomModal";
+// SelectPicker
+import SelectPicker from "components/SelectPicker";
+// Images
 const menuIcon = require("assets/icons/archives/menu.png");
 const profileImg = require("assets/icons/archives/profile.png");
 const searchIcon = require("assets/icons/archives/search.png");
@@ -28,8 +32,13 @@ const commentOffIcon = require("assets/icons/archives/comment_off.png");
 const commentOnIcon = require("assets/icons/archives/comment_on.png");
 const bookmarkOnIcon = require("assets/icons/archives/bookmark_on.png");
 const bookmarkOffIcon = require("assets/icons/archives/bookmark_off.png");
+const add = require('assets/icons/home/add.png');
 
 const Archives = ({ navigation }) => {
+  // Select Picker
+  const [sort, setSort] = useState("");
+  const onChangeSort = (value) => setSort(value);
+
   //post
   const [post, setPost] = useState([]);
   const postCollection = firestore().collection("post");
@@ -252,14 +261,12 @@ const Archives = ({ navigation }) => {
       <TouchableOpacity
         onPress={() => handleClickList(item)}
         style={{
-          marginLeft: 14,
-          marginVertical: 6,
-          borderRadius: 12,
+          marginRight: 8,
+          borderRadius: 16,
           borderWidth: item.isClick ? 0 : 1,
           borderColor: item.isClick ? "rgba(255, 116, 116, 0.12)" : "#dddddd",
           alignSelf: "flex-start",
-          paddingHorizontal: 7,
-          paddingVertical: 4,
+          padding: 8,
           backgroundColor: item.isClick ? "rgba(255, 116, 116, 0.12)" : "#fff",
         }}
       >
@@ -277,46 +284,46 @@ const Archives = ({ navigation }) => {
         // onPress={() => navigation.navigate("Post_Firebase")}
         style={{
           backgroundColor: "#fff",
-          marginHorizontal: 12,
+          marginHorizontal: 20,
           // marginBottom: lastIndex === index ? 80 : 12,
           marginBottom: 12,
-          paddingVertical: 15,
-          paddingHorizontal: 12,
+          paddingVertical: 20,
+          paddingHorizontal: 16,
           borderRadius: 12,
         }}
       >
-        <Text style={{ fontSize: 14, fontWeight: "bold", color: "#ff7474" }}>
+        <Text style={{ fontSize: 16, fontWeight: "bold", color: "#ff7474" }}>
           {communities.map((v, i) => {
             if (v.community_id === item.community_id) return v.community_name;
           })}
         </Text>
-        <View style={{ marginTop: 8 }}>
+        <View style={{ marginTop: 12 }}>
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              gap: 5,
+              gap: 6,
             }}
           >
             <Image source={profileImg} style={{ width: 32, height: 32 }} />
 
-            <Text style={{ fontSize: 14, color: "#000000" }}>
+            <Text style={{ fontSize: 16, color: "#000000" }}>
               {user.map((v, i) => {
                 if (v.id === item.user_id) return v.nickname;
               })}
             </Text>
-            <Text style={{ fontSize: 10, color: "#969696" }}>
+            <Text style={{ fontSize: 12, color: "#969696" }}>
               {changeDate(item.reg_date)}
             </Text>
           </View>
-          <View style={{ marginHorizontal: 40, gap: 7 }}>
-            <Text style={{ fontSize: 12, color: "#000000" }}>
+          <View style={{ marginHorizontal: 40, gap: 8, marginTop: 8 }}>
+            <Text style={{ fontSize: 14, color: "#000000" }}>
               1. 준비 기간 : {changeDate(item.start_date)}
             </Text>
-            <Text style={{ fontSize: 12, color: "#000000" }}>
+            <Text style={{ fontSize: 14, color: "#000000" }}>
               2. 교재 : {item.book}
             </Text>
-            <Text style={{ fontSize: 12, color: "#000000" }}>
+            <Text style={{ fontSize: 14, color: "#000000" }}>
               3. 결과 : {item.result}
             </Text>
           </View>
@@ -371,9 +378,9 @@ const Archives = ({ navigation }) => {
           style={{
             flexDirection: "row",
             position: "absolute",
-            right: 11,
-            bottom: 9,
-            gap: 11,
+            right: 12,
+            bottom: 10,
+            gap: 12,
           }}
         >
           <View
@@ -439,8 +446,10 @@ const Archives = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f1f1f1" }}>
-      <CustomHeader left={menuIcon} title={"Archives"} right={alarmOffIcon} />
-      <View style={{ flexDirection: "row" }}>
+      <Header left={menuIcon} title={"Archives"} right={alarmOffIcon} rightClick={() => navigation.navigate('Alarm')} />
+
+      {/* 커뮤니티 목록 */}
+      <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', marginTop: 8, marginHorizontal: 14 }}>
         <FlatList
           data={communities}
           renderItem={renderCommunityList}
@@ -450,41 +459,36 @@ const Archives = ({ navigation }) => {
           removeClippedSubviews
         />
         <TouchableOpacity
-          onPress={() => onPressSearch()}
-          style={{ marginVertical: 9, marginHorizontal: 12 }}
+          onPress={() => navigation.navigate('Search')}
+          style={{ marginVertical: 9, marginLeft: 12 }}
         >
           <Image source={searchIcon} style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
       </View>
-      <View
-        style={{
-          marginRight: 12,
-          marginBottom: 30,
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            position: "absolute",
-            right: 0,
-          }}
-        >
-          <Text>좋아요순</Text>
-          <Image source={sortIcon} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-      </View>
+
+      {/* 게시판 */}
       <FlatList
         data={post}
         renderItem={renderCommunityListClick}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         removeClippedSubviews
+        ListHeaderComponent={() => (
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginTop: 8, marginRight: 18, marginBottom: 10 }}>
+            <SelectPicker
+              onChangeSort={onChangeSort}
+            />
+            <Image source={sortIcon} style={{ width: 24, height: 24 }} />
+          </View>
+        )}
       />
-      <ActionButton
-        offsetY={80}
-        buttonColor="#ff7474"
-        onPress={() => navigation.navigate("AddPost")}
-      />
+
+      {/* Add 버튼 */}
+      <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end', right: 0, bottom: 80, position: 'absolute', zIndex: 10, marginRight: 12 }}>
+        <TouchableOpacity onPress={() => navigation.navigate('Add')}>
+          <Image source={add} style={{ width: 72, height: 72 }} />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

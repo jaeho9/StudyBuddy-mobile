@@ -1,17 +1,9 @@
 import React, { useContext, useState } from "react";
-import {
-  View,
-  TextInput,
-  Image,
-  StyleSheet,
-  Button,
-  Modal,
-  TouchableOpacity,
-  Text,
-} from "react-native";
-import Header from "components/header";
+import { View, TextInput, Image, StyleSheet, Button, Modal, TouchableOpacity, Text } from "react-native";
+// Header
+import Header from "components/Tab/Header";
 
-const TagModal = ({ visible, onClose, onSelect, onAddCommunity }) => {
+const TagModal = ({ visible, onClose, onSelect, onAddCommunity, navigation }) => {
   const tags = ["code", "palette"];
   return (
     <Modal visible={visible} animationType="slide" transparent={true}>
@@ -108,7 +100,7 @@ const CommunityAdd = () => {
     <View style={styles.container}>
       <Header
         left={clear}
-        leftClick={"Community"}
+        leftClick={() => navigation.navigate("Community")}
         title="커뮤니티 추가"
         right={mode}
         rightClick={() => setModalVisible(true)}

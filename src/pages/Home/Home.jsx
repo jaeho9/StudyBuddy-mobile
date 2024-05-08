@@ -5,7 +5,7 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore';
 
 // Header
-import Header from '../../components/Tab/header';
+import Header from '../../components/Tab/Header';
 // Modal
 import ModalSelectorPopup from "../../components/Modal/CustomModal2";
 // SelectPicker
@@ -538,7 +538,6 @@ const Home = ({ navigation, route }) => {
         title={logo}
         right={alarmOffIcon}
         rightClick={() => navigation.navigate('Alarm')}
-        leftClick={"Alarm"}
       />
 
       {/* 커뮤니티 목록 */}
