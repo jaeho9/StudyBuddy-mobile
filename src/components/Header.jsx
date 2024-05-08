@@ -6,12 +6,11 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
-  ImageBackground,
 } from "react-native";
-const Header = ({ left, title, right, leftClick, rightClick}) => {
+const header = ({ left, title, right, leftClick, rightClick }) => {
   const navigation = useNavigation();
 
-  useEffect(() => { 
+  useEffect(() => {
     console.log("rightClick", typeof rightClick);
   }, []);
 
@@ -25,7 +24,6 @@ const Header = ({ left, title, right, leftClick, rightClick}) => {
         paddingHorizontal: 18,
         borderBottomWidth: 1,
         borderBottomColor: "#dddddd",
-        backgroundColor: "#ffffff",
       }}
     >
       <TouchableOpacity onPress={() => navigation.navigate(leftClick)}>
@@ -35,8 +33,8 @@ const Header = ({ left, title, right, leftClick, rightClick}) => {
           <View style={{ width: 24, height: 24 }}></View>
         )}
       </TouchableOpacity>
-      {title && typeof title === "string" && (
-        <TouchableOpacity>
+      <TouchableOpacity>
+        {typeof title === "string" ? (
           <Text
             style={{
               fontSize: 16,
@@ -47,19 +45,18 @@ const Header = ({ left, title, right, leftClick, rightClick}) => {
           >
             {title}
           </Text>
-        </TouchableOpacity>
-      )}
-      {title && typeof title !== "string" && (
-        <TouchableOpacity>
+        ) : (
           <Image source={title} style={{ width: 40, height: 40 }} />
-        </TouchableOpacity>
-      )}
-      {right && (
-        <TouchableOpacity onPress={() => navigation.navigate(rightClick)}>
+        )}
+      </TouchableOpacity>
+      <TouchableOpacity onPress={rightClick}>
+        {right ? (
           <Image source={right} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-      )}
+        ) : (
+          <View style={{ width: 24, height: 24 }}></View>
+        )}
+      </TouchableOpacity>
     </View>
   );
 };
-export default Header;
+export default header;
