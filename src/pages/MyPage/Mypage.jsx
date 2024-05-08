@@ -6,16 +6,19 @@ import {
     TouchableOpacity,
     SafeAreaView,
 } from "react-native";
-import Header from "components/Tab/header";
 import { useNavigation } from "@react-navigation/native";
+// Header
+import Header from "components/Tab/Header";
+// Components
 import MiddleTab from "components/Tab/MiddleTab"; // MiddleTab 컴포넌트 임포트
 import { MyPagePostList } from "components/List/MyPagePostList";
 
+// Images
 const menuIcon = require("assets/icons/home/menu.png");
-const settings = require("assets/mypage/settings.png");
-const link = require("assets/mypage/link.png");
-const calendar = require("assets/mypage/calendar.png");
-const MyPageProfile = require("assets/mypage/Image/MyPageProfile.png");
+const settings = require("assets/icons/mypage/settings.png");
+const link = require("assets/icons/mypage/link.png");
+const calendar = require("assets/icons/mypage/calendar.png");
+const MyPageProfile = require("assets/icons/mypage/Image/MyPageProfile.png");
 
 const dummyData = {
     id: 1,
@@ -46,8 +49,7 @@ const Mypage = ({ }) => {
                 left={menuIcon}
                 title={"MyPage"}
                 right={settings}
-                leftClick={"Home"}
-                rightClick={"Settings"}
+                rightClick={() => navigation.navigate("Settings")}
             />
             <View
                 style={{

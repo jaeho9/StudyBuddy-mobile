@@ -1,15 +1,9 @@
-import React, { useEffect, useState, useContext } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  Image,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import firestore from "@react-native-firebase/firestore"; // 파이어스토어 기능 검사 필요
-import Header from "components/Tab/header";
+// Header
+import Header from "components/Tab/Header";
 
 const tagImages = {
   code: require("assets/icons/Community/code.png"),
@@ -71,7 +65,7 @@ const Community = () => {
     <View style={styles.root}>
       <Header
         left={require("/assets/icons/Community/search.png")}
-        leftClick={"CommunitySearch"}
+        leftClick={() => navigation.navigate("CommunitySearch")}
         title={"Community"}
         right={require("/assets/icons/Community/group_add.png")}
         rightClick={() => navigation.navigate("CommunityAdd")}

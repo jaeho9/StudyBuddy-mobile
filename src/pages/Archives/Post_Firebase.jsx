@@ -12,10 +12,9 @@ import {
   Modal,
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import CustomHeader from "components/CustomHeader";
-import { DeleteModal } from "components/DeleteModal";
-import { ModalSelectorPopup } from "components/CustomModal";
-import { dummy_comment } from "dummy_data";
+import Header from "components/Tab/Header";
+import { DeleteModal } from "components/Modal/DeleteModal";
+import { ModalSelectorPopup } from "components/Modal/CustomModal";
 
 const backIcon = require("assets/icons/archives/back.png");
 const fileIcon = require("assets/icons/archives/file.png");
@@ -198,7 +197,7 @@ const Post = ({ route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f1f1f1" }}>
-      <CustomHeader left={backIcon} title={"게시물"} leftClick={"Archives"} />
+      <Header left={backIcon} title={"게시물"} leftClick={() => navigation.navigate("Archives")} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{

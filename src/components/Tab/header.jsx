@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
+
 const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
   const navigation = useNavigation();
 
@@ -27,7 +28,7 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
         backgroundColor: '#fff'
       }}
     >
-      <TouchableOpacity onPress={() => navigation.navigate(leftClick)}>
+      <TouchableOpacity onPress={leftClick}>
         {left ? (
           <Image source={left} style={{ width: 24, height: 24 }} />
         ) : (
@@ -51,7 +52,7 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
         )}
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => rightClick && navigation.navigate(rightClick)}
+        onPress={rightClick}
       >
         {right ? (
           typeof right === "string" ? (

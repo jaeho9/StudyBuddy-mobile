@@ -1,20 +1,13 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  Image,
-  Alert,
-  Dimensions
-} from 'react-native';
-import Header from 'components/Header';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Image, Alert, Dimensions } from 'react-native';
+// Header
+import Header from 'components/Tab/Header';
 
-const { width, height } = Dimensions.get("window");
-
+// Images
 const backIcon = require('assets/icons/home/back.png');
 const arrowIcon = require('assets/icons/signupandlogin/arrow.png');
+
+const { width, height } = Dimensions.get("window");
 
 const Signup1 = ({ navigation }) => {
   const [isAllChecked, setIsAllChecked] = useState(false);
@@ -51,7 +44,7 @@ const Signup1 = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
-      <Header left={backIcon} leftClick={'Start'} />
+      <Header left={backIcon} leftClick={() => navigation.navigate('Start')} />
       <View style={styles.container}>
         <View>
           <Text style={styles.title}>스터디버디</Text>

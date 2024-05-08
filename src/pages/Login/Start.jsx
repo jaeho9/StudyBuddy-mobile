@@ -1,13 +1,7 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  Text,
-  TouchableOpacity,
-  SafeAreaView,
-} from 'react-native';
+import { View, StyleSheet, Image, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 
+// Images
 const studybuddyIcon = require("assets/icons/home/studybuddy.png");
 
 const Start = ({ navigation }) => {

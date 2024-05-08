@@ -8,7 +8,7 @@ import {
   SafeAreaView,
 } from "react-native";
 
-import CustomHeader from "components/CustomHeader";
+import Header from "components/Tab/Header";
 
 const backIcon = require("assets/icons/archives/back.png");
 
@@ -23,11 +23,11 @@ const CommentEdit = ({ route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <CustomHeader
+      <Header
         left={backIcon}
         title={"댓글 수정"}
         right={"확인"}
-        rightClick={"Post"}
+        rightClick={() => NavigationContainer.navigate("Post")}
         id={id}
         item={item}
         comment={commentEdit}

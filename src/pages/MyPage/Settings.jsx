@@ -7,19 +7,19 @@ import {
     TouchableOpacity,
     StyleSheet,
 } from "react-native";
-import Header from "components/Tab/header";
+import Header from "components/Tab/Header";
 
 const backIcon = require("assets/icons/home/back.png");
-const phone = require("assets/mypage/SettingsIcon/phone.png");
-const message = require("assets/mypage/SettingsIcon/message.png");
-const security = require("assets/mypage/SettingsIcon/security.png");
-const info = require("assets/mypage/SettingsIcon/info.png");
-const arrow = require("assets/mypage/SettingsIcon/arrow.png");
+const phone = require("assets/icons/mypage/SettingsIcon/phone.png");
+const message = require("assets/icons/mypage/SettingsIcon/message.png");
+const security = require("assets/icons/mypage/SettingsIcon/security.png");
+const info = require("assets/icons/mypage/SettingsIcon/info.png");
+const arrow = require("assets/icons/mypage/SettingsIcon/arrow.png");
 
-const Settings = () => {
+const Settings = ({ navigation }) => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-            <Header left={backIcon} title={"Settings"} leftClick={"MyPage"} />
+            <Header left={backIcon} title={"Settings"} leftClick={() => navigation.goBack()} />
 
             <View style={{ flex: 1, backgroundColor: "#f1f1f1" }}>
                 <View style={{ marginTop: 31, marginLeft: 24, marginRight: 24 }}>

@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  TextInput,
-  Image,
-  Linking,
-} from 'react-native';
-import Header from 'components/Header';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, TextInput, Image, Linking } from 'react-native';
+// Header
+import Header from 'components/Tab/Header';
 
+// Images
 const backIcon = require('assets/icons/home/back.png');
 const googleIcon = require('assets/icons/signupandlogin/google.png');
 const kakaoIcon = require('assets/icons/signupandlogin/kakao.png');
@@ -50,7 +43,7 @@ const Login = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
-      <Header left={backIcon} leftClick={'Start'} />
+      <Header left={backIcon} leftClick={() => navigation.navigate('Start')} />
       <View style={styles.container}>
         <Text style={{ fontSize: 16, color: '#ff7474', fontWeight: 'bold', marginVertical: 30, marginRight: 310 }}>계정</Text>
         {errorMessages ? <Text style={{ color: 'red', marginBottom: 10 }}>{errorMessages}</Text> : null}

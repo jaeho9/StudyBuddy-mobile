@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, Image, Dimensions, TouchableOpacity } from 'react-native';
+// Onboarding 라이브러리
 import Onboarding from 'react-native-onboarding-swiper';
-
+// Images
 const onboarding1 = require("assets/icons/onboarding/onboarding1.jpg");
 const onboarding2 = require("assets/icons/onboarding/onboarding2.jpg");
 const onboarding3 = require("assets/icons/onboarding/onboarding3.jpg");

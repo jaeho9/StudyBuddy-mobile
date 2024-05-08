@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { SafeAreaView, View, Image, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, FlatList, Dimensions, KeyboardAvoidingView, ScrollView } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 // Header
-import Header from '../../components/Tab/header';
+import Header from '../../components/Tab/Header';
 // Axios
 import axios from 'axios';
 

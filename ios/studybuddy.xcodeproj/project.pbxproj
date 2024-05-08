@@ -188,7 +188,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
-				3493BC80FF434FCD5C0CD19E /* [CP-User] [RNFB] Core Configuration */,
+				1A69B93A486E6FE10362F1B7 /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
@@ -290,7 +290,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-studybuddy/Pods-studybuddy-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3493BC80FF434FCD5C0CD19E /* [CP-User] [RNFB] Core Configuration */ = {
+		1A69B93A486E6FE10362F1B7 /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SafeAreaView, Text, TouchableWithoutFeedback, View, TouchableOpacity, Image, TextInput, Dimensions, Keyboard, FlatList } from "react-native";
 
 // Header
-import Header from '../../components/Tab/header';
+import Header from '../../components/Tab/Header';
 
 // Imgaes
 const arrowLeft = require('assets/icons/add/arrow_left.png');
@@ -46,7 +46,7 @@ const Search = ({ navigation }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
             <Header
                 left={arrowLeft}
-                leftClick={"Home"}
+                leftClick={() => navigation.goBack()}
                 title={logo}
             />
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-
+// Images
 const studybuddyIcon = require("assets/icons/home/studybuddy.png");
 
 const Splash = ({ navigation }) => {

@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  TextInput,
-  Alert,
-} from 'react-native';
-import Header from 'components/Header';
-
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, TextInput, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+// Header
+import Header from 'components/Tab/Header';
 
+// Images
 const backIcon = require('assets/icons/home/back.png');
+
 const checkExistingData = async (nickname, email) => {
   const existingNickname = 'rlawlgud';
   const existingEmail = 'wlgud@naver.com';
@@ -155,7 +149,7 @@ const Signup3 = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
-      <Header left={backIcon} leftClick={'Signup2'} />
+      <Header left={backIcon} leftClick={() => navigation.navigate('Signup2')} />
       <KeyboardAwareScrollView>
         <View style={styles.container}>
           <View>

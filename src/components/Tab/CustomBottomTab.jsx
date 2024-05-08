@@ -1,14 +1,14 @@
 import React, { useRef } from "react";
 import { View, TouchableOpacity, Animated, StyleSheet } from "react-native";
-
-const homeOn = require("assets/bottomtab/home_on.png");
-const homeOff = require("assets/bottomtab/home_off.png");
-const communityOn = require("assets/bottomtab/community_on.png");
-const communityOff = require("assets/bottomtab/community_off.png");
-const bookmarkOn = require("assets/bottomtab/bookmark_on.png");
-const bookmarkOff = require("assets/bottomtab/bookmark_off.png");
-const mypageOn = require("assets/bottomtab/mypage_on.png");
-const mypageOff = require("assets/bottomtab/mypage_off.png");
+// Images
+const homeOn = require('assets/icons/bottomtab/home_on.png');
+const homeOff = require("assets/icons/bottomtab/home_off.png");
+const communityOn = require("assets/icons/bottomtab/community_on.png");
+const communityOff = require("assets/icons/bottomtab/community_off.png");
+const bookmarkOn = require("assets/icons/bottomtab/bookmark_on.png");
+const bookmarkOff = require("assets/icons/bottomtab/bookmark_off.png");
+const mypageOn = require("assets/icons/bottomtab/mypage_on.png");
+const mypageOff = require("assets/icons/bottomtab/mypage_off.png");
 
 const CustomBottomTab = ({ state, navigation, insets, descriptors }) => {
     const tab1Value = useRef(new Animated.Value(0)).current;

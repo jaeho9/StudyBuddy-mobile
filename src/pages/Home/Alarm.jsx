@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 // Header
-import Header from "../../components/Tab/header";
+import Header from "../../components/Tab/Header";
 import RemoveModal from "components/Modal/RemoveModal";
 // Images
 const backIcon = require("assets/icons/home/back.png");
@@ -51,7 +51,7 @@ const dummy_data = [
   }
 ]
 
-const Alarm = () => {
+const Alarm = ({ navigation }) => {
   const [deleteMode, setDeleteMode] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   // 삭제
@@ -111,7 +111,7 @@ const Alarm = () => {
         left={backIcon}
         title={"알림"}
         right={deleteMode ? complete : deleteIcon}
-        leftClick={"Home"}
+        leftClick={() => navigation.goBack()}
         rightClick={deleteMode ? handleCompleteClick : handleDeleteClick}
       />
       <FlatList

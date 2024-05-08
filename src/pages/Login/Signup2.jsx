@@ -1,15 +1,8 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  Image,
-  Linking,
-} from 'react-native';
-import Header from 'components/Header';
-
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Image, Linking } from 'react-native';
+// Header
+import Header from 'components/Tab/Header';
+// Images
 const backIcon = require('assets/icons/home/back.png');
 const emailIcon = require('assets/icons/signupandlogin/email.png');
 const googleIcon = require('assets/icons/signupandlogin/google.png');
@@ -35,7 +28,7 @@ const Signup2 = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
-      <Header left={backIcon} leftClick={'Signup1'} />
+      <Header left={backIcon} leftClick={() => navigation.navigate('Signup1')} />
       <View style={styles.container}>
         <View>
           <Text style={styles.title}>스터디버디</Text>

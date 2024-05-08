@@ -1,19 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { PostList } from "components/Post";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Text,
-  ScrollView,
-} from "react-native";
-import Header from "components/Tab/header";
-import MiddleTab from "components/MiddleTab";
+import { View, StyleSheet, TouchableOpacity, Image, Text, ScrollView } from "react-native";
+// Header
+import Header from "components/Tab/Header";
+// Components
+import MiddleTab from "components/Tab/MiddleTab";
 import CommunityRulesAndMembers from "components/Community/CommunityRulesandMembers";
-import { CommunityContext } from "components/Community/CommunityContext";
-const CommunityPost = () => {
-  const { posts } = useContext(CommunityContext); // 파이어베이스 연동 필요
+import { PostList } from "components/Post";
+
+const CommunityPost = ({ navigation }) => {
   const [selectedTab, setSelectedTab] = useState("Popular");
   const [sortedPosts, setSortedPosts] = useState([]);
 
@@ -51,10 +45,10 @@ const CommunityPost = () => {
     <View style={styles.container}>
       <Header
         left={require("/assets/icons/Community/chevron_left.png")}
-        leftClick={"Community"}
+        leftClick={() => navigation.navigate("Community")}
         title={"정보처리기사"}
         right={require("/assets/icons/Community/search.png")}
-        rightClick={"CommunitySearch"}
+        rightClick={() => navigation.navigate("CommunitySearch")}
       />
       <View style={styles.infoContainer}>
         <View style={styles.infoRow}>

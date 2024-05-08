@@ -1,9 +1,7 @@
 import React, { useContext } from "react";
 import { View, Image, Text, StyleSheet, FlatList } from "react-native";
-import { CommunityContext } from "./Community/CommunityContext";
-export function PostList() {
-  const { posts } = useContext(CommunityContext); // 컨텍스트에서 포스트 데이터 가져오기
 
+export function PostList() {
   const BookmarkBorder = require("/assets/icons/Community/bookmark_border.png");
   const FavoriteIcon = require("/assets/icons/Community/favorite.png");
   const SmsIcon = require("/assets/icons/Community/sms.png");

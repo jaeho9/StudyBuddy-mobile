@@ -9,15 +9,15 @@ import {
     TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // 네비게이션 훅 가져오기
-import Header from "components/Tab/header";
-import MyPageModal from "components/Modal/MyPageModal"; // MyPageModal 컴포넌트 임포트
+import Header from "components/Tab/Header";
+import MyPageModal from "components/Modal/MyPageModal";// MyPageModal 컴포넌트 임포트
 import BirthdateModal from "components/Modal/BirthdateModal";
 
 const backIcon = require("assets/icons/home/back.png");
-const settings = require("assets/mypage/settings.png");
-const error_red = require("assets/mypage/error_red.png");
-const error_blue = require("assets/mypage/error_blue.png");
-const MyPageProfile = require("assets/mypage/Image/MyPageProfile.png");
+const settings = require("assets/icons/mypage/settings.png");
+const error_red = require("assets/icons/mypage/error_red.png");
+const error_blue = require("assets/icons/mypage/error_blue.png");
+const MyPageProfile = require("assets/icons/mypage/Image/MyPageProfile.png");
 
 const EditProfile = () => {
     const navigation = useNavigation();
@@ -70,7 +70,7 @@ const EditProfile = () => {
                 left={backIcon}
                 title={"프로필 수정"}
                 right={"저장"}
-                leftClick={"MyPage"}
+                leftClick={() => navigation.navigate("MyPage")}
                 isDuplicate={isDuplicate}
             />
             <View style={styles.ProfileContainer}>

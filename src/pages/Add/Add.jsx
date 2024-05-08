@@ -6,9 +6,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import firestore from '@react-native-firebase/firestore';
 
 // Import Pages
-import Header from 'components/Tab/header';
-import DownModal from 'components/Modal/CommunityModal';
-import MidModal from "components/Modal/ResultModal";
+import Header from 'components/Tab/Header';
+import CommunityModal from 'components/Modal/CommunityModal';
+import ResultModal from "components/Modal/ResultModal";
 import CalendarModal from "components/Modal/CalendarModal";
 import FileModal from "components/Modal/FileModal";
 
@@ -117,7 +117,7 @@ const Add = ({ navigation, route }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
             <Header
                 left={clear}
-                leftClick={"Home"}
+                leftClick={() => navigation.goBack()}
                 title={"새 게시물"}
                 right={isReadyToAddFeed ? feedAdd : feedAddOff}
                 rightClick={rightClick}
@@ -249,8 +249,8 @@ const Add = ({ navigation, route }) => {
                 </View>
 
                 {/* Modal */}
-                <DownModal isVisible={communityVisible} setIsVisible={setCommunityVisible} onSelectCommunity={onSelectCommunity} />
-                <MidModal isVisible={resultVisible} setIsVisible={setResultVisible} onSelectResult={onSelectResult} />
+                <CommunityModal isVisible={communityVisible} setIsVisible={setCommunityVisible} onSelectCommunity={onSelectCommunity} />
+                <ResultModal isVisible={resultVisible} setIsVisible={setResultVisible} onSelectResult={onSelectResult} />
                 <CalendarModal isVisible={dateVisible} setIsVisible={setDateVisible} onSelectDate={onSelectDate} />
                 <FileModal isVisible={fileVisible} setIsVisible={setFileVisible} onSelectFile={onSelectFile} />
             </KeyboardAwareScrollView>

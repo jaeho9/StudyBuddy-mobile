@@ -8,7 +8,22 @@ import {
     TouchableOpacity,
     Modal,
 } from "react-native";
+
 import DeleteConfirmationModal from "components/Modal/DeleteConfirmationModal";
+
+const heartOffIcon = require("assets/icons/archives/heart_off.png");
+const heartOnIcon = require("assets/icons/archives/heart_on.png");
+const commentOffIcon = require("assets/icons/archives/comment_off.png");
+const commentOnIcon = require("assets/icons/archives/comment_on.png");
+const bookmarkOnIcon = require("assets/icons/archives/bookmark_on.png");
+const bookmarkOffIcon = require("assets/icons/archives/bookmark_off.png");
+const BookmarkBorder = require("assets/icons/mypage/PostListIcon/bookmark_border.png");
+const FavoriteIcon = require("assets/icons/mypage/PostListIcon/favorite_border.png");
+const SmsIcon = require("assets/icons/mypage/PostListIcon/sms.png");
+const ProfileImage = require("assets/icons/mypage/PostListIcon/Profile.png");
+const morehoriz = require("assets/icons/mypage/PostListIcon/morehoriz.png");
+const close = require("assets/icons/mypage/PostListIcon/close.png");
+const mode = require("assets/icons/mypage/PostListIcon/mode.png");
 
 const dummy_data = [
     {
@@ -20,8 +35,11 @@ const dummy_data = [
         content1: "1. 준비 기간 : 2주",
         content2: "2. 교재 : X",
         content3: "3. 결과: 합격!",
-        favorites: "123",
-        comments: "123",
+        heart: 122,
+        heartClick: false,
+        comment: 122,
+        commentClick: false,
+        bookmark: true,
     },
     // {
     //   id: "2", // 고유 ID 추가
@@ -40,19 +58,43 @@ const dummy_data = [
 export function MyPagePostList() {
     const [isModalVisible, setModalVisible] = useState(false);
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
-
+    const [detailClick, setDetailClick] = useState(dummy_data);
     const onDeletePressed = () => {
         setModalVisible(false); // Close the first modal
         setDeleteModalVisible(true); // Open the delete confirmation modal
     };
 
-    const BookmarkBorder = require("assets/mypage/PostListIcon/bookmark_border.png");
-    const FavoriteIcon = require("assets/mypage/PostListIcon/favorite_border.png");
-    const SmsIcon = require("assets/mypage/PostListIcon/sms.png");
-    const ProfileImage = require("assets/mypage/PostListIcon/Profile.png");
-    const morehoriz = require("assets/mypage/PostListIcon/morehoriz.png");
-    const close = require("assets/mypage/PostListIcon/close.png");
-    const mode = require("assets/mypage/PostListIcon/mode.png");
+    // 좋아요
+    const handleClickHeart = (index) => {
+        setDetailClick(
+            dummy_data.map((v, i) => {
+                if (v.id === index) {
+                    v.heartClick = !v.heartClick;
+                    if (v.heartClick) {
+                        v.heart += 1;
+                    } else {
+                        v.heart -= 1;
+                    }
+                }
+                return v;
+            })
+        );
+    };
+
+    // 댓글
+    const handelClickComment = (item) => { };
+
+    // 북마크
+    const handleClickBookmark = (index) => {
+        setDetailClick(
+            dummy_data.map((v, i) => {
+                if (v.id === index) {
+                    v.bookmark = !v.bookmark;
+                }
+                return v;
+            })
+        );
+    };
 
     const renderItem = ({ item }) => (
         <View style={styles.root}>
@@ -77,16 +119,70 @@ export function MyPagePostList() {
                 <Text style={styles.contentText}>{item.content2}</Text>
                 <Text style={styles.contentText}>{item.content3}</Text>
             </View>
-            <View style={styles.iconsContainer}>
-                <View style={styles.likesContainer}>
-                    <Image source={FavoriteIcon} />
-                    <Text style={styles.likeCountText}>{item.favorites}</Text>
+
+            <View style={{ width: 24, height: 24 }} />
+            <View
+                style={{
+                    flexDirection: "row",
+                    position: "absolute",
+                    right: 12,
+                    bottom: 10,
+                    gap: 12,
+                }}
+            >
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 3,
+                    }}
+                >
+                    <TouchableOpacity onPress={() => handleClickHeart(item.id)}>
+                        <Image
+                            source={item.heartClick ? heartOnIcon : heartOffIcon}
+                            style={{ width: 18, height: 18 }}
+                        />
+                    </TouchableOpacity>
+                    <Text style={{ color: item.heartClick ? "#ff7474" : "#bdbdbd" }}>
+                        {item.heart}
+                    </Text>
                 </View>
-                <View style={styles.commentsContainer}>
-                    <Image source={SmsIcon} />
-                    <Text style={styles.commentCountText}>{item.comments}</Text>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 3,
+                    }}
+                >
+                    <TouchableOpacity onPress={() => handelClickComment(item)}>
+                        <Image
+                            source={item.commentClick ? commentOnIcon : commentOffIcon}
+                            style={{ width: 18, height: 18 }}
+                        />
+                    </TouchableOpacity>
+                    <Text
+                        style={{ color: item.commentClick ? "#606060" : "#bdbdbd" }}
+                    >
+                        {item.comment}
+                    </Text>
                 </View>
-                <Image source={BookmarkBorder} />
+                <TouchableOpacity
+                    onPress={() => {
+                        handleClickBookmark(item.id);
+                    }}
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <Image
+                        source={item.bookmark ? bookmarkOnIcon : bookmarkOffIcon}
+                        style={{ width: 18, height: 18 }}
+                    />
+                </TouchableOpacity>
             </View>
 
             <Modal visible={isModalVisible} transparent={true}>
@@ -142,48 +238,49 @@ export function MyPagePostList() {
 const styles = StyleSheet.create({
     root: {
         width: "100%", // 100% 로 수정함
-        height: 178, // 178로 수정함
+        height: 188, // 188로 수정함
         borderBottomColor: "rgba(189, 189, 189, 1)",
         borderBottomWidth: 1,
         backgroundColor: "rgba(255, 255, 255, 1)",
-        padding: 10,
+        paddingVertical: 20,
+        paddingHorizontal: 16
     },
     categoryText: {
         color: "#FF7474",
         fontFamily: "Inter",
-        fontSize: 14,
+        fontSize: 16,
         fontStyle: "normal",
-        fontWeight: "700",
+        fontWeight: "bold",
         lineHeight: 22,
         marginLeft: 12,
-        marginBottom: 6.32,
     },
     profileContainer: {
         flexDirection: "row",
         alignItems: "center",
         marginLeft: 12,
+        marginTop: 6
     },
     usernameText: {
         color: "rgba(0, 0, 0, 1)",
         fontFamily: "Inter",
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: "400",
         lineHeight: 22,
-        marginLeft: 10, // 이미지와 텍스트 사이의 간격
+        marginLeft: 6, // 이미지와 텍스트 사이의 간격
     },
     dateText: {
         color: "rgba(150, 150, 150, 1)",
         fontFamily: "Inter",
-        fontSize: 10,
+        fontSize: 12,
         fontWeight: "400",
         lineHeight: 22,
-        marginLeft: 10,
+        marginLeft: 6,
     },
     conetntContainer: { marginLeft: 53, marginTop: 7.5 },
     contentText: {
         color: "rgba(0, 0, 0, 1)",
         fontFamily: "Inter",
-        fontSize: 12,
+        fontSize: 14,
         fontStyle: "normal",
         fontWeight: "400",
         lineHeight: 22,
