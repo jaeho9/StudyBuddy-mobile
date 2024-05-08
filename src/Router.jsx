@@ -6,7 +6,7 @@ import CustomBottomTab from "components/Tab/CustomBottomTab";
 import Home from "pages/Home/Home";
 import Community from "pages/Community/Community";
 import Archives from "pages/Archives/Archives";
-import Mypage from "pages/MyPage/Mypage";
+import Mypage from "pages/MyPage/MyPage";
 import Alarm from "pages/Home/Alarm";
 import Add from "pages/Home/Add";
 import Book from "pages/Home/Book";
@@ -14,10 +14,7 @@ import Search from "pages/Home/Search";
 import SearchResult from "pages/Home/SearchResult";
 
 import Splash from "pages/Splash";
-import Onboarding1 from "pages/Onboarding/Onboarding1";
-import Onboarding2 from "pages/Onboarding/Onboarding2";
-import Onboarding3 from "pages/Onboarding/Onboarding3";
-import Onboarding4 from "pages/Onboarding/Onboarding4";
+import Onboarding from "pages/Onboarding";
 import Start from "pages/Start";
 import Signup1 from "pages/Login/Signup1";
 import Signup2 from "pages/Login/Signup2";
@@ -29,7 +26,6 @@ import EditProfile from "pages/MyPage/EditProfile";
 import Settings from "pages/MyPage/Settings";
 import Library from "pages/MyPage/Library";
 import Camera from "pages/MyPage/Camera";
-import Onboarding from "pages/Onboarding";
 
 
 const Stack = createNativeStackNavigator();
@@ -58,10 +54,6 @@ const Router = () => {
     <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name='Onboarding' component={Onboarding} />
-      <Stack.Screen name="Onboarding1" component={Onboarding1} />
-      <Stack.Screen name="Onboarding2" component={Onboarding2} />
-      <Stack.Screen name="Onboarding3" component={Onboarding3} />
-      <Stack.Screen name="Onboarding4" component={Onboarding4} />
       <Stack.Screen name="Start" component={Start} />
       <Stack.Screen name="Signup1" component={Signup1} />
       <Stack.Screen name="Signup2" component={Signup2} />
