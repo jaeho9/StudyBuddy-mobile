@@ -31,7 +31,10 @@ const CustomBottomTab = ({ state, navigation, insets, descriptors }) => {
 
   return (
     <View
-      style={[styles.bottomTabBarWrapper, { paddingBottom: insets.bottom }]}
+      style={[
+        styles.bottomTabBarWrapper,
+        { paddingBottom: insets.bottom + 20 },
+      ]}
     >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];

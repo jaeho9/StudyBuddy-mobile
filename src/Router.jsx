@@ -2,18 +2,12 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import CustomBottomTab from "components/CustomBottomTab";
-
 import CustomBottomTab from "./components/Tab/CustomBottomTab";
-import CustomBottomTab from "./components/CustomBottomTab";
-import Home from "./pages/Home";
-import Community from "./pages/Community";
-import Archives from "./pages/Archives";
-import Mypage from "./pages/Mypage";
-import Community from "./pages/Community/Community";
-import Archives from "./pages/Archives/Archives";
-import MyPage from "pages/MyPage/MyPage";
-import Alarm from "pages/Home/Alarm";
+import Archives_Firebase from "pages/Archives/Archives_Firebase";
+import CommentEdit from "pages/Archives/CommentEdit";
+import PostEdit from "pages/Archives/PostEdit";
+import comments from "pages/Archives/comments";
+import commentss from "pages/Archives/commentss";
 
 import EditProfile from "pages/MyPage/EditProfile";
 import Settings from "pages/MyPage/Settings";
@@ -32,7 +26,10 @@ const MainTab = () => {
         headerShown: false,
       }}
     >
-      <Tab.Screen name="홈" component={Alarm} />
+      <Tab.Screen name="Home" component={comments} />
+      <Tab.Screen name="Community" component={commentss} />
+      <Tab.Screen name="Archives" component={Archives_Firebase} />
+      <Tab.Screen name="MyPage" component={comments} />
     </Tab.Navigator>
   );
 };
@@ -44,14 +41,11 @@ const Router = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Alarm" component={Alarm} />
       <Stack.Screen name="MainTab" component={MainTab} />
-      <Stack.Screen name="Alarm" component={Alarm} />
-      <Stack.Screen name="EditProfile" component={EditProfile} />
+      {/* <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="Library" component={Library} />
-      <Stack.Screen name="Camera" component={Camera} />
+      <Stack.Screen name="Camera" component={Camera} /> */}
     </Stack.Navigator>
   );
 };
