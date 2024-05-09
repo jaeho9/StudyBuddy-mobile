@@ -81,8 +81,13 @@ const PostEdit = ({ navigation, route }) => {
   const edit_post = useRef({});
   const postCollection = firestore().collection("post");
 
+  //community
+  const [community, setCommunity] = useState([]);
+  const communityCollection = firestore().collection("community");
+
   useEffect(() => {
     post_api();
+    community_api();
   }, []);
 
   const post_api = async () => {
@@ -98,8 +103,7 @@ const PostEdit = ({ navigation, route }) => {
           };
         }
       });
-      // console.log(edit_post.current);
-      console.log("date", edit_post.current.end_date);
+      onSelectDate(edit_post.current.start_date, edit_post.current.end_date);
       setSelectedDate({
         startDate: edit_post.current.start_date,
         endDate: edit_post.current.end_date,
@@ -108,6 +112,28 @@ const PostEdit = ({ navigation, route }) => {
       setText(edit_post.current.study);
     } catch (error) {
       console.log("post error", error.message);
+    }
+  };
+
+  const community_api = async () => {
+    try {
+      const community_data = await communityCollection.get();
+      setCommunity(
+        community_data._docs.map((doc) => {
+          if (doc._data.id === edit_post.current.community_id) {
+            edit_post.current = {
+              ...edit_post.current,
+              community_name: doc._data.name,
+            };
+          }
+        })
+      );
+      onSelectCommunity(edit_post.current.community_name);
+      setSelectedCommunity(edit_post.current.community_name);
+      console.log(edit_post.current.community_name);
+      console.log("hi", selectedCommunity);
+    } catch (error) {
+      console.log("community error", error.message);
     }
   };
 
@@ -153,7 +179,7 @@ const PostEdit = ({ navigation, route }) => {
         >
           {selectedCommunity ? (
             <Text style={{ fontSize: 16, color: "#7A7A7A" }}>
-              {selectedCommunity.name}
+              {selectedCommunity}
             </Text>
           ) : (
             <Text style={{ fontSize: 16, color: "#BDBDBD" }}>
@@ -375,7 +401,7 @@ const PostEdit = ({ navigation, route }) => {
         </View>
 
         <DownModal
-          // community_name={item.community_name}
+          community_name={edit_post.current.community_name}
           isVisible={communityVisible}
           setIsVisible={setCommunityVisible}
           onSelectCommunity={onSelectCommunity}

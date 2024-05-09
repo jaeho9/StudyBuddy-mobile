@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import CustomBottomTab from "./components/Tab/CustomBottomTab";
 import Archives_Firebase from "pages/Archives/Archives_Firebase";
+import Post_Firebase from "pages/Archives/Post_Firebase";
 import CommentEdit from "pages/Archives/CommentEdit";
 import PostEdit from "pages/Archives/PostEdit";
 import comments from "pages/Archives/comments";
@@ -42,10 +43,9 @@ const Router = () => {
       }}
     >
       <Stack.Screen name="MainTab" component={MainTab} />
-      {/* <Stack.Screen name="EditProfile" component={EditProfile} />
-      <Stack.Screen name="Settings" component={Settings} />
-      <Stack.Screen name="Library" component={Library} />
-      <Stack.Screen name="Camera" component={Camera} /> */}
+      <Stack.Screen name="Post_Firebase" component={Post_Firebase} />
+      <Stack.Screen name="PostEdit" component={PostEdit} />
+      <Stack.Screen name="CommentEdit" component={CommentEdit} />
     </Stack.Navigator>
   );
 };

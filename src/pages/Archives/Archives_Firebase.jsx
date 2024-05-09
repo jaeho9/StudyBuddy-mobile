@@ -69,6 +69,7 @@ const Archives = ({ navigation }) => {
 
   const [lastIndex, setLastIndex] = useState(0);
 
+  // custom modal
   var more = useRef([]);
   const [modalSelectVisible, setModalSelectVisible] = useState([]);
   const deleteVisible = useRef(true);
@@ -168,17 +169,28 @@ const Archives = ({ navigation }) => {
   etc = () => {
     setCommunities(whole.concat(community));
     setLastIndex(post.length - 1);
-    // join.map((v, i) => {
-    //   if (v.user_id === "SeDJYBVUGSjQGaWlzPmm") {
-    //     community.map((a, b) => {
-    //       if (a.community_id === v.community_id) {
-    //         console.log(a);
-    //         왜 set이 안되지이
-    //         setJoinCommunity([...joinCommunity, a]);
-    //       }
-    //     });
-    //   }
-    // });
+    join.map((v, i) => {
+      if (v.user_id === "SeDJYBVUGSjQGaWlzPmm") {
+        community.map((a, b) => {
+          if (a.community_id === v.community_id) {
+            console.log("join", a.community_name);
+            setJoinCommunity([
+              ...joinCommunity,
+              {
+                community_id: a.community_id,
+                community_name: a.community_name,
+                isClick: a.isClick,
+              },
+            ]);
+            console.log(joinCommunity);
+          }
+        });
+      }
+    });
+  };
+
+  onPressSearch = () => {
+    console.log(joinCommunity);
   };
 
   changeDate = (e) => {
@@ -275,6 +287,7 @@ const Archives = ({ navigation }) => {
     return (
       <TouchableOpacity
         // onPress={() => navigation.navigate("Post_Firebase")}
+        onPress={() => console.log("post_id", item.id)}
         style={{
           backgroundColor: "#fff",
           marginHorizontal: 12,

@@ -77,8 +77,8 @@ const comments = ({}) => {
     joinRef
       .set({
         id: joinRef.id,
-        community_id: "tOJMmHC53VPzOnMhIhat",
-        user_id: "Gsh6TJg50rswXPGaA7Zk",
+        community_id: "5CijZlwyTF3Zo6NpOgwq",
+        user_id: "SeDJYBVUGSjQGaWlzPmm",
         reg_date: today,
       })
       .then(() => {
@@ -182,7 +182,7 @@ const comments = ({}) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <TouchableOpacity onPress={(e) => bookmark_heart_Submit(e)}>
+        <TouchableOpacity onPress={(e) => joinSubmit(e)}>
           <Text>데이터 저장하기</Text>
         </TouchableOpacity>
       </View>

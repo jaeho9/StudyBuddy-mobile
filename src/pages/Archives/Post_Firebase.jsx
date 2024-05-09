@@ -15,7 +15,6 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import CustomHeader from "components/CustomHeader";
 import { DeleteModal } from "components/DeleteModal";
 import { ModalSelectorPopup } from "components/CustomModal";
-import { dummy_comment } from "dummy_data";
 
 const backIcon = require("assets/icons/archives/back.png");
 const fileIcon = require("assets/icons/archives/file.png");

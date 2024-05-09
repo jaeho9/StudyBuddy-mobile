@@ -24,7 +24,7 @@ const { width, height } = Dimensions.get("window");
 const dummy_data = [
   {
     id: 1,
-    name: "정보처리기사",
+    name: "정보처리기능사",
   },
   {
     id: 2,
@@ -50,12 +50,15 @@ const CustomModal = ({
   const [selectIndex, setSelectIndex] = useState();
 
   useEffect(() => {
-    onSelectCommunity(community_name);
-    let findIndex = dummy_data.findIndex(
-      (data) => data.name === community_name
-    );
-    setSelectIndex(findIndex);
-  }, []);
+    if (community_name) {
+      console.log("name", community_name);
+      onSelectCommunity(community_name);
+      let findIndex = dummy_data.findIndex(
+        (data) => data.name === community_name
+      );
+      setSelectIndex(findIndex);
+    }
+  }, [community_name]);
 
   const ModalItem = ({ item, index }) => {
     return (
