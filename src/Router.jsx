@@ -37,12 +37,12 @@ import Book from "pages/Add/Book";
 // Archives
 import Archives_Firebase from "pages/Archives/Archives_Firebase";
 import CommentEdit from "pages/Archives/CommentEdit";
-import Post_Firebase from "pages/Archives/Post_Firebase"
+import Post_Firebase from "pages/Archives/Post_Firebase";
 import Post from "pages/Archives/Post";
 import PostEdit from "pages/Archives/PostEdit";
 
 // MyPage
-import Mypage from "pages/MyPage/MyPage";
+import Mypage from "pages/MyPage/Mypage";
 import EditProfile from "pages/MyPage/EditProfile";
 import Settings from "pages/MyPage/Settings";
 import Library from "pages/MyPage/Library";
@@ -77,7 +77,7 @@ const Router = () => {
     >
       {/* Login */}
       <Stack.Screen name="Splash" component={Splash} />
-      <Stack.Screen name='Onboarding' component={Onboarding} />
+      <Stack.Screen name="Onboarding" component={Onboarding} />
       <Stack.Screen name="Start" component={Start} />
       <Stack.Screen name="Signup1" component={Signup1} />
       <Stack.Screen name="Signup2" component={Signup2} />
@@ -108,7 +108,6 @@ const Router = () => {
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="Library" component={Library} />
       <Stack.Screen name="Camera" component={Camera} />
-
     </Stack.Navigator>
   );
 };
