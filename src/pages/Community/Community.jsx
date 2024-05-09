@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  Image,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import firestore from "@react-native-firebase/firestore"; // 파이어스토어 기능 검사 필요
 // Header
@@ -21,12 +28,17 @@ const Community = () => {
       .onSnapshot((snapshot) => {
         const fetchedCommunities = snapshot.docs.map((doc) => {
           const data = doc.data();
+          const formattedDate = data.reg_date
+            ? new Date(data.reg_date.seconds * 1000)
+                .toLocaleDateString("en-CA") // 'en-CA' locale은 YYYY-MM-DD 형식을 사용합니다.
+                .replace(/-/g, ".") // '-'를 '.'로 변경합니다.
+            : "날짜 없음"; // 'reg_date' 필드가 없는 경우 대체 텍스트
           return {
             id: doc.id,
-            title: data.name || "000", // 기본값 설정
-            members: data.members || "000", // 기본값 설정
-            posts: data.posts || "000", // 기본값 설정
-            startDate: data.reg_date || "000", // 기본값 설정
+            title: data.name || "이름 없음", // 기본값 설정
+            members: data.members || "0명", // 기본값 설정
+            posts: data.posts || "0개", // 기본값 설정
+            startDate: formattedDate, // 포맷된 날짜 사용
             tag: data.tag || "code", // 'code'를 기본 태그로 설정
           };
         });
@@ -48,7 +60,7 @@ const Community = () => {
       <Image source={tagImages[item.tag]} style={styles.tagIcon} />
       <View style={styles.memberInfoContainer}>
         <Text style={styles.label}>인원 </Text>
-        <Text style={styles.memberCount}>{`${item.members}명`}</Text>
+        <Text style={styles.memberCount}>{`${item.members}`}</Text>
       </View>
       <View style={styles.startDateContainer}>
         <Text style={styles.startDateLabel}>시작일</Text>
@@ -56,7 +68,7 @@ const Community = () => {
       </View>
       <View style={styles.postInfoContainer}>
         <Text style={styles.postLabel}>게시글</Text>
-        <Text style={styles.postCount}>{`${item.posts}개`}</Text>
+        <Text style={styles.postCount}>{`${item.posts}`}</Text>
       </View>
     </TouchableOpacity>
   );
