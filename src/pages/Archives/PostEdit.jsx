@@ -8,13 +8,17 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import CustomHeader from "components/CustomHeader";
-import DownModal from "components/DownModal";
-import MidModal from "components/MidModal";
-import CalendarModal from "components/CalendarModal";
-import FileModal from "components/FileModal";
-import firestore from "@react-native-firebase/firestore";
+// Keyboard Aware Scroll View
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+// FireStore
+import firestore from '@react-native-firebase/firestore';
+
+// Import Pages
+import Header from 'components/Tab/Header';
+import CommunityModal from 'components/Modal/CommunityModal';
+import ResultModal from "components/Modal/ResultModal";
+import CalendarModal from "components/Modal/CalendarModal";
+import FileModal from "components/Modal/FileModal";
 
 const { width, height } = Dimensions.get("window");
 
@@ -156,11 +160,12 @@ const PostEdit = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <CustomHeader
+      <Header
         left={backIcon}
         title={"게시물 수정"}
         right={editIcon}
-        rightClick={"Archives"}
+        rightClick={() => navigation.navigate("Archives")}
+        leftClick={() => navigation.goBack()}
       />
       <KeyboardAwareScrollView
         style={{ marginHorizontal: 20, marginVertical: 16 }}
@@ -401,12 +406,12 @@ const PostEdit = ({ navigation, route }) => {
         </View>
 
         <DownModal
-          community_name={edit_post.current.community_name}
+          // community_name={item.community_name}
           isVisible={communityVisible}
           setIsVisible={setCommunityVisible}
           onSelectCommunity={onSelectCommunity}
         />
-        <MidModal
+        <ResultModal
           community_result={edit_post.current.result}
           isVisible={resultVisible}
           setIsVisible={setResultVisible}
