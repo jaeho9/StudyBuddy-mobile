@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+} from "react-native";
 import firestore from "@react-native-firebase/firestore";
+const Width = Dimensions.get("window").width; //스크린 너비 초기화
 
 const CommunityRulesAndMembers = ({ communityId }) => {
   const [rules, setRules] = useState();
@@ -77,6 +85,8 @@ const CommunityRulesAndMembers = ({ communityId }) => {
 const useStyles = () =>
   StyleSheet.create({
     container: {
+      flex: 1,
+      width: Width,
       padding: 20,
       backgroundColor: "rgba(241, 241, 241, 1)",
     },
