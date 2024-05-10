@@ -23,29 +23,41 @@ const Community = () => {
   const bookmark = require("assets/icons/Community/bookmark.png");
 
   useEffect(() => {
-    const unsubscribe = firestore()
-      .collection("community")
-      .onSnapshot((snapshot) => {
-        const fetchedCommunities = snapshot.docs.map((doc) => {
+    const fetchCommunities = async () => {
+      const communitySnapshot = await firestore().collection("community").get();
+      const communityData = await Promise.all(
+        communitySnapshot.docs.map(async (doc) => {
           const data = doc.data();
           const formattedDate = data.reg_date
             ? new Date(data.reg_date.seconds * 1000)
-                .toLocaleDateString("en-CA") // 'en-CA' locale은 YYYY-MM-DD 형식을 사용합니다.
-                .replace(/-/g, ".") // '-'를 '.'로 변경합니다.
-            : "날짜 없음"; // 'reg_date' 필드가 없는 경우 대체 텍스트
+                .toLocaleDateString("en-CA")
+                .replace(/-/g, ".")
+            : "날짜 없음";
+          // Fetch members count
+          const joinSnapshot = await firestore()
+            .collection("join")
+            .where("community_id", "==", doc.id)
+            .get();
+
+          // Fetch posts count
+          const postSnapshot = await firestore()
+            .collection("post")
+            .where("community_id", "==", doc.id)
+            .get();
           return {
             id: doc.id,
-            title: data.name || "이름 없음", // 기본값 설정
-            members: data.members || "0명", // 기본값 설정
-            posts: data.posts || "0개", // 기본값 설정
-            startDate: formattedDate, // 포맷된 날짜 사용
-            tag: data.tag || "code", // 'code'를 기본 태그로 설정
+            title: data.name || "이름 없음",
+            members: joinSnapshot.size,
+            posts: postSnapshot.size,
+            startDate: formattedDate,
+            tag: data.tag || "code",
           };
-        });
-        setCommunities(fetchedCommunities);
-      });
+        })
+      );
+      setCommunities(communityData);
+    };
 
-    return () => unsubscribe();
+    fetchCommunities();
   }, []);
 
   const renderItem = ({ item }) => (
@@ -60,7 +72,7 @@ const Community = () => {
       <Image source={tagImages[item.tag]} style={styles.tagIcon} />
       <View style={styles.memberInfoContainer}>
         <Text style={styles.label}>인원 </Text>
-        <Text style={styles.memberCount}>{`${item.members}`}</Text>
+        <Text style={styles.memberCount}>{`${item.members}명`}</Text>
       </View>
       <View style={styles.startDateContainer}>
         <Text style={styles.startDateLabel}>시작일</Text>
@@ -68,7 +80,7 @@ const Community = () => {
       </View>
       <View style={styles.postInfoContainer}>
         <Text style={styles.postLabel}>게시글</Text>
-        <Text style={styles.postCount}>{`${item.posts}`}</Text>
+        <Text style={styles.postCount}>{`${item.posts}개`}</Text>
       </View>
     </TouchableOpacity>
   );

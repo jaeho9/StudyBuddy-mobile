@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { View, Image, Text, StyleSheet, FlatList } from "react-native";
 
-export function PostList() {
+export function PostList({ posts }) {
   const BookmarkBorder = require("/assets/icons/Community/bookmark_border.png");
   const FavoriteIcon = require("/assets/icons/Community/favorite.png");
   const SmsIcon = require("/assets/icons/Community/sms.png");
@@ -43,7 +43,7 @@ export function PostList() {
     <FlatList
       data={posts}
       renderItem={renderItem}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item, index) => item.id || String(index)} // id가 없는 경우 인덱스 사용
     />
   );
 }
