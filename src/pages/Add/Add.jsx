@@ -38,6 +38,7 @@ const Add = ({ navigation, route }) => {
     const onSelectCommunity = (community) => {
         setSelectedCommunity(community);
     };
+    console.log(selectedCommunity)
 
     // 준비 기간
     const [dateVisible, setDateVisible] = useState(false);
@@ -48,7 +49,6 @@ const Add = ({ navigation, route }) => {
 
     // 교재
     const { book } = route.params ? route.params : {};
-    console.log(book)
 
     // 결과
     const [resultVisible, setResultVisible] = useState(false);
@@ -72,7 +72,6 @@ const Add = ({ navigation, route }) => {
 
     // 현재 날짜와 시간을 가져오기
     const currentDate = new Date();
-    const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
 
     // API 연동
     const addCollection = firestore().collection('post');
@@ -81,16 +80,15 @@ const Add = ({ navigation, route }) => {
         try {
             await addCollection.add({
                 book: book,
-                community_id: selectedCommunity.name,
+                community_id: selectedCommunity.community_id,
                 data: '',
-                end_date: selectedDate.endDate,
-                id: '1',
-                reg_date: formattedDate,
+                end_date: new Date(selectedDate.endDate),
+                reg_date: currentDate,
                 result: selectedResult,
-                start_date: selectedDate.startDate,
+                start_date: new Date(selectedDate.startDate),
                 study: text,
-                update_date: formattedDate,
-                user_id: 'Gsh6TJg50rswXPGaA7Zk'
+                update_date: currentDate,
+                user_id: 'SeDJYBVUGSjQGaWlzPmm'
             });
             setSelectedCommunity('');
             setSelectedDate('');
@@ -129,7 +127,7 @@ const Add = ({ navigation, route }) => {
                     style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
                 >
                     {selectedCommunity ? (
-                        <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedCommunity.name}</Text>
+                        <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedCommunity.community_name}</Text>
                     ) : (
                         <Text style={{ fontSize: 16, color: '#BDBDBD' }}>커뮤니티 선택</Text>
                     )}

@@ -11,6 +11,8 @@ const CalendarModal = ({ isVisible, setIsVisible, onSelectDate }) => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
+    console.log(startDate, endDate)
+
     const handleSaveResult = () => {
         onSelectDate(startDate, endDate);
         setIsVisible(false);
