@@ -13,12 +13,13 @@ const cancel = require('assets/icons/add/cancel.png');
 
 const { width, height } = Dimensions.get("window");
 
-const CustomModal = ({ isVisible, setIsVisible, onSelectCommunity }) => {
+const CommunityModal = ({ isVisible, setIsVisible, onSelectCommunity, selectedCommunity }) => {
     const [keyword, setKeyword] = useState('');
     const [selectIndex, setSelectIndex] = useState();
 
     //community
     const [communities, setCommunities] = useState([]);
+    const [joinCommunities, setJoinCommunities] = useState([]);
     const communityCollection = firestore().collection("community");
 
     //join
@@ -34,6 +35,10 @@ const CustomModal = ({ isVisible, setIsVisible, onSelectCommunity }) => {
         community_api();
         join_api();
     }, []);
+
+    useEffect(() => {
+        etc();
+    }, [join]);
 
     const user_api = async () => {
         try {
@@ -60,23 +65,30 @@ const CustomModal = ({ isVisible, setIsVisible, onSelectCommunity }) => {
 
     const join_api = async () => {
         try {
-            // user_id: SeDJYBVUGSjQGaWlzPmm 설정
-            const join_data = await joinCollection.where('user_id', '==', 'SeDJYBVUGSjQGaWlzPmm').get();
-
-            setJoin(
-                join_data._docs.map((doc) => ({
-                    community_id: doc._data.community_id,
-                    user_id: doc._data.user_id,
-                })));
-
-            // 사용자가 가입한 커뮤니티의 데이터를 community에서 찾아서 joinCommunity에 추가
-            const userJoinCommunities = join_data._docs.map(doc => doc._data.community_id);
-            const userCommunities = community.filter(item => userJoinCommunities.includes(item.community_id));
-            setCommunities(whole.concat(userCommunities));
-
+            const join_data = await joinCollection.get();
+            setJoin(join_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
         } catch (error) {
             console.log("post error", error.message);
         }
+    };
+
+    etc = () => {
+        let arr = [];
+        join.map((v, i) => {
+            if (v.user_id === "SeDJYBVUGSjQGaWlzPmm") {
+                communities.map((a, b) => {
+                    if (a.community_id === v.community_id) {
+                        arr.push({
+                            community_id: a.community_id,
+                            community_name: a.community_name,
+                            isClick: a.isClick,
+                        });
+                    }
+                });
+            }
+        });
+
+        setJoinCommunities(arr);
     };
 
     const searchCommunity = async () => {
@@ -223,4 +235,4 @@ const CustomModal = ({ isVisible, setIsVisible, onSelectCommunity }) => {
     )
 }
 
-export default CustomModal;
+export default CommunityModal;

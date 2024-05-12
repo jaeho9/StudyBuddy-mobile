@@ -106,7 +106,6 @@ const Add = ({ navigation, route }) => {
         }
     };
 
-
     // 현재 날짜와 시간을 가져오기
     const currentDate = new Date();
 
@@ -118,8 +117,9 @@ const Add = ({ navigation, route }) => {
             await addCollection.add({
                 book: book,
                 community_id: selectedCommunity.community_id,
-                data: '',
+                data: filename[0],
                 end_date: new Date(selectedDate.endDate),
+                id: addCollection.id,
                 reg_date: currentDate,
                 result: selectedResult,
                 start_date: new Date(selectedDate.startDate),

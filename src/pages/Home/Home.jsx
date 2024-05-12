@@ -33,6 +33,7 @@ const Home = ({ navigation }) => {
 
   //post
   const [post, setPost] = useState([]);
+  const [diffDate, setDiffDate] = useState();
   const postCollection = firestore().collection("post");
 
   //community
@@ -176,6 +177,7 @@ const Home = ({ navigation }) => {
       const post_data = await postCollection.get();
       setPost(
         post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+
     } catch (error) {
       console.log("post error", error.message);
     }
@@ -274,6 +276,14 @@ const Home = ({ navigation }) => {
     } else {
       return year + "." + month + "." + day;
     }
+  };
+
+  const countDate = (start, end) => {
+    let startDate = start.toDate();
+    let endDate = end.toDate();
+    const diffMSec = endDate.getTime() - startDate.getTime();
+    const diffDate = diffMSec / (24 * 60 * 60 * 1000);
+    return diffDate;
   };
 
   goodsMoreButtonClicked = (id) => {
@@ -493,7 +503,7 @@ const Home = ({ navigation }) => {
           </View>
           <View style={{ marginHorizontal: 40, gap: 8, marginTop: 8 }}>
             <Text style={{ fontSize: 14, color: "#000000" }}>
-              1. 준비 기간 : {changeDate(item.start_date)}
+              1. 준비 기간 : {countDate(item.start_date, item.end_date)}일
             </Text>
             <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, color: "#000000" }}>
               2. 교재 : {item.book}
