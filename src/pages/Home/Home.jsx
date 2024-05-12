@@ -1,19 +1,28 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Image, TouchableOpacity, SafeAreaView, Dimensions, FlatList, Text, Modal } from "react-native";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+  Dimensions,
+  FlatList,
+  Text,
+  Modal,
+} from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 // FireStore
-import firestore from '@react-native-firebase/firestore';
+import firestore from "@react-native-firebase/firestore";
 
 // Header
-import Header from '../../components/Tab/Header';
+import Header from "components/Tab/Header";
 // Modal
 import ModalSelectorPopup from "../../components/Modal/CustomModal2";
 // SelectPicker
 import SelectPicker from "components/SelectPicker";
 
 // Images
-const logo = require('assets/icons/home/logo.png');
-const add = require('assets/icons/home/add.png');
+const logo = require("assets/icons/home/logo.png");
+const add = require("assets/icons/home/add.png");
 const menuIcon = require("assets/icons/archives/menu.png");
 const profileImg = require("assets/icons/archives/profile.png");
 const searchIcon = require("assets/icons/archives/search.png");
@@ -347,7 +356,7 @@ const Home = ({ navigation, route }) => {
   };
 
   // 댓글
-  const handelClickComment = (item) => { };
+  const handelClickComment = (item) => {};
 
   // 북마크
   const handleClickBookmark = (index) => {
@@ -379,18 +388,10 @@ const Home = ({ navigation, route }) => {
           {item.community_name}
         </Text>
         <View style={{ marginTop: 12 }}>
-          <View
-            style={{ flexDirection: "row", alignItems: "center", gap: 6, }}>
-            <Image
-              source={item.profileImg}
-              style={{ width: 32, height: 32 }}
-            />
-            <Text style={{ fontSize: 16, color: "#000000" }}>
-              {item.name}
-            </Text>
-            <Text style={{ fontSize: 12, color: "#969696" }}>
-              {item.date}
-            </Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+            <Image source={item.profileImg} style={{ width: 32, height: 32 }} />
+            <Text style={{ fontSize: 16, color: "#000000" }}>{item.name}</Text>
+            <Text style={{ fontSize: 12, color: "#969696" }}>{item.date}</Text>
           </View>
           <View style={{ marginTop: 8, marginHorizontal: 40, gap: 8 }}>
             <Text style={{ fontSize: 14, color: "#000000" }}>
@@ -495,9 +496,7 @@ const Home = ({ navigation, route }) => {
                 style={{ width: 18, height: 18 }}
               />
             </TouchableOpacity>
-            <Text
-              style={{ color: item.commentClick ? "#606060" : "#bdbdbd" }}
-            >
+            <Text style={{ color: item.commentClick ? "#606060" : "#bdbdbd" }}>
               {item.comment}
             </Text>
           </View>
@@ -537,11 +536,19 @@ const Home = ({ navigation, route }) => {
         left={menuIcon}
         title={logo}
         right={alarmOffIcon}
-        rightClick={() => navigation.navigate('Alarm')}
+        rightClick={() => navigation.navigate("Alarm")}
       />
 
       {/* 커뮤니티 목록 */}
-      <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', marginTop: 8, marginHorizontal: 14 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 8,
+          marginHorizontal: 14,
+        }}
+      >
         <FlatList
           data={dummy_communityList}
           renderItem={renderCommunityList}
@@ -551,7 +558,7 @@ const Home = ({ navigation, route }) => {
           removeClippedSubviews
         />
         <TouchableOpacity
-          onPress={() => navigation.navigate('Search')}
+          onPress={() => navigation.navigate("Search")}
           style={{ marginVertical: 9, marginLeft: 12 }}
         >
           <Image source={searchIcon} style={{ width: 24, height: 24 }} />
@@ -566,22 +573,40 @@ const Home = ({ navigation, route }) => {
         showsVerticalScrollIndicator={false}
         removeClippedSubviews
         ListHeaderComponent={() => (
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginTop: 8, marginRight: 18, marginBottom: 10 }}>
-            <SelectPicker
-              onChangeSort={onChangeSort}
-            />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              marginTop: 8,
+              marginRight: 18,
+              marginBottom: 10,
+            }}
+          >
+            <SelectPicker onChangeSort={onChangeSort} />
             <Image source={sortIcon} style={{ width: 24, height: 24 }} />
           </View>
         )}
       />
 
       {/* Add 버튼 */}
-      <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end', right: 0, bottom: 80, position: 'absolute', zIndex: 10, marginRight: 12 }}>
-        <TouchableOpacity onPress={() => navigation.navigate('Add')}>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "flex-end",
+          justifyContent: "flex-end",
+          right: 0,
+          bottom: 80,
+          position: "absolute",
+          zIndex: 10,
+          marginRight: 12,
+        }}
+      >
+        <TouchableOpacity onPress={() => navigation.navigate("Add")}>
           <Image source={add} style={{ width: 72, height: 72 }} />
         </TouchableOpacity>
       </View>
-    </SafeAreaView >
+    </SafeAreaView>
   );
 };
 export default Home;

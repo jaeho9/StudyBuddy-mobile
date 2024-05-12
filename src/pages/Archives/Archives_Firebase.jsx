@@ -32,7 +32,7 @@ const commentOffIcon = require("assets/icons/archives/comment_off.png");
 const commentOnIcon = require("assets/icons/archives/comment_on.png");
 const bookmarkOnIcon = require("assets/icons/archives/bookmark_on.png");
 const bookmarkOffIcon = require("assets/icons/archives/bookmark_off.png");
-const add = require('assets/icons/home/add.png');
+const add = require("assets/icons/home/add.png");
 
 const Archives = ({ navigation }) => {
   // Select Picker
@@ -45,13 +45,7 @@ const Archives = ({ navigation }) => {
 
   //community
   const [community, setCommunity] = useState([]);
-  const [joinCommunity, setJoinCommunity] = useState([
-    {
-      community_id: 0,
-      community_name: "전체",
-      isClick: true,
-    },
-  ]);
+  const [joinCommunities, setJoinCommunities] = useState([]);
   const [communities, setCommunities] = useState([]);
   const communityCollection = firestore().collection("community");
 
@@ -62,6 +56,10 @@ const Archives = ({ navigation }) => {
   //user
   const [user, setUser] = useState([]);
   const userCollection = firestore().collection("user");
+
+  //like
+  const [like, setLike] = useState([]);
+  const likeCollection = firestore().collection("like");
 
   //bookmark
   const [bookmark, setBookmark] = useState([]);
@@ -91,6 +89,7 @@ const Archives = ({ navigation }) => {
     community_api();
     join_api();
     post_api();
+    // like_api();
     bookmark_api();
     setTimeout(
       () =>
@@ -110,7 +109,9 @@ const Archives = ({ navigation }) => {
 
   useEffect(() => {
     etc();
-  }, [post.length]);
+  }, [bookmark]);
+
+  useEffect(() => {}, [communities]);
 
   useEffect(() => {
     modalSelectVisible.map((e, i) => {
@@ -164,6 +165,26 @@ const Archives = ({ navigation }) => {
     }
   };
 
+  const like_api = async () => {
+    try {
+      const like_data = await likeCollection.get();
+      setLike(like_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      return "hi";
+    } catch (error) {
+      console.log("like error", error.message);
+    }
+  };
+
+  // const like_add_api = async () => {
+  //   try {
+  //     await likeCollection.add({
+
+  //     })
+  //   } catch (error) {
+  //     console.log("like error", error.message);
+  //   }
+  // };
+
   const bookmark_api = async () => {
     try {
       const bookmark_data = await bookmarkCollection.get();
@@ -176,30 +197,24 @@ const Archives = ({ navigation }) => {
   };
 
   etc = () => {
-    setCommunities(whole.concat(community));
     setLastIndex(post.length - 1);
+    let arr = [];
     join.map((v, i) => {
       if (v.user_id === "SeDJYBVUGSjQGaWlzPmm") {
         community.map((a, b) => {
           if (a.community_id === v.community_id) {
-            console.log("join", a.community_name);
-            setJoinCommunity([
-              ...joinCommunity,
-              {
-                community_id: a.community_id,
-                community_name: a.community_name,
-                isClick: a.isClick,
-              },
-            ]);
-            console.log(joinCommunity);
+            arr.push({
+              community_id: a.community_id,
+              community_name: a.community_name,
+              isClick: a.isClick,
+            });
           }
         });
       }
     });
-  };
-
-  onPressSearch = () => {
-    console.log(joinCommunity);
+    // setCommunities(whole.concat(community));
+    setCommunities(whole.concat(arr));
+    setJoinCommunities(arr);
   };
 
   changeDate = (e) => {
@@ -235,25 +250,13 @@ const Archives = ({ navigation }) => {
     });
   };
 
-  const modalVisible = (id) => {
+  modalVisible = (id) => {
     let copiedModal = [...modalSelectVisible];
     copiedModal[id] = false;
     setModalSelectVisible(copiedModal);
   };
 
-  // const deleteTrueVisible = () => {
-  //   setTimeout(() => {
-  //     deleteVisible.current = true;
-  //   }, 2000);
-  // };
-
-  // const deleteFalseVisible = () => {
-  //   setTimeout(() => {
-  //     deleteVisible.current = false;
-  //   }, 2000);
-  // };
-
-  const handleClickList = (item) => {
+  const onPressCommunityList = (item) => {
     setCommunities(
       communities.map((v, i) => {
         if (v.isClick === true) {
@@ -267,11 +270,15 @@ const Archives = ({ navigation }) => {
     );
   };
 
+  const onPressLike = (item) => {
+    console.log(item);
+  };
+
   // 내가 가입한 커뮤니티 리스트만 보여야 함 + 커뮤니티 디비 설계해야 함
   const renderCommunityList = ({ item, index }) => {
     return (
       <TouchableOpacity
-        onPress={() => handleClickList(item)}
+        onPress={() => onPressCommunityList(item)}
         style={{
           marginRight: 8,
           borderRadius: 16,
@@ -291,10 +298,14 @@ const Archives = ({ navigation }) => {
 
   //내가 북마크 누른 게시물이 보여짐
   const renderCommunityDetail = ({ item, index }) => {
+    console.log("1");
     return (
       <TouchableOpacity
-        // onPress={() => navigation.navigate("Post_Firebase")}
-        onPress={() => console.log("post_id", item.id)}
+        onPress={() =>
+          navigation.navigate("Post_Firebase", {
+            post_id: item.id,
+          })
+        }
         style={{
           backgroundColor: "#fff",
           marginHorizontal: 20,
@@ -356,12 +367,9 @@ const Archives = ({ navigation }) => {
           <ModalSelect
             x={modalX[index]}
             y={modalY[index]}
-            // deleteVisible={deleteVisible}
-            // deleteTrueVisible={() => deleteTrueVisible()}
-            // deleteFalseVisible={() => deleteFalseVisible()}
             post={item.id}
             navigation={navigation}
-            // modalVisible={() => modalVisible(item.id)}
+            modalVisible={() => this.modalVisible(index)}
             closeModalPopupMenu={() => {
               let copiedModal = [...modalSelectVisible];
               copiedModal[index] = false;
@@ -380,10 +388,9 @@ const Archives = ({ navigation }) => {
             borderColor: "rgba(0,0,0,0)",
           }}
         >
-          <Image source={moreIcon} style={{ width: 24, height: 24 }} />
-          {/* {item.user_id === "SeDJYBVUGSjQGaWlzPmm" && (
+          {item.user_id === "SeDJYBVUGSjQGaWlzPmm" && (
             <Image source={moreIcon} style={{ width: 24, height: 24 }} />
-          )} */}
+          )}
         </TouchableOpacity>
 
         <View style={{ width: 24, height: 24 }} />
@@ -404,7 +411,7 @@ const Archives = ({ navigation }) => {
               gap: 3,
             }}
           >
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => onPressLike(item)}>
               <Image source={heartOffIcon} style={{ width: 18, height: 18 }} />
             </TouchableOpacity>
           </View>
@@ -459,10 +466,23 @@ const Archives = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f1f1f1" }}>
-      <Header left={menuIcon} title={"Archives"} right={alarmOffIcon} rightClick={() => navigation.navigate('Alarm')} />
+      <Header
+        left={menuIcon}
+        title={"Archives"}
+        right={alarmOffIcon}
+        rightClick={() => navigation.navigate("Alarm")}
+      />
 
       {/* 커뮤니티 목록 */}
-      <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', marginTop: 8, marginHorizontal: 14 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 8,
+          marginHorizontal: 14,
+        }}
+      >
         <FlatList
           data={communities}
           renderItem={renderCommunityList}
@@ -472,7 +492,7 @@ const Archives = ({ navigation }) => {
           removeClippedSubviews
         />
         <TouchableOpacity
-          onPress={() => navigation.navigate('Search')}
+          onPress={() => navigation.navigate("Search")}
           style={{ marginVertical: 9, marginLeft: 12 }}
         >
           <Image source={searchIcon} style={{ width: 24, height: 24 }} />
@@ -487,18 +507,36 @@ const Archives = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         removeClippedSubviews
         ListHeaderComponent={() => (
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginTop: 8, marginRight: 18, marginBottom: 10 }}>
-            <SelectPicker
-              onChangeSort={onChangeSort}
-            />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              marginTop: 8,
+              marginRight: 18,
+              marginBottom: 10,
+            }}
+          >
+            <SelectPicker onChangeSort={onChangeSort} />
             <Image source={sortIcon} style={{ width: 24, height: 24 }} />
           </View>
         )}
       />
 
       {/* Add 버튼 */}
-      <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end', right: 0, bottom: 80, position: 'absolute', zIndex: 10, marginRight: 12 }}>
-        <TouchableOpacity onPress={() => navigation.navigate('Add')}>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "flex-end",
+          justifyContent: "flex-end",
+          right: 0,
+          bottom: 80,
+          position: "absolute",
+          zIndex: 10,
+          marginRight: 12,
+        }}
+      >
+        <TouchableOpacity onPress={() => navigation.navigate("Add")}>
           <Image source={add} style={{ width: 72, height: 72 }} />
         </TouchableOpacity>
       </View>

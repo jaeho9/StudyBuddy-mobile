@@ -9,13 +9,13 @@ import {
   TextInput,
 } from "react-native";
 // Keyboard Aware Scroll View
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // FireStore
-import firestore from '@react-native-firebase/firestore';
+import firestore from "@react-native-firebase/firestore";
 
 // Import Pages
-import Header from 'components/Tab/Header';
-import CommunityModal from 'components/Modal/CommunityModal';
+import Header from "components/Tab/Header";
+import CommunityModal from "components/Modal/CommunityModal";
 import ResultModal from "components/Modal/ResultModal";
 import CalendarModal from "components/Modal/CalendarModal";
 import FileModal from "components/Modal/FileModal";
@@ -134,8 +134,6 @@ const PostEdit = ({ navigation, route }) => {
       );
       onSelectCommunity(edit_post.current.community_name);
       setSelectedCommunity(edit_post.current.community_name);
-      console.log(edit_post.current.community_name);
-      console.log("hi", selectedCommunity);
     } catch (error) {
       console.log("community error", error.message);
     }
@@ -405,21 +403,19 @@ const PostEdit = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
 
-        <DownModal
-          // community_name={item.community_name}
+        <CommunityModal
+          selectedCommunity={selectedCommunity}
           isVisible={communityVisible}
           setIsVisible={setCommunityVisible}
           onSelectCommunity={onSelectCommunity}
         />
         <ResultModal
-          community_result={edit_post.current.result}
+          selectedResult={edit_post.current.result}
           isVisible={resultVisible}
           setIsVisible={setResultVisible}
           onSelectResult={onSelectResult}
         />
         <CalendarModal
-          community_startDate={edit_post.current.start_date}
-          community_endDate={edit_post.current.end_date}
           isVisible={dateVisible}
           setIsVisible={setDateVisible}
           onSelectDate={onSelectDate}

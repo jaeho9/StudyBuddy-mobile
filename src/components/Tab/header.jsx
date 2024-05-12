@@ -8,7 +8,7 @@ import {
   SafeAreaView,
 } from "react-native";
 
-const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
+const Header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
         paddingHorizontal: 18,
         borderBottomWidth: 1,
         borderBottomColor: "#dddddd",
-        backgroundColor: '#fff'
+        backgroundColor: "#fff",
       }}
     >
       <TouchableOpacity onPress={leftClick}>
@@ -51,9 +51,7 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
           <Image source={title} style={{ width: 40, height: 40 }} />
         )}
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={rightClick}
-      >
+      <TouchableOpacity onPress={rightClick}>
         {right ? (
           typeof right === "string" ? (
             <Text
@@ -75,4 +73,4 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
     </View>
   );
 };
-export default header;
+export default Header;

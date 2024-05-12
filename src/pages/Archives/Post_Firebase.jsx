@@ -12,10 +12,14 @@ import {
   Modal,
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import CustomHeader from "components/CustomHeader";
-import { DeleteModal } from "components/DeleteModal";
-import { ModalSelectorPopup } from "components/CustomModal";
+import Header from "components/Tab/Header";
+import { DeleteModal } from "components/Modal/DeleteModal";
+import { ModalSelect } from "components/Modal/CustomModal";
 import { dummy_comment } from "dummy_data";
+
+// FireStore
+import firestore from "@react-native-firebase/firestore";
+import { Directions } from "react-native-gesture-handler";
 
 const backIcon = require("assets/icons/archives/back.png");
 const fileIcon = require("assets/icons/archives/file.png");
@@ -28,29 +32,54 @@ const bookmarkOffIcon = require("assets/icons/archives/bookmark_off.png");
 const moreIcon = require("assets/icons/archives/more.png");
 
 const Post = ({ route }) => {
-  const { commentId, commentEdit, item } = route.params;
+  //navigation
   const navigation = useNavigation();
-  const [detailClick, setDetailClick] = useState(item);
-  const [deleteVisible, setDeleteVisible] = useState(false);
-  const [comment, setComment] = useState();
 
+  //community
+  const [community, setCommunity] = useState([]);
+  const pre_community = useRef({});
+  const communityCollection = firestore().collection("community");
+
+  //post
+  const { post_id } = route.params;
+  const post = useRef({});
+  const postCollection = firestore().collection("post");
+
+  //user
+  const user = useRef({});
+  const userCollection = firestore().collection("user");
+
+  //users
+  const [users, setUsers] = useState([]);
+  const usersCollection = firestore().collection("user");
+
+  //comment
+  const [comment, setComment] = useState();
+  const [comments, setComments] = useState([]);
+  const commentCollection = firestore().collection("comment");
+
+  //custom modal
   var more = useRef([]);
-  const [ModalSelectorPopupVisible, setModalSelectorPopupVisible] = useState(
-    []
-  );
+  const [modalSelectVisible, setModalSelectVisible] = useState([]);
   const [modalX, setModalX] = useState([]);
   const [modalY, setModalY] = useState([]);
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    post_api();
+    user_api();
+    users_api();
+    community_api();
+    comment_api();
     setTimeout(
       () =>
         more.current.forEach((element) => {
+          // console.log("more", more);
           element.measure((fx, fy, width, height, px, py) => {
             setModalX((modalX) => [...modalX, px - width * 4]);
             setModalY((modalY) => [...modalY, py + height]);
-            setModalSelectorPopupVisible((ModalSelectorPopupVisible) => [
-              ...ModalSelectorPopupVisible,
+            setModalSelectVisible((modalSelectVisible) => [
+              ...modalSelectVisible,
               false,
             ]);
           });
@@ -59,75 +88,166 @@ const Post = ({ route }) => {
     );
   }, []);
 
+  useEffect(() => {}, [comments]);
+
   useEffect(() => {
-    ModalSelectorPopupVisible.map((e, i) => {
+    console.log("isFocused----------------------");
+    setTimeout(() => comment_api(), 1);
+    comment_api();
+    modalSelectVisible.map((e, i) => {
       if (e === true) {
-        console.log(e, i);
-        let copiedModal = [...ModalSelectorPopupVisible];
+        let copiedModal = [...modalSelectVisible];
         copiedModal[i] = false;
-        setModalSelectorPopupVisible(copiedModal);
+        setModalSelectVisible(copiedModal);
       }
     });
-  }, [isFocused, dummy_comment]);
+  }, [isFocused]);
+
+  const post_api = async () => {
+    try {
+      const post_data = await postCollection.get();
+      post_data._docs.map((doc) => {
+        if (doc._data.id === post_id) {
+          post.current = {
+            ...doc.data(),
+            id: doc.id,
+            start_date: changeDate(doc._data.start_date).replaceAll(".", "-"),
+            end_date: changeDate(doc._data.end_date).replaceAll(".", "-"),
+            reg_date: changeDate(doc._data.reg_date).replaceAll(".", "-"),
+            update_date: changeDate(doc._data.update_date).replaceAll(".", "-"),
+          };
+        }
+      });
+    } catch (error) {
+      console.log("post error", error.message);
+    }
+  };
+
+  const users_api = async () => {
+    try {
+      const users_data = await usersCollection.get();
+      setUsers(users_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    } catch (error) {
+      console.log("user error", error.message);
+    }
+  };
+
+  const user_api = async () => {
+    try {
+      const user_data = await userCollection.get();
+      user_data._docs.map((doc) => {
+        if (doc._data.id === post.current.user_id) {
+          user.current = {
+            ...doc.data(),
+            id: doc.id,
+          };
+        }
+      });
+    } catch (error) {
+      console.log("user error", error.message);
+    }
+  };
+
+  const community_api = async () => {
+    try {
+      const community_data = await communityCollection.get();
+      community_data._docs.map((doc) => {
+        if (doc._data.id === post.current.community_id) {
+          pre_community.current = {
+            ...doc.data(),
+            id: doc.id,
+          };
+          setCommunity({
+            ...doc.data(),
+            id: doc.id,
+          });
+        }
+      });
+    } catch (error) {
+      console.log("community error", error.message);
+    }
+  };
+
+  const comment_api = async () => {
+    try {
+      const comment_data = await commentCollection.orderBy("reg_date").get();
+      let arr = [];
+      comment_data._docs.map((doc) => {
+        if (doc._data.post_id === post.current.id) {
+          arr.push({ ...doc.data(), id: doc.id });
+        }
+      });
+      setComments(arr);
+    } catch (error) {
+      console.log("comment error", error.message);
+    }
+  };
+
+  //댓글 등록
+  const commentSubmit = (e) => {
+    var today = new Date();
+
+    e.preventDefault();
+    const commentRef = commentCollection.doc();
+    commentRef
+      .set({
+        id: commentRef.id,
+        post_id: post_id,
+        user_id: "SeDJYBVUGSjQGaWlzPmm",
+        comment: comment,
+        reg_date: today,
+        update_date: today,
+      })
+      .then(() => {
+        console.log("document success!");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setComment();
+    comment_api();
+  };
+
+  changeDate = (e) => {
+    let date = e.toDate();
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    if (month < 10) {
+      if (day < 10) {
+        return year + "-0" + month + "-0" + day;
+      } else {
+        return year + "-0" + month + "-" + day;
+      }
+    } else {
+      return year + "-" + month + "-" + day;
+    }
+  };
 
   goodsMoreButtonClicked = (id) => {
     more.current[id].measure((fx, fy, width, height, px, py) => {
+      let copiedX = [...modalX];
+      copiedX[id] = px - width * 4;
+      setModalX(copiedX);
+
       let copiedY = [...modalY];
       copiedY[id] = py + height;
       setModalY(copiedY);
 
-      let copiedModal = [...ModalSelectorPopupVisible];
+      let copiedModal = [...modalSelectVisible];
       copiedModal[id] = true;
-      setModalSelectorPopupVisible(copiedModal);
+      setModalSelectVisible(copiedModal);
     });
-    console.log("post", ModalSelectorPopupVisible);
   };
 
-  changeVisible = (id) => {
-    let copiedModal = [...ModalSelectorPopupVisible];
+  //왜 두번 클릭해야 새로고침이 될까?
+  const modalVisible = (id) => {
+    let copiedModal = [...modalSelectVisible];
     copiedModal[id] = false;
-    setModalSelectorPopupVisible(copiedModal);
-  };
+    setModalSelectVisible(copiedModal);
 
-  const handleClickHeart = (item) => {
-    setDetailClick((i) => {
-      if (i.heartClick) {
-        return {
-          ...i,
-          heart: detailClick.heart - 1,
-          heartClick: !detailClick.heartClick,
-        };
-      } else {
-        return {
-          ...i,
-          heart: detailClick.heart + 1,
-          heartClick: !detailClick.heartClick,
-        };
-      }
-    });
-    item.heartClick = detailClick.heartClick;
-    item.heart = detailClick.heart;
-  };
-
-  const handleClickBookmark = (index) => {
-    setDetailClick(
-      dummy_communityDetail.map((v, i) => {
-        if (v.id === index) {
-          v.bookmark = !v.bookmark;
-        }
-        return v;
-      })
-    );
-  };
-
-  const onPressInput = () => {
-    dummy_comment.push({
-      id: 7,
-      profileImg: require("assets/icons/archives/profile.png"),
-      name: "KimDdong",
-      date: "2023.02.05",
-      comment: comment,
-    });
+    setTimeout(() => comment_api(), 1);
   };
 
   const renderComment = ({ item, index }) => {
@@ -137,29 +257,25 @@ const Post = ({ route }) => {
           animationType="fade"
           transparent={true}
           visible={
-            ModalSelectorPopupVisible[item.id]
-              ? ModalSelectorPopupVisible[item.id]
-              : false
+            modalSelectVisible[index] ? modalSelectVisible[index] : false
           }
           onRequestClose={() => {
-            let copiedModal = [...ModalSelectorPopupVisible];
-            copiedModal[item.id] = false;
-            setModalSelectorPopupVisible(copiedModal);
+            let copiedModal = [...modalSelectVisible];
+            copiedModal[index] = false;
+            setModalSelectVisible(copiedModal);
           }}
         >
-          <ModalSelectorPopup
-            x={modalX[item.id]}
-            y={modalY[item.id]}
-            id={item.id}
-            comment={item.comment}
-            item={route.params}
+          <ModalSelect
+            x={modalX[index]}
+            y={modalY[index]}
+            comment={item.id}
+            post={post_id}
             navigation={navigation}
-            visible={ModalSelectorPopupVisible[item.id]}
-            changeVisible={() => this.changeVisible(item.id)}
+            modalVisible={() => modalVisible(index)}
             closeModalPopupMenu={() => {
-              let copiedModal = [...ModalSelectorPopupVisible];
-              copiedModal[item.id] = false;
-              setModalSelectorPopupVisible(copiedModal);
+              let copiedModal = [...modalSelectVisible];
+              copiedModal[index] = false;
+              setModalSelectVisible(copiedModal);
             }}
           />
         </Modal>
@@ -172,12 +288,20 @@ const Post = ({ route }) => {
         >
           <Image source={item.profileImg} style={{ width: 32, height: 32 }} />
           <View>
-            <Text style={{ fontSize: 14, color: "#000000" }}>김도영</Text>
-            <Text style={{ fontSize: 10, color: "#969696" }}>{item.date}</Text>
+            <Text style={{ fontSize: 14, color: "#000000" }}>
+              {users.map((v, i) => {
+                if (v.id === item.user_id) {
+                  return v.nickname;
+                }
+              })}
+            </Text>
+            <Text style={{ fontSize: 10, color: "#969696" }}>
+              {changeDate(item.update_date)}
+            </Text>
           </View>
           <TouchableOpacity
-            ref={(e) => (more.current[item.id] = e)}
-            onPress={() => this.goodsMoreButtonClicked(item.id)}
+            ref={(e) => (more.current[index] = e)}
+            onPress={() => this.goodsMoreButtonClicked(index)}
             style={{
               position: "absolute",
               top: 9,
@@ -186,11 +310,13 @@ const Post = ({ route }) => {
               borderColor: "rgba(0,0,0,0)",
             }}
           >
-            <Image source={moreIcon} style={{ width: 24, height: 24 }} />
+            {item.user_id === "SeDJYBVUGSjQGaWlzPmm" && (
+              <Image source={moreIcon} style={{ width: 24, height: 24 }} />
+            )}
           </TouchableOpacity>
         </View>
         <View style={{ paddingTop: 10 }}>
-          <Text>{item.id === commentId ? commentEdit : item.comment}</Text>
+          <Text>{item.comment}</Text>
         </View>
       </View>
     );
@@ -203,8 +329,8 @@ const Post = ({ route }) => {
         title={"게시물"}
         leftClick={() => navigation.navigate("Archives")}
       />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
+      <View
+        // showsVerticalScrollIndicator={false}
         style={{
           flex: 1,
           backgroundColor: "#fff",
@@ -216,7 +342,7 @@ const Post = ({ route }) => {
       >
         <View style={{ paddingTop: 15, paddingHorizontal: 27 }}>
           <Text style={{ fontSize: 14, fontWeight: "bold", color: "#ff7474" }}>
-            {item.community_name}
+            {pre_community?.current.name}
           </Text>
           <View
             style={{
@@ -226,26 +352,34 @@ const Post = ({ route }) => {
               gap: 5,
             }}
           >
-            <Image source={item.profileImg} style={{ width: 32, height: 32 }} />
-            <Text style={{ fontSize: 14, color: "#000000" }}>{item.name}</Text>
-            <Text style={{ fontSize: 10, color: "#969696" }}>{item.date}</Text>
+            {/* <Image
+              source={require(user.current?.profile_img)}
+              style={{ width: 32, height: 32 }}
+            /> */}
+            <Text style={{ fontSize: 14, color: "#000000" }}>
+              {user.current?.nickname}
+            </Text>
+            <Text style={{ fontSize: 10, color: "#969696" }}>
+              {post.current?.update_date}
+            </Text>
           </View>
           <View style={{ marginTop: 11, gap: 7 }}>
             <Text style={{ fontSize: 12, color: "#000000" }}>
-              1. 준비 기간 : {item.period}
+              1. 준비 기간 : {post.current?.start_date} ~{" "}
+              {post.current?.end_date}
             </Text>
             <Text style={{ fontSize: 12, color: "#000000" }}>
-              2. 교재 : {item.book}
+              2. 교재 : {post.current?.book}
             </Text>
             <Text style={{ fontSize: 12, color: "#000000" }}>
-              3. 결과 : {item.result}
+              3. 결과 : {post.current?.result}
             </Text>
             <View style={{ gap: 7 }}>
               <Text style={{ fontSize: 12, color: "#000000" }}>
                 4. 공부 방법
               </Text>
               <Text style={{ paddingLeft: 11, fontSize: 12, color: "#000000" }}>
-                {item.study}
+                {post.current?.study}
               </Text>
             </View>
           </View>
@@ -285,15 +419,14 @@ const Post = ({ route }) => {
                 gap: 3,
               }}
             >
-              <TouchableOpacity onPress={() => handleClickHeart(item)}>
+              <TouchableOpacity
+              // onPress={() => handleClickHeart(post)}
+              >
                 <Image
-                  source={item.heartClick ? heartOnIcon : heartOffIcon}
+                  source={heartOffIcon}
                   style={{ width: 18, height: 18 }}
                 />
               </TouchableOpacity>
-              <Text style={{ color: item.heartClick ? "#ff7474" : "#bdbdbd" }}>
-                {item.heart}
-              </Text>
             </View>
             <View
               style={{
@@ -305,15 +438,10 @@ const Post = ({ route }) => {
             >
               <TouchableOpacity>
                 <Image
-                  source={item.commentClick ? commentOnIcon : commentOffIcon}
+                  source={commentOffIcon}
                   style={{ width: 18, height: 18 }}
                 />
               </TouchableOpacity>
-              <Text
-                style={{ color: item.commentClick ? "#606060" : "#bdbdbd" }}
-              >
-                {item.comment}
-              </Text>
             </View>
             <TouchableOpacity
               onPress={() => {
@@ -336,6 +464,7 @@ const Post = ({ route }) => {
         </View>
         <View
           style={{
+            flex: 1,
             borderTopWidth: 1,
             borderTopColor: "#ddd",
             padding: 15,
@@ -343,15 +472,19 @@ const Post = ({ route }) => {
           }}
         >
           <Text style={{ fontSize: 12, color: "#333" }}>댓글</Text>
-          <FlatList
-            data={dummy_comment}
-            renderItem={renderComment}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-            removeClippedSubviews
-          />
+
+          {/* 댓글이 없는 경우도 생각하기 */}
+          {comments.length > 0 && (
+            <FlatList
+              data={comments}
+              renderItem={renderComment}
+              keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+              removeClippedSubviews
+            />
+          )}
         </View>
-      </ScrollView>
+      </View>
 
       <View
         style={{
@@ -380,7 +513,7 @@ const Post = ({ route }) => {
         />
         <TouchableOpacity
           style={{ paddingRight: 8 }}
-          onPress={() => onPressInput()}
+          onPress={(e) => commentSubmit(e)}
         >
           <Text>등록</Text>
         </TouchableOpacity>
