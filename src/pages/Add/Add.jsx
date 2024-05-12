@@ -4,6 +4,9 @@ import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View, Dimension
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 // FireStore
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+// Document Picker
+import DocumentPicker from 'react-native-document-picker'
 
 // Import Pages
 import Header from 'components/Tab/Header';
@@ -64,11 +67,45 @@ const Add = ({ navigation, route }) => {
     };
 
     // 자료
+
     const [fileVisible, setFileVisible] = useState(false);
+    const [filename, setFilename] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null);
     const onSelectFile = (file) => {
         setSelectedFile(file);
     };
+    const selectDoc = async () => {
+        try {
+            const doc = await DocumentPicker.pick({
+                type: [DocumentPicker.types.pdf],
+                allowMultiSelection: true,
+            });
+            setSelectedFile(doc.map(item => item.uri));
+            setFilename(doc.map(item => item.name));
+
+            doc.forEach(async (doc) => {
+                await uploadFile(doc.uri, doc.name);
+            });
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                console.log('User canclled the upload', err);
+            } else {
+                console.log(err);
+            }
+        }
+    }
+
+    // 파일 업로드 함수
+    const uploadFile = async (uri, filename) => {
+        try {
+            const reference = storage().ref('/file/' + filename);
+            await reference.putFile(uri); // 파일 업로드
+            console.log('File uploaded successfully!');
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
+    };
+
 
     // 현재 날짜와 시간을 가져오기
     const currentDate = new Date();
@@ -219,7 +256,7 @@ const Add = ({ navigation, route }) => {
 
                     {/* 자료 */}
                     <TouchableOpacity
-                        onPress={() => setFileVisible(!fileVisible)}
+                        onPress={selectDoc}
                         style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, padding: 8, borderRadius: 4, borderWidth: 1, borderColor: '#BDBDBD', flex: 1 }}
                     >
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
@@ -227,7 +264,7 @@ const Add = ({ navigation, route }) => {
                                 <>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                         <Image source={attachFileOn} style={{ width: 24, height: 24 }} />
-                                        <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedFile.name}</Text>
+                                        <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{filename}</Text>
                                     </View>
                                     <TouchableOpacity
                                         onPress={() => setSelectedFile(null)}

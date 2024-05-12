@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, SafeAreaView, FlatList, StyleSheet
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 // FireStore
 import firestore from "@react-native-firebase/firestore";
+import storage from '@react-native-firebase/storage';
 // Components
 import Header from "components/Tab/Header";
 import { ModalSelect } from "components/Modal/CustomModal";
@@ -25,7 +26,7 @@ const bookmarkOnIcon = require("assets/icons/archives/bookmark_on.png");
 const bookmarkOffIcon = require("assets/icons/archives/bookmark_off.png");
 const add = require('assets/icons/home/add.png');
 
-const Archives = ({ navigation }) => {
+const Home = ({ navigation }) => {
   // Select Picker
   const [sort, setSort] = useState("");
   const onChangeSort = (value) => setSort(value);
@@ -650,4 +651,4 @@ const Archives = ({ navigation }) => {
   );
 };
 
-export default Archives;
+export default Home;
