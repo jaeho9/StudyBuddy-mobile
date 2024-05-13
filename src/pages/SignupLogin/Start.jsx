@@ -36,9 +36,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
+    backgroundColor: '#FFFFFF',
     margin: 10,
     marginBottom: 100,
-    backgroundColor: '#FFFFFF',
   },
   logo: {
     width: 90,
