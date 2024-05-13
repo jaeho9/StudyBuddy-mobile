@@ -110,6 +110,7 @@ const Archives = ({ navigation }) => {
 
   useEffect(() => {
     etc();
+    console.log(bookmark);
   }, [bookmark]);
 
   useEffect(() => {}, [communities]);

@@ -40,9 +40,27 @@ export class ModalSelect extends Component {
           doc.ref.delete();
         });
       });
-      console.log("delete complete!");
+      console.log("comment delete complete!");
     } catch (error) {
       console.log("comment error", error.message);
+    }
+  };
+
+  post_api = async () => {
+    try {
+      const postCollection = firestore().collection("post");
+      const rows = await postCollection.where("id", "==", this.props.post);
+      rows.get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          doc.ref.delete();
+        });
+      });
+      this.setState({
+        deleteVisible: true,
+      });
+      console.log("post delete complete!");
+    } catch (error) {
+      console.log("post error", error.message);
     }
   };
 
@@ -53,8 +71,9 @@ export class ModalSelect extends Component {
   onPressDelete() {
     this.props.modalVisible();
     if (this.props.comment) {
-      console.log(this.props.comment);
       this.comment_api();
+    } else {
+      this.post_api();
     }
   }
 
