@@ -13,6 +13,7 @@ import {
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 // FireStore
 import firestore from "@react-native-firebase/firestore";
+
 // Components
 import Header from "components/Tab/Header";
 import { ModalSelect } from "components/Modal/CustomModal";
@@ -248,6 +249,10 @@ const Archives = ({ navigation }) => {
     let copiedModal = [...modalSelectVisible];
     copiedModal[id] = false;
     setModalSelectVisible(copiedModal);
+  };
+
+  const onPressLike = () => {
+    // const storage = getStorage();
   };
 
   const onPressCommunityList = (item) => {

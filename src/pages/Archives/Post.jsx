@@ -17,9 +17,11 @@ import { DeleteModal } from "components/Modal/DeleteModal";
 import { ModalSelect } from "components/Modal/CustomModal";
 import { dummy_comment } from "dummy_data";
 
-// FireStore
+// FireStore && File Download
 import firestore from "@react-native-firebase/firestore";
-import { Directions } from "react-native-gesture-handler";
+import storage from "@react-native-firebase/storage";
+import RNFetchBlob from "rn-fetch-blob";
+// import * as RNFS from "react-native-fs";
 
 const backIcon = require("assets/icons/archives/back.png");
 const fileIcon = require("assets/icons/archives/file.png");
@@ -241,6 +243,30 @@ const Post = ({ route }) => {
     });
   };
 
+  const onPressData = async (data) => {
+    try {
+      const reference = await storage()
+        .ref("/file/" + data)
+        .getDownloadURL()
+        .catch((e) => e);
+
+      const { fs } = RNFetchBlob;
+      const downloads = fs.dirs.DownloadDir;
+      const filePath = `${downloads}/${data}`;
+
+      RNFetchBlob.config({
+        path: filePath,
+        fileCache: true,
+      })
+        .fetch("GET", reference)
+        .then((res) => {
+          console.log("The file saved to", res.path());
+        });
+    } catch (error) {
+      console.log("onPressData error", error.message);
+    }
+  };
+
   //왜 두번 클릭해야 새로고침이 될까?
   const modalVisible = (id) => {
     let copiedModal = [...modalSelectVisible];
@@ -395,14 +421,11 @@ const Post = ({ route }) => {
             }}
           >
             <Image source={fileIcon} style={{ width: 16, height: 16 }} />
-            <View>
+            <TouchableOpacity onPress={() => onPressData(post.current?.data)}>
               <Text style={{ fontSize: 12, color: "#606060" }}>
-                정보처리기사 필기 요약.pdf
+                {post.current?.data}
               </Text>
-              <Text style={{ fontSize: 12, color: "#606060" }}>
-                정보처리기사 필기 요약.pdf
-              </Text>
-            </View>
+            </TouchableOpacity>
           </View>
           <View
             style={{
