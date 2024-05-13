@@ -7,14 +7,27 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
+import firestore from "@react-native-firebase/firestore";
 
-const DeleteConfirmationModal = ({ isVisible, onClose }) => {
+const DeleteConfirmationModal = ({ isVisible, onClose, postId }) => {
+  const handleDelete = async () => {
+    try {
+      await firestore().collection("post").doc(postId).delete();
+      onClose();
+    } catch (error) {
+      console.error("게시물 삭제 중 에러 발생:", error);
+    }
+  };
+
   return (
     <Modal visible={isVisible} transparent={true}>
       <View style={styles.modalContent}>
-        <Text style={styles.modalText}>게시물 삭제됨</Text>
+        <Text style={styles.modalText}>게시물을 삭제하시겠습니까?</Text>
+        <TouchableOpacity onPress={handleDelete}>
+          <Text style={styles.cancelButton1}>확인</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={onClose}>
-          <Text style={styles.cancelButton}>취소</Text>
+          <Text style={styles.cancelButton2}>취소</Text>
         </TouchableOpacity>
       </View>
     </Modal>
@@ -42,7 +55,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginLeft: 20,
   },
-  cancelButton: {
+  cancelButton1: {
+    color: "#FFF",
+    fontFamily: "Inter",
+    fontWeight: "700",
+    fontSize: 18,
+  },
+  cancelButton2: {
     color: "#FFF",
     fontFamily: "Inter",
     fontWeight: "700",

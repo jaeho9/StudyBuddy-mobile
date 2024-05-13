@@ -30,21 +30,31 @@ user.link
 user.birthday
 
 
-2.
-게시글
+2. (---------------완----------------)
+게시글 (로그인한 id == post.id)
 community.name (ex 정보처리기사)
 user.profile_img (프로필 사진)
 user.nickname (이름)
-post.reg_date (게시글 등록일) -> YYYY.MM.DD
-1. post./// 준비기간 .......... 생각좀
+post.reg_date (게시글 등록일)
+
+1. post.reg_date/// 준비기간 .......... 생각좀
 2. post.book /// 교재 없으면 X
 3. post.result /// 합 , 불 
 
-3.
-하트
 
-4.
+3. (---------------완----------------)
+하트
+게시글 (로그인한 id == post.id)
+community.name (ex 정보처리기사)
+user.profile_img (프로필 사진)
+user.nickname (이름)
+post.reg_date (게시글 등록일)
+
+
+
+4.(---------------완----------------)
 댓글
+
 
 
 5.

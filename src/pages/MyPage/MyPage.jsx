@@ -11,6 +11,8 @@ import Header from "components/Tab/header";
 import { useNavigation } from "@react-navigation/native";
 import MiddleTab from "components/Tab/MiddleTab"; // MiddleTab 컴포넌트 임포트
 import { MyPagePostList } from "components/List/MyPagePostList";
+import { MyPagePostList_heart } from "components/List/MyPagePostList_heart";
+import { MyPagePostList_comment } from "components/List/MyPagePostList_comment";
 
 import firestore from "@react-native-firebase/firestore"; // firestore
 
@@ -20,16 +22,7 @@ const link = require("assets/mypage/link.png");
 const calendar = require("assets/mypage/calendar.png");
 const MyPageProfile = require("assets/mypage/Image/MyPageProfile.png");
 
-// const dummyData = {
-//   id: 1,
-//   name: "김도영",
-//   email: "rlaehdud159@gmail.com",
-//   profileImage: MyPageProfile,
-//   addtext: true,
-//   introduction: "정처기 필기를 2주만에 꼭 합격하겠어!",
-//   link: "www.naver.com",
-//   date: "1999년 1월 1일",
-// };
+const loggedInUserId = "test_id";
 
 const Mypage = ({}) => {
   //user
@@ -41,8 +34,8 @@ const Mypage = ({}) => {
     try {
       const user_data = await userCollection.get();
       const userData = user_data._docs
-        .find((doc) => doc.id === "test_id") // 로그인 한 아이디 별 데이터 프로필 불러오기
-        .data(); // id가 '1vfLu0QlpF6ZVigXb1GE'인 사용자 데이터 가져오기
+        .find((doc) => doc.id === loggedInUserId) // 로그인 한 아이디 별 데이터 프로필 불러오기
+        .data();
       setDummyData({
         id: userData.id,
         name: userData.nickname,
@@ -59,18 +52,6 @@ const Mypage = ({}) => {
     }
   };
 
-  // const dummyData = {
-  //   id: user.id,
-  //   name: user.nickname,
-  //   email: user.email,
-  //   // profileImage: user.profile_img,
-  //   profileImage: MyPageProfile,
-  //   addtext: true,
-  //   introduction: user.about_me,
-  //   link: user.link,
-  //   date: user.birthday,
-  // };
-
   useEffect(() => {
     // 컴포넌트가 처음으로 렌더링될 때 사용자 데이터를 가져옴
     user_api();
@@ -81,9 +62,10 @@ const Mypage = ({}) => {
 
   const handleTabPress = async (index) => {
     setSelectedTab(index);
-    if (index === 0) {
-      await user_api();
-    }
+    await user_api();
+    // 탭에 따라 다른 게시글 목록을 보여주도록 설정
+    // 예를 들어, index === 0 이면 게시글 목록을 렌더링
+    // index === 1 이면 하트가 눌렸으므로 하트 목록을 렌더링하고, index === 2 이면 댓글 목록을 렌더링
   };
 
   const handleEditProfile = () => {
@@ -156,7 +138,6 @@ const Mypage = ({}) => {
           <Text style={styles.ProfileButtonText}>프로필 수정</Text>
         </TouchableOpacity>
       </View>
-
       <View style={styles.MiddleTab}>
         <MiddleTab
           text="게시글"
@@ -174,15 +155,13 @@ const Mypage = ({}) => {
           onPress={() => handleTabPress(2)}
         />
       </View>
-      {/* <View> // test'''''''''''''''''''''''''''''''''''''
-        <Button title="데이터 불러오기" onPress={user_api} />
-        {user?.map((row, idx) => {
-          return <Text>{row.email}</Text>;
-        })}
-      </View> */}
-      <View style={styles.cardListContainer}>
-        <MyPagePostList />
-      </View>
+      {selectedTab === 0 && <MyPagePostList data={dummyData} type="게시글" />}
+      {selectedTab === 1 && (
+        <MyPagePostList_heart data={dummyData} type="하트" />
+      )}
+      {selectedTab === 2 && (
+        <MyPagePostList_comment data={dummyData} type="댓글" />
+      )}
     </SafeAreaView>
   );
 };

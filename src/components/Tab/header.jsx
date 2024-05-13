@@ -7,7 +7,15 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
+const header = ({
+  left,
+  title,
+  right,
+  leftClick,
+  rightClick,
+  isDuplicate,
+  onSave,
+}) => {
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -50,7 +58,13 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
         )}
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => rightClick && navigation.navigate(rightClick)}
+        onPress={() => {
+          if (onSave) {
+            onSave(); // onSave가 존재할 때 호출
+          } else if (rightClick) {
+            navigation.navigate(rightClick); // rightClick가 존재할 때 네비게이션 이동
+          }
+        }}
       >
         {right ? (
           typeof right === "string" ? (
@@ -58,7 +72,7 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
               style={{
                 fontSize: 16,
                 fontWeight: "bold",
-                color: isDuplicate ? "#FF7474" : "#bdbdbd", // isDuplicate 상태에 따라 색상 변경
+                color: isDuplicate ? "#bdbdbd" : "#FF7474", // isDuplicate 상태에 따라 색상 변경
               }}
             >
               {right}
