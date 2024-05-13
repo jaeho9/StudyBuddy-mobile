@@ -18,6 +18,7 @@ import Header from "components/Tab/Header";
 import { ModalSelect } from "components/Modal/CustomModal";
 // SelectPicker
 import SelectPicker from "components/SelectPicker";
+import { Firestore } from "@firebase/firestore";
 // Images
 const menuIcon = require("assets/icons/archives/menu.png");
 const profileImg = require("assets/icons/archives/profile.png");
@@ -114,6 +115,7 @@ const Archives = ({ navigation }) => {
   useEffect(() => {}, [communities]);
 
   useEffect(() => {
+    post_api();
     modalSelectVisible.map((e, i) => {
       if (e === true) {
         let copiedModal = [...modalSelectVisible];
@@ -165,25 +167,16 @@ const Archives = ({ navigation }) => {
     }
   };
 
-  const like_api = async () => {
+  const bookmark_id_api = async () => {
     try {
-      const like_data = await likeCollection.get();
-      setLike(like_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      return "hi";
+      const bookmark_id_data = await bookmarkCollection
+        .where("user_id", "==", "SeDJYBVUGSjQGaWlzPmm")
+        .get();
+      bookmark_id_data._docs.map((doc) => console.log("bookmark", doc));
     } catch (error) {
-      console.log("like error", error.message);
+      console.log("bookmark id error", error.message);
     }
   };
-
-  // const like_add_api = async () => {
-  //   try {
-  //     await likeCollection.add({
-
-  //     })
-  //   } catch (error) {
-  //     console.log("like error", error.message);
-  //   }
-  // };
 
   const bookmark_api = async () => {
     try {
@@ -270,10 +263,6 @@ const Archives = ({ navigation }) => {
     );
   };
 
-  const onPressLike = (item) => {
-    console.log(item);
-  };
-
   // 내가 가입한 커뮤니티 리스트만 보여야 함 + 커뮤니티 디비 설계해야 함
   const renderCommunityList = ({ item, index }) => {
     return (
@@ -298,11 +287,10 @@ const Archives = ({ navigation }) => {
 
   //내가 북마크 누른 게시물이 보여짐
   const renderCommunityDetail = ({ item, index }) => {
-    console.log("1");
     return (
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate("Post_Firebase", {
+          navigation.navigate("Post", {
             post_id: item.id,
           })
         }
@@ -342,7 +330,8 @@ const Archives = ({ navigation }) => {
           </View>
           <View style={{ marginHorizontal: 40, gap: 8, marginTop: 8 }}>
             <Text style={{ fontSize: 14, color: "#000000" }}>
-              1. 준비 기간 : {changeDate(item.start_date)}
+              1. 준비 기간 : {changeDate(item.start_date)} ~{" "}
+              {changeDate(item.end_date)}
             </Text>
             <Text style={{ fontSize: 14, color: "#000000" }}>
               2. 교재 : {item.book}

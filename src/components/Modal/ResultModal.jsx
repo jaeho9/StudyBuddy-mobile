@@ -14,7 +14,6 @@ const MidModal = ({
   const [result, setResult] = useState(selectedResult);
 
   useEffect(() => {
-    console.log("result");
     setResult(selectedResult);
   }, [selectedResult]);
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Dimensions, Text, TouchableOpacity } from "react-native";
 // Modal
 import Modal from "react-native-modal";
@@ -7,11 +7,21 @@ import { Calendar } from "react-native-calendars";
 
 const { width, height } = Dimensions.get("window");
 
-const CalendarModal = ({ isVisible, setIsVisible, onSelectDate }) => {
+const CalendarModal = ({
+  isVisible,
+  setIsVisible,
+  onSelectDate,
+  selectedDate,
+}) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  console.log(startDate, endDate);
+  // console.log(startDate, endDate);
+
+  useEffect(() => {
+    setStartDate(selectedDate?.startDate);
+    setEndDate(selectedDate?.endDate);
+  }, [selectedDate]);
 
   const handleSaveResult = () => {
     onSelectDate(startDate, endDate);
