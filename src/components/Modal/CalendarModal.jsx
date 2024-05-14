@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Dimensions, Text, TouchableOpacity } from "react-native";
 // Modal
 import Modal from "react-native-modal";
@@ -7,37 +7,53 @@ import { Calendar } from "react-native-calendars";
 
 const { width, height } = Dimensions.get("window");
 
-const CalendarModal = ({ isVisible, setIsVisible, onSelectDate }) => {
+const CalendarModal = ({
+  isVisible,
+  setIsVisible,
+  onSelectDate,
+  selectedDate,
+}) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [selectedDate, setSelectedDate] = useState("");
-  //   const handleSaveResult = () => {
-  //     onSelectDate(startDate, endDate);
-  //     setIsVisible(false);
-  //   };
+
+  useEffect(() => {
+    setStartDate(selectedDate?.startDate);
+    setEndDate(selectedDate?.endDate);
+  }, [selectedDate]);
 
   const handleSaveResult = () => {
-    // 선택된 날짜를 이용하여 생년월일을 설정하고, 모달을 닫습니다.
-    onSelectDate(selectedDate);
+    onSelectDate(startDate, endDate);
     setIsVisible(false);
   };
 
   const handleDayPress = (day) => {
-    setSelectedDate(day.dateString); // 선택된 날짜만 저장
+    if (!startDate || (startDate && endDate)) {
+      setStartDate(day.dateString);
+      setEndDate("");
+    } else {
+      setEndDate(day.dateString);
+    }
   };
 
   const generateMarkedDates = () => {
     const markedDates = {};
-
-    if (selectedDate) {
-      markedDates[selectedDate] = {
+    if (startDate && endDate) {
+      const currentDate = new Date(startDate);
+      while (currentDate <= new Date(endDate)) {
+        markedDates[currentDate.toISOString().slice(0, 10)] = {
+          selected: true,
+          disableTouchEvent: true,
+          selectedDotColor: "#FF7474",
+        };
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    } else if (startDate) {
+      markedDates[startDate] = {
         selected: true,
         disableTouchEvent: true,
         selectedDotColor: "#FF7474",
-        selectedTextColor: "#FFFFFF", // 선택된 날짜의 텍스트 색상 변경
       };
     }
-
     return markedDates;
   };
 
@@ -63,7 +79,7 @@ const CalendarModal = ({ isVisible, setIsVisible, onSelectDate }) => {
       <View
         style={{
           width: width - 40,
-          height: height / 1.5,
+          height: height / 2,
           paddingTop: 24,
           paddingHorizontal: 16,
           backgroundColor: "#FFF",
@@ -83,7 +99,7 @@ const CalendarModal = ({ isVisible, setIsVisible, onSelectDate }) => {
             </Text>
           </TouchableOpacity>
           <Text style={{ fontSize: 16, fontWeight: 700, color: "#8A8A8A" }}>
-            생년월일 선택
+            일정 선택
           </Text>
           <TouchableOpacity onPress={handleSaveResult}>
             <Text style={{ fontSize: 16, fontWeight: 700, color: "#FF7474" }}>
@@ -96,7 +112,7 @@ const CalendarModal = ({ isVisible, setIsVisible, onSelectDate }) => {
           onDayPress={handleDayPress}
           markedDates={generateMarkedDates()}
           style={{
-            marginTop: 28,
+            marginTop: 20,
           }}
           theme={{
             backgroundColor: "#ffffff",

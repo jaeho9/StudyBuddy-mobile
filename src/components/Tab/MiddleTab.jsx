@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 
 const Line = require("assets/icons/mypage/Line.png");
 const emptyLine = require("assets/icons/mypage/emptyLine.png");
@@ -12,6 +12,17 @@ const MiddleTab = ({ text, selected, onPress }) => {
         onPress={onPress}
       >
         <Text style={styles.MiddleTabText}>{text}</Text>
+        {selected ? (
+          <Image
+            source={require("assets/icons/mypage/Line.png")}
+            style={styles.Image}
+          />
+        ) : (
+          <Image
+            source={require("assets/icons/mypage/emptyLine.png")}
+            style={styles.Image}
+          />
+        )}
       </TouchableOpacity>
       {selected ? (
         <Image source={Line} style={styles.Image} />
@@ -22,7 +33,7 @@ const MiddleTab = ({ text, selected, onPress }) => {
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   MiddleTabText: {
     color: "#333",
     fontSize: 16,
@@ -35,6 +46,6 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
   },
-};
+});
 
 export default MiddleTab;

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { View, TouchableOpacity, Animated, StyleSheet } from "react-native";
-
+// Images
 const homeOn = require("assets/icons/bottomtab/home_on.png");
 const homeOff = require("assets/icons/bottomtab/home_off.png");
 const communityOn = require("assets/icons/bottomtab/community_on.png");
@@ -31,7 +31,10 @@ const CustomBottomTab = ({ state, navigation, insets, descriptors }) => {
 
   return (
     <View
-      style={[styles.bottomTabBarWrapper, { paddingBottom: insets.bottom }]}
+      style={[
+        styles.bottomTabBarWrapper,
+        { paddingBottom: insets.bottom + 20 },
+      ]}
     >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];

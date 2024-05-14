@@ -7,10 +7,9 @@ import {
   Image,
   StyleSheet,
   TextInput,
-  Alert, // Alert를 임포트합니다.
 } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // 네비게이션 훅 가져오기
-import Header from "components/Tab/header";
+import Header from "components/Tab/Header";
 import MyPageModal from "components/Modal/MyPageModal"; // MyPageModal 컴포넌트 임포트
 import BirthdateModal from "components/Modal/BirthdateModal";
 import firestore from "@react-native-firebase/firestore"; // firestore

@@ -71,5 +71,3 @@ const styles = StyleSheet.create({
 });
 
 export default DeleteConfirmationModal;
-
-// 확인 버튼을 추가고려?

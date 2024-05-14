@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Modal,
 } from "react-native";
+
 import DeleteConfirmationModal from "components/Modal/DeleteConfirmationModal";
 import firestore from "@react-native-firebase/firestore";
 
