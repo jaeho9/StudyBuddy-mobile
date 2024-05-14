@@ -1,31 +1,37 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { startTransition, useState, useEffect, useRef } from "react";
 import {
-  View,
-  Text,
   Image,
-  TouchableOpacity,
   SafeAreaView,
-  Dimensions,
+  Text,
   TextInput,
+  TouchableOpacity,
+  View,
+  Dimensions,
 } from "react-native";
+
+import { useNavigation, useIsFocused } from "@react-navigation/native";
+
 // Keyboard Aware Scroll View
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // FireStore
-import firestore from '@react-native-firebase/firestore';
+import firestore from "@react-native-firebase/firestore";
+import storage from "@react-native-firebase/storage";
+
+// Document Picker
+import DocumentPicker from "react-native-document-picker";
 
 // Import Pages
-import Header from 'components/Tab/Header';
-import CommunityModal from 'components/Modal/CommunityModal';
+import Header from "components/Tab/Header";
+import CommunityModal from "components/Modal/CommunityModal";
 import ResultModal from "components/Modal/ResultModal";
 import CalendarModal from "components/Modal/CalendarModal";
 import FileModal from "components/Modal/FileModal";
 
-const { width, height } = Dimensions.get("window");
-
-const backIcon = require("assets/icons/archives/back.png");
-const editIcon = require("assets/icons/archives/edit_header.png");
+// Images
 const clear = require("assets/icons/add/clear.png");
+const backIcon = require("assets/icons/archives/back.png");
 const feedAdd = require("assets/icons/add/feed_add.png");
+const feedAddOff = require("assets/icons/add/feed_add_off.png");
 const arrowDown = require("assets/icons/add/arrow_down.png");
 const arrowRight = require("assets/icons/add/arrow_right.png");
 const calendarOn = require("assets/icons/add/calendar_on.png");
@@ -39,7 +45,9 @@ const reviewsOff = require("assets/icons/add/reviews_off.png");
 const attachFile = require("assets/icons/add/attach_file.png");
 const attachFileOn = require("assets/icons/add/attach_file_on.png");
 
-const PostEdit = ({ navigation, route }) => {
+const { width, height } = Dimensions.get("window");
+
+const Add = ({ navigation, route }) => {
   const { id } = route.params;
 
   // 커뮤니티 선택
@@ -58,6 +66,8 @@ const PostEdit = ({ navigation, route }) => {
 
   // 교재
   const { book } = route.params ? route.params : {};
+  const [selectedBook, setSelectedBook] = useState(null);
+  const isFocused = useIsFocused();
 
   // 결과
   const [resultVisible, setResultVisible] = useState(false);
@@ -74,6 +84,7 @@ const PostEdit = ({ navigation, route }) => {
 
   // 자료
   const [fileVisible, setFileVisible] = useState(false);
+  const [filename, setFilename] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const onSelectFile = (file) => {
     setSelectedFile(file);
@@ -85,11 +96,65 @@ const PostEdit = ({ navigation, route }) => {
   const edit_post = useRef({});
   const postCollection = firestore().collection("post");
 
+  //community
+  const [community, setCommunity] = useState([]);
+  const communityCollection = firestore().collection("community");
+
   useEffect(() => {
-    post_api();
+    post_read_api();
+    community_api();
   }, []);
 
-  const post_api = async () => {
+  useEffect(() => {
+    if (book) {
+      setSelectedBook(book);
+    }
+  }, [isFocused]);
+
+  const selectDoc = async () => {
+    console.log("selectDoc");
+    try {
+      const doc = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf],
+        copyTo: "cachesDirectory",
+        allowMultiSelection: true,
+      });
+      setSelectedFile(doc.map((item) => item.uri));
+      setFilename(doc.map((item) => item.name));
+
+      doc.forEach(async (doc) => {
+        await uploadFile(doc.fileCopyUri, doc.uri, doc.name);
+      });
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log("User canclled the upload", err);
+      } else {
+        console.log(err);
+      }
+    }
+  };
+
+  // 파일 업로드 함수
+  const uploadFile = async (fileCopyUri, uri, filename) => {
+    try {
+      // const reference = storage().ref("/file/" + filename);
+      // await reference.putFile(uri); // 파일 업로드
+      // console.log("File uploaded successfully!");
+
+      console.log(fileCopyUri.replace("file://", ""));
+      const reference = storage().ref("/file/" + filename);
+      await reference.putFile(fileCopyUri.replace("file://", ""));
+      console.log("File uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  };
+
+  // 현재 날짜와 시간을 가져오기
+  const currentDate = new Date();
+
+  //post 읽기
+  const post_read_api = async () => {
     try {
       const post_data = await postCollection.get();
       post_data._docs.map((doc) => {
@@ -102,16 +167,66 @@ const PostEdit = ({ navigation, route }) => {
           };
         }
       });
-      // console.log(edit_post.current);
-      console.log("date", edit_post.current.end_date);
+      onSelectDate(edit_post.current.start_date, edit_post.current.end_date);
       setSelectedDate({
         startDate: edit_post.current.start_date,
         endDate: edit_post.current.end_date,
       });
+      setSelectedBook(edit_post.current.book);
       setSelectedResult(edit_post.current.result);
       setText(edit_post.current.study);
+      setFilename(edit_post.current.data);
+      setSelectedFile(edit_post.current.data);
     } catch (error) {
       console.log("post error", error.message);
+    }
+  };
+
+  //post 수정
+  const post_update_api = async () => {
+    var cur_date = new Date();
+    try {
+      const rows = await postCollection.where("id", "==", id);
+      rows.get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          doc.ref.update({
+            community_id: selectedCommunity.community_id,
+            start_date: new Date(selectedDate.startDate),
+            end_date: new Date(selectedDate.endDate),
+            book: book ? book : selectedBook,
+            result: selectedResult,
+            data: filename,
+            study: text,
+            update_date: cur_date,
+          });
+        });
+      });
+    } catch (error) {
+      console.log("post_update error", error.message);
+    }
+  };
+
+  const community_api = async () => {
+    try {
+      const community_data = await communityCollection.get();
+      setCommunity(
+        community_data._docs.map((doc) => {
+          if (doc._data.id === edit_post.current.community_id) {
+            edit_post.current = {
+              ...edit_post.current,
+              community_name: doc._data.name,
+              community_id: doc.id,
+            };
+          }
+        })
+      );
+      // onSelectCommunity(edit_post.current.community_name);
+      setSelectedCommunity({
+        community_id: edit_post.current.community_id,
+        community_name: edit_post.current.community_name,
+      });
+    } catch (error) {
+      console.log("community error", error.message);
     }
   };
 
@@ -132,18 +247,40 @@ const PostEdit = ({ navigation, route }) => {
     }
   };
 
+  // 커뮤니티, 준비 기간, 교재, 결과, 공부 방법을 작성하면 버튼 활성화
+  const isReadyToAddFeed =
+    selectedCommunity && selectedDate && selectedBook && selectedResult && text;
+
+  // rightClick 함수 정의
+  const rightClick = async () => {
+    if (isReadyToAddFeed) {
+      await post_update_api();
+      navigation.navigate("Archives");
+    } else {
+      console.log(
+        "else",
+        selectedCommunity,
+        selectedDate,
+        selectedBook,
+        selectedResult,
+        text
+      );
+    }
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
       <Header
         left={backIcon}
-        title={"게시물 수정"}
-        right={editIcon}
-        rightClick={() => navigation.navigate("Archives")}
         leftClick={() => navigation.goBack()}
+        title={"게시물 수정"}
+        right={isReadyToAddFeed ? feedAdd : feedAddOff}
+        rightClick={rightClick}
       />
       <KeyboardAwareScrollView
         style={{ marginHorizontal: 20, marginVertical: 16 }}
       >
+        {/* 커뮤니티 선택 */}
         <TouchableOpacity
           onPress={() => setCommunityVisible(!communityVisible)}
           style={{
@@ -158,7 +295,7 @@ const PostEdit = ({ navigation, route }) => {
         >
           {selectedCommunity ? (
             <Text style={{ fontSize: 16, color: "#7A7A7A" }}>
-              {selectedCommunity.name}
+              {selectedCommunity.community_name}
             </Text>
           ) : (
             <Text style={{ fontSize: 16, color: "#BDBDBD" }}>
@@ -168,6 +305,7 @@ const PostEdit = ({ navigation, route }) => {
           <Image source={arrowDown} style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
 
+        {/* 준비 기간 */}
         <TouchableOpacity
           onPress={() => setDateVisible(!dateVisible)}
           style={{
@@ -200,12 +338,12 @@ const PostEdit = ({ navigation, route }) => {
               <Text style={{ fontSize: 16, color: "#BDBDBD" }}>준비 기간</Text>
             </View>
           )}
-
           <Image source={arrowRight} style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
 
+        {/* 교재 */}
         <TouchableOpacity
-          onPress={() => navigation.navigate("Book")}
+          onPress={() => navigation.navigate("PostEditBook", { post_id: id })}
           style={{
             height: 40,
             flexDirection: "row",
@@ -217,14 +355,18 @@ const PostEdit = ({ navigation, route }) => {
             borderBottomColor: "#BDBDBD",
           }}
         >
-          {book ? (
+          {selectedBook ? (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
                 source={storiesOn}
                 style={{ width: 24, height: 24, marginRight: 8 }}
               />
-              <Text style={{ fontSize: 16, color: "#7A7A7A" }}>
-                {book.name}
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={{ width: width - 120, fontSize: 16, color: "#7A7A7A" }}
+              >
+                {selectedBook}
               </Text>
             </View>
           ) : (
@@ -236,10 +378,10 @@ const PostEdit = ({ navigation, route }) => {
               <Text style={{ fontSize: 16, color: "#BDBDBD" }}>교재</Text>
             </View>
           )}
-
           <Image source={arrowRight} style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
 
+        {/* 결과 */}
         <TouchableOpacity
           onPress={() => setResultVisible(!resultVisible)}
           style={{
@@ -275,6 +417,7 @@ const PostEdit = ({ navigation, route }) => {
           <Image source={arrowRight} style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
 
+        {/* 공부 방법 */}
         <View style={{ marginTop: 4 }}>
           {text ? (
             <View
@@ -327,8 +470,9 @@ const PostEdit = ({ navigation, route }) => {
             }}
           />
 
+          {/* 자료 */}
           <TouchableOpacity
-            onPress={() => setFileVisible(!fileVisible)}
+            onPress={selectDoc}
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -356,7 +500,7 @@ const PostEdit = ({ navigation, route }) => {
                       style={{ width: 24, height: 24 }}
                     />
                     <Text style={{ fontSize: 16, color: "#7A7A7A" }}>
-                      {selectedFile.name}
+                      {filename}
                     </Text>
                   </View>
                   <TouchableOpacity
@@ -379,24 +523,24 @@ const PostEdit = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
 
+        {/* Modal */}
         <CommunityModal
-          // community_name={item.community_name}
           isVisible={communityVisible}
           setIsVisible={setCommunityVisible}
           onSelectCommunity={onSelectCommunity}
+          selectedCommunity={selectedCommunity}
         />
         <ResultModal
-          community_result={edit_post.current.result}
           isVisible={resultVisible}
           setIsVisible={setResultVisible}
           onSelectResult={onSelectResult}
+          selectedResult={selectedResult}
         />
         <CalendarModal
-          community_startDate={edit_post.current.start_date}
-          community_endDate={edit_post.current.end_date}
           isVisible={dateVisible}
           setIsVisible={setDateVisible}
           onSelectDate={onSelectDate}
+          selectedDate={selectedDate}
         />
         <FileModal
           isVisible={fileVisible}
@@ -407,4 +551,5 @@ const PostEdit = ({ navigation, route }) => {
     </SafeAreaView>
   );
 };
-export default PostEdit;
+
+export default Add;

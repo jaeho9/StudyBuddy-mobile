@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Keyboard,
@@ -9,120 +9,56 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-// FireStore
-import firestore from "@react-native-firebase/firestore";
 // Modal
 import Modal from "react-native-modal";
 
 //Images
-const search = require("assets/icons/add/search.png");
-const selectOn = require("assets/icons/add/select_on.png");
-const selectOff = require("assets/icons/add/select_off.png");
-const cancel = require("assets/icons/add/cancel.png");
+const search = require("../assets/icons/add/search.png");
+const selectOn = require("../assets/icons/add/select_on.png");
+const selectOff = require("../assets/icons/add/select_off.png");
+const cancel = require("../assets/icons/add/cancel.png");
 
 const { width, height } = Dimensions.get("window");
 
-const CommunityModal = ({
+// Dummy_data
+const dummy_data = [
+  {
+    id: 1,
+    name: "정보처리기능사",
+  },
+  {
+    id: 2,
+    name: "정보보안기사",
+  },
+  {
+    id: 3,
+    name: "컴퓨터활용능력",
+  },
+  {
+    id: 4,
+    name: "TOEIC",
+  },
+];
+
+const CustomModal = ({
+  community_name,
   isVisible,
   setIsVisible,
   onSelectCommunity,
-  selectedCommunity,
 }) => {
   const [keyword, setKeyword] = useState("");
   const [selectIndex, setSelectIndex] = useState();
 
-  //community
-  const [communities, setCommunities] = useState([]);
-  const [joinCommunities, setJoinCommunities] = useState([]);
-  const communityCollection = firestore().collection("community");
-
-  //join
-  const [join, setJoin] = useState([]);
-  const joinCollection = firestore().collection("join");
-
-  //user
-  const [user, setUser] = useState([]);
-  const userCollection = firestore().collection("user");
-
   useEffect(() => {
-    user_api();
-    community_api();
-    join_api();
-  }, []);
-
-  useEffect(() => {
-    etc();
-  }, [join]);
-
-  const user_api = async () => {
-    try {
-      const user_data = await userCollection.get();
-      setUser(user_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    } catch (error) {
-      console.log("user error", error.message);
-    }
-  };
-
-  const community_api = async () => {
-    try {
-      const community_data = await communityCollection.get();
-      setCommunities(
-        community_data._docs.map((doc) => ({
-          community_id: doc._data.id,
-          community_name: doc._data.name,
-        }))
+    if (community_name) {
+      console.log("name", community_name);
+      onSelectCommunity(community_name);
+      let findIndex = dummy_data.findIndex(
+        (data) => data.name === community_name
       );
-    } catch (error) {
-      console.log("community error", error.message);
+      setSelectIndex(findIndex);
     }
-  };
-
-  const join_api = async () => {
-    try {
-      const join_data = await joinCollection.get();
-      setJoin(join_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    } catch (error) {
-      console.log("post error", error.message);
-    }
-  };
-
-  etc = () => {
-    let arr = [];
-    join.map((v, i) => {
-      if (v.user_id === "SeDJYBVUGSjQGaWlzPmm") {
-        communities.map((a, b) => {
-          if (a.community_id === v.community_id) {
-            arr.push({
-              community_id: a.community_id,
-              community_name: a.community_name,
-              isClick: a.isClick,
-            });
-          }
-        });
-      }
-    });
-
-    setJoinCommunities(arr);
-  };
-
-  const searchCommunity = async () => {
-    try {
-      // Firestore 쿼리를 사용하여 커뮤니티를 검색합니다.
-      const querySnapshot = await communityCollection
-        .where("name", ">=", keyword) // 검색어와 일치하는 커뮤니티 검색
-        .where("name", "<=", keyword + "\uf8ff") // 검색어로 시작하는 커뮤니티 검색
-        .get();
-
-      // 쿼리 결과를 배열로 변환하여 communities 상태를 업데이트합니다.
-      const communitiesData = querySnapshot.docs.map((doc) => ({
-        community_id: doc.id,
-        community_name: doc.data().name,
-      }));
-      setCommunities(communitiesData);
-    } catch (error) {
-      console.error("Error searching communities:", error.message);
-    }
-  };
+  }, [community_name]);
 
   const ModalItem = ({ item, index }) => {
     return (
@@ -135,9 +71,7 @@ const CommunityModal = ({
           }}
         >
           <Text style={{ fontSize: 16, fontWeight: 700, color: "#717171" }}>
-            {communities.map((v, i) => {
-              if (v.community_id === item.community_id) return v.community_name;
-            })}
+            {item.name}
           </Text>
           <TouchableOpacity
             onPress={() => {
@@ -237,10 +171,7 @@ const CommunityModal = ({
               autoCorrect={false}
               autoCapitalize="none"
               value={keyword}
-              textAlignVertical="top"
-              multiline
               onChangeText={(text) => setKeyword(text)}
-              onSubmitEditing={searchCommunity} // 엔터 키나 검색 버튼을 눌렀을 때 searchCommunity 함수 실행
               allowFontScaling={false}
               style={{
                 flex: 1,
@@ -253,12 +184,7 @@ const CommunityModal = ({
               }}
             />
             {keyword ? (
-              <TouchableOpacity
-                onPress={() => {
-                  setKeyword("");
-                  community_api();
-                }}
-              >
+              <TouchableOpacity onPress={() => setBook("")}>
                 <Image source={cancel} style={{ width: 24, height: 24 }} />
               </TouchableOpacity>
             ) : (
@@ -269,7 +195,7 @@ const CommunityModal = ({
 
         <View>
           <FlatList
-            data={joinCommunities}
+            data={dummy_data}
             renderItem={ModalItem}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
@@ -283,4 +209,4 @@ const CommunityModal = ({
   );
 };
 
-export default CommunityModal;
+export default CustomModal;

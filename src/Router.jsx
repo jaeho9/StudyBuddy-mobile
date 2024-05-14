@@ -35,14 +35,14 @@ import Add from "pages/Add/Add";
 import Book from "pages/Add/Book";
 
 // Archives
-import Archives_Firebase from "pages/Archives/Archives_Firebase";
+import Archives from "pages/Archives/Archives";
 import CommentEdit from "pages/Archives/CommentEdit";
-import Post_Firebase from "pages/Archives/Post_Firebase"
 import Post from "pages/Archives/Post";
 import PostEdit from "pages/Archives/PostEdit";
+import PostEditBook from "pages/Archives/PostEditBook";
 
 // MyPage
-import Mypage from "pages/MyPage/MyPage";
+import Mypage from "pages/MyPage/Mypage";
 import EditProfile from "pages/MyPage/EditProfile";
 import Settings from "pages/MyPage/Settings";
 import Library from "pages/MyPage/Library";
@@ -63,7 +63,7 @@ const MainTab = () => {
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Community" component={Community} />
-      <Tab.Screen name="Archives" component={Archives_Firebase} />
+      <Tab.Screen name="Archives" component={Archives} />
       <Tab.Screen name="MyPage" component={Mypage} />
     </Tab.Navigator>
   );
@@ -76,15 +76,15 @@ const Router = () => {
       screenOptions={{ headerShown: false }}
     >
       {/* Login */}
-      <Stack.Screen name="Splash" component={Splash} />
-      <Stack.Screen name='Onboarding' component={Onboarding} />
+      {/* <Stack.Screen name="Splash" component={Splash} />
+      <Stack.Screen name="Onboarding" component={Onboarding} />
       <Stack.Screen name="Start" component={Start} />
       <Stack.Screen name="Signup1" component={Signup1} />
       <Stack.Screen name="Signup2" component={Signup2} />
       <Stack.Screen name="Signup3" component={Signup3} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Account" component={Account} />
-      <Stack.Screen name="Password" component={Password} />
+      <Stack.Screen name="Password" component={Password} /> */}
       {/* MainTab */}
       <Stack.Screen name="MainTab" component={MainTab} />
       {/* Home */}
@@ -100,15 +100,14 @@ const Router = () => {
       <Stack.Screen name="CommunitySearch" component={CommunitySearch} />
       {/* Archives */}
       <Stack.Screen name="CommentEdit" component={CommentEdit} />
-      <Stack.Screen name="Post_Firebase" component={Post_Firebase} />
       <Stack.Screen name="Post" component={Post} />
       <Stack.Screen name="PostEdit" component={PostEdit} />
+      <Stack.Screen name="PostEditBook" component={PostEditBook} />
       {/* MyPage */}
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="Library" component={Library} />
       <Stack.Screen name="Camera" component={Camera} />
-
     </Stack.Navigator>
   );
 };

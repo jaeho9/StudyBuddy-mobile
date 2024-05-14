@@ -6,16 +6,13 @@ import Modal from "react-native-modal";
 const { width, height } = Dimensions.get("window");
 
 const MidModal = ({
+  community_result,
   isVisible,
   setIsVisible,
   onSelectResult,
   selectedResult,
 }) => {
   const [result, setResult] = useState(selectedResult);
-
-  useEffect(() => {
-    setResult(selectedResult);
-  }, [selectedResult]);
 
   const handleSelectResult = (selected) => {
     setResult(selected);
@@ -25,6 +22,13 @@ const MidModal = ({
     onSelectResult(result);
     setIsVisible(false);
   };
+
+  useEffect(() => {
+    if (community_result) {
+      setResult(community_result);
+      handleSelectResult(community_result);
+    }
+  }, [community_result]);
 
   return (
     <Modal

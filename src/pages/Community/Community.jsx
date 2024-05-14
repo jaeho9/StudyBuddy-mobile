@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  Image,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import firestore from "@react-native-firebase/firestore"; // 파이어스토어 기능 검사 필요
 // Header
@@ -16,24 +23,41 @@ const Community = () => {
   const bookmark = require("assets/icons/Community/bookmark.png");
 
   useEffect(() => {
-    const unsubscribe = firestore()
-      .collection("community")
-      .onSnapshot((snapshot) => {
-        const fetchedCommunities = snapshot.docs.map((doc) => {
+    const fetchCommunities = async () => {
+      const communitySnapshot = await firestore().collection("community").get();
+      const communityData = await Promise.all(
+        communitySnapshot.docs.map(async (doc) => {
           const data = doc.data();
+          const formattedDate = data.reg_date
+            ? new Date(data.reg_date.seconds * 1000)
+                .toLocaleDateString("en-CA")
+                .replace(/-/g, ".")
+            : "날짜 없음";
+          // Fetch members count
+          const joinSnapshot = await firestore()
+            .collection("join")
+            .where("community_id", "==", doc.id)
+            .get();
+
+          // Fetch posts count
+          const postSnapshot = await firestore()
+            .collection("post")
+            .where("community_id", "==", doc.id)
+            .get();
           return {
             id: doc.id,
-            title: data.name || "000", // 기본값 설정
-            members: data.members || "000", // 기본값 설정
-            posts: data.posts || "000", // 기본값 설정
-            startDate: data.reg_date || "000", // 기본값 설정
-            tag: data.tag || "code", // 'code'를 기본 태그로 설정
+            title: data.name || "이름 없음",
+            members: joinSnapshot.size,
+            posts: postSnapshot.size,
+            startDate: formattedDate,
+            tag: data.tag || "code",
           };
-        });
-        setCommunities(fetchedCommunities);
-      });
+        })
+      );
+      setCommunities(communityData);
+    };
 
-    return () => unsubscribe();
+    fetchCommunities();
   }, []);
 
   const renderItem = ({ item }) => (

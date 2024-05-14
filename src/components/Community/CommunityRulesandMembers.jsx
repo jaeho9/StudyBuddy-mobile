@@ -1,24 +1,64 @@
-import React from "react";
-import { View, Text, Image, StyleSheet, FlatList } from "react-native";
-// 파이어스토어로 규칙 및 멤버 id 불러오기로 최적화 필요
-const CommunityRulesAndMembers = () => {
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+} from "react-native";
+import firestore from "@react-native-firebase/firestore";
+const Width = Dimensions.get("window").width; //스크린 너비 초기화
+
+const CommunityRulesAndMembers = ({ communityId }) => {
+  const [rules, setRules] = useState();
+  const [members, setMembers] = useState([]);
   const styles = useStyles();
-  const members = [
-    { id: "1", name: "김도영" },
-    { id: "2", name: "김상우" },
-    { id: "3", name: "김지형" },
-    { id: "4", name: "이재호" },
-    { id: "5", name: "하지혜" },
-  ];
+
+  useEffect(() => {
+    const fetchRulesAndMembers = async () => {
+      // 규칙 가져오기
+      const communityDoc = await firestore()
+        .collection("community")
+        .doc(communityId)
+        .get();
+
+      if (communityDoc.exists) {
+        const ruleData = communityDoc.data().rule;
+        // 단일 데이터를 배열이 아닌 형태로 UI에 직접 표시
+        setRules(ruleData); // 배열이 아닌 형태의 ruleData를 직접 설정
+      }
+
+      // 멤버 가져오기
+      const joinSnapshot = await firestore()
+        .collection("join")
+        .where("community_id", "==", communityId)
+        .get();
+
+      const memberPromises = joinSnapshot.docs.map(async (doc) => {
+        const userDoc = await firestore()
+          .collection("user")
+          .doc(doc.data().user_id)
+          .get();
+        return { id: doc.id, name: userDoc.data()?.nickname };
+      });
+
+      const membersData = await Promise.all(memberPromises);
+      setMembers(membersData);
+    };
+
+    fetchRulesAndMembers();
+  }, [communityId]);
 
   return (
     <View style={styles.container}>
       <View style={styles.rulesSection}>
         <Text style={styles.rulesTitle}>규칙</Text>
-        <Text style={styles.ruleText}>전공을 꼭 작성해주세요!</Text>
-        <Text style={styles.ruleText}>연락처를 남겨주세요!</Text>
-        <Text style={styles.ruleText}>댓글은 예의 바르게!</Text>
-        <Text style={styles.ruleText}>정보 공유를 활발히!</Text>
+        <Text style={styles.ruleText}>
+          {typeof rules === "string"
+            ? rules
+            : "규칙 정보가 설정되지 않았습니다."}
+        </Text>
       </View>
       <View style={styles.membersSection}>
         <Text style={styles.membersTitle}>멤버</Text>
@@ -45,7 +85,8 @@ const CommunityRulesAndMembers = () => {
 const useStyles = () =>
   StyleSheet.create({
     container: {
-      width: 393,
+      flex: 1,
+      width: Width,
       padding: 20,
       backgroundColor: "rgba(241, 241, 241, 1)",
     },
@@ -76,7 +117,7 @@ const useStyles = () =>
       marginBottom: 10,
     },
     memberProfile: {
-      flexDirection: "row",
+      flexDirection: "column",
       alignItems: "center",
       marginRight: 20,
     },

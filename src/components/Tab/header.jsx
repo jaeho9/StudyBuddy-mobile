@@ -25,7 +25,7 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate, isRead
         paddingHorizontal: 18,
         borderBottomWidth: 1,
         borderBottomColor: "#dddddd",
-        backgroundColor: '#fff'
+        backgroundColor: "#fff",
       }}
     >
       <TouchableOpacity onPress={leftClick}>
@@ -51,9 +51,7 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate, isRead
           <Image source={title} style={{ width: 40, height: 40 }} />
         )}
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={rightClick}
-      >
+      <TouchableOpacity onPress={rightClick}>
         {right ? (
           typeof right === "string" ? (
             <Text
@@ -75,4 +73,4 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate, isRead
     </View>
   );
 };
-export default header;
+export default Header;

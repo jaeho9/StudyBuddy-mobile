@@ -9,6 +9,7 @@ import Header from "components/Tab/Header";
 import { ModalSelect } from "components/Modal/CustomModal";
 // SelectPicker
 import SelectPicker from "components/SelectPicker";
+
 // Images
 const logo = require('assets/icons/home/logo.png');
 const menuIcon = require("assets/icons/archives/menu.png");
@@ -595,7 +596,15 @@ const Home = ({ navigation }) => {
       <Header left={menuIcon} title={logo} right={alarmOffIcon} rightClick={() => navigation.navigate('Alarm')} />
 
       {/* 커뮤니티 목록 */}
-      <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', marginTop: 8, marginHorizontal: 14 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 8,
+          marginHorizontal: 14,
+        }}
+      >
         <FlatList
           data={joinCommunity}
           renderItem={renderCommunityList}
@@ -605,7 +614,7 @@ const Home = ({ navigation }) => {
           removeClippedSubviews
         />
         <TouchableOpacity
-          onPress={() => navigation.navigate('Search')}
+          onPress={() => navigation.navigate("Search")}
           style={{ marginVertical: 9, marginLeft: 12 }}
         >
           <Image source={searchIcon} style={{ width: 24, height: 24 }} />
@@ -620,10 +629,17 @@ const Home = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         removeClippedSubviews
         ListHeaderComponent={() => (
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginTop: 8, marginRight: 18, marginBottom: 10 }}>
-            <SelectPicker
-              onChangeSort={onChangeSort}
-            />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              marginTop: 8,
+              marginRight: 18,
+              marginBottom: 10,
+            }}
+          >
+            <SelectPicker onChangeSort={onChangeSort} />
             <Image source={sortIcon} style={{ width: 24, height: 24 }} />
           </View>
         )}
