@@ -16,9 +16,22 @@ const CommunitySearch = () => {
   const navigation = useNavigation();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const tagImages = {
-    code: require("assets/icons/Community/code.png"),
-    palette: require("/assets/icons/Community/palette.png"),
+  const TagImages = {
+    apartment: require("assets/icons/Community/Tags/apartment.png"),
+    av_timer: require("assets/icons/Community/Tags/av_timer.png"),
+    card_travel: require("assets/icons/Community/Tags/card_travel.png"),
+    code: require("assets/icons/Community/Tags/code.png"),
+    construction: require("assets/icons/Community/Tags/construction.png"),
+    credit_card: require("assets/icons/Community/Tags/credit_card.png"),
+    egg: require("assets/icons/Community/Tags/egg_alt.png"),
+    forest: require("assets/icons/Community/Tags/forest.png"),
+    live_tv: require("assets/icons/Community/Tags/live_tv.png"),
+    local_police: require("assets/icons/Community/Tags/local_police.png"),
+    local_shupping: require("assets/icons/Community/Tags/local_shipping.png"),
+    luggage: require("assets/icons/Community/Tags/luggage.png"),
+    medication: require("assets/icons/Community/Tags/medication.png"),
+    palette: require("/assets/icons/Community/Tags/palette.png"),
+    school: require("assets/icons/Community/Tags/school.png"),
   };
   const bookmark = require("assets/icons/Community/bookmark.png");
 
@@ -76,7 +89,7 @@ const CommunitySearch = () => {
     >
       <Text style={styles.communityTitle}>{item.title}</Text>
       <Image source={bookmark} style={styles.bookmarkIcon} />
-      <Image source={tagImages[item.tag]} style={styles.tagIcon} />
+      <Image source={TagImages[item.tag]} style={styles.tagIcon} />
       <View style={styles.memberInfoContainer}>
         <Text style={styles.label}>인원 </Text>
         <Text style={styles.memberCount}>{`${item.members}`}</Text>

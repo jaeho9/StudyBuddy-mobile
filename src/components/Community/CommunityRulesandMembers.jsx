@@ -5,13 +5,15 @@ import {
   Image,
   StyleSheet,
   FlatList,
+  ScrollView,
   Dimensions,
 } from "react-native";
 import firestore from "@react-native-firebase/firestore";
-const Width = Dimensions.get("window").width; //스크린 너비 초기화
+
+const Width = Dimensions.get("window").width; // 스크린 너비 초기화
 
 const CommunityRulesAndMembers = ({ communityId }) => {
-  const [rules, setRules] = useState();
+  const [rules, setRules] = useState(null);
   const [members, setMembers] = useState([]);
   const styles = useStyles();
 
@@ -25,7 +27,6 @@ const CommunityRulesAndMembers = ({ communityId }) => {
 
       if (communityDoc.exists) {
         const ruleData = communityDoc.data().rule;
-        // 단일 데이터를 배열이 아닌 형태로 UI에 직접 표시
         setRules(ruleData); // 배열이 아닌 형태의 ruleData를 직접 설정
       }
 
@@ -51,7 +52,7 @@ const CommunityRulesAndMembers = ({ communityId }) => {
   }, [communityId]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.rulesSection}>
         <Text style={styles.rulesTitle}>규칙</Text>
         <Text style={styles.ruleText}>
@@ -78,7 +79,7 @@ const CommunityRulesAndMembers = ({ communityId }) => {
           showsHorizontalScrollIndicator={false}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
