@@ -8,7 +8,7 @@ import {
   SafeAreaView,
 } from "react-native";
 
-const header = ({
+const Header = ({
   left,
   title,
   right,

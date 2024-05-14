@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   Button,
 } from "react-native";
-import Header from "components/Tab/header";
+import Header from "components/Tab/Header";
 import { useNavigation } from "@react-navigation/native";
 import MiddleTab from "components/Tab/MiddleTab"; // MiddleTab 컴포넌트 임포트
 import { MyPagePostList } from "components/List/MyPagePostList";
