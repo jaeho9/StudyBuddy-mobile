@@ -7,6 +7,7 @@ import {
   Text,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import firestore from "@react-native-firebase/firestore";
@@ -29,86 +30,86 @@ const CommunityPost = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const [sortedPosts, setSortedPosts] = useState([]);
-
-  useEffect(() => {
-    setLoading(true);
-    const fetchCommunityInfo = async () => {
-      try {
-        const doc = await firestore()
-          .collection("community")
-          .doc(communityId)
-          .get();
-        if (doc.exists) {
-          const data = doc.data();
-          // Fetch members count
-          const joinSnapshot = await firestore()
-            .collection("join")
-            .where("community_id", "==", communityId)
-            .get();
-          setCommunityInfo({
-            name: data.name || "이름 없음",
-            startDate: data.reg_date
-              ? new Date(data.reg_date.seconds * 1000)
-                  .toLocaleDateString("en-CA")
-                  .replace(/-/g, ".")
-              : "날짜 없음",
-            introduce: data.introduce || "소개 정보 없음",
-            membersCount: joinSnapshot.size,
-          });
-        }
-      } catch (error) {
-        Alert.alert("Error", "Failed to fetch community info.");
-        console.error("Error fetching community info:", error);
-      }
-    };
-
-    const fetchPosts = async () => {
-      try {
-        const snapshot = await firestore()
-          .collection("post")
+  const [isSigned, setIsSigned] = useState(false);
+  const fetchCommunityInfo = async () => {
+    try {
+      const doc = await firestore()
+        .collection("community")
+        .doc(communityId)
+        .get();
+      if (doc.exists) {
+        const data = doc.data();
+        // Fetch members count
+        const joinSnapshot = await firestore()
+          .collection("join")
           .where("community_id", "==", communityId)
           .get();
-        const fetchedPosts = await Promise.all(
-          snapshot.docs.map(async (doc) => {
-            const postData = doc.data();
-            const userDoc = await firestore()
-              .collection("user")
-              .doc(postData.user_id)
-              .get();
-            const username = userDoc.data()?.nickname || "Unknown User";
-            const formattedDate = new Date(postData.reg_date.seconds * 1000)
-              .toLocaleDateString("en-CA")
-              .replace(/-/g, ".");
-            const startDate = new Date(postData.start_date.seconds * 1000);
-            const endDate = new Date(postData.end_date.seconds * 1000);
-            const durationDays = (endDate - startDate) / (1000 * 3600 * 24);
-            const likesSnapshot = await firestore()
-              .collection("like")
-              .where("post_id", "==", doc.id)
-              .get();
-            return {
-              id: doc.id,
-              name: username,
-              date: formattedDate,
-              content1: `${durationDays}일`,
-              content2: `책: ${postData.book}`,
-              content3: postData.result,
-              favorites: likesSnapshot.size,
-              comments: 0,
-            };
-          })
-        );
-        setPosts(fetchedPosts);
-      } catch (error) {
-        Alert.alert("Error", "Failed to fetch posts for this community.");
-        console.error("Error fetching posts:", error);
+        setCommunityInfo({
+          name: data.name || "이름 없음",
+          startDate: data.reg_date
+            ? new Date(data.reg_date.seconds * 1000)
+                .toLocaleDateString("en-CA")
+                .replace(/-/g, ".")
+            : "날짜 없음",
+          introduce: data.introduce || "소개 정보 없음",
+          membersCount: joinSnapshot.size,
+        });
       }
-    };
+    } catch (error) {
+      Alert.alert("Error", "Failed to fetch community info.");
+      console.error("Error fetching community info:", error);
+    }
+  };
 
+  const fetchPosts = async () => {
+    try {
+      const snapshot = await firestore()
+        .collection("post")
+        .where("community_id", "==", communityId)
+        .get();
+      const fetchedPosts = await Promise.all(
+        snapshot.docs.map(async (doc) => {
+          const postData = doc.data();
+          const userDoc = await firestore()
+            .collection("user")
+            .doc(postData.user_id)
+            .get();
+          const username = userDoc.data()?.nickname || "Unknown User";
+          const formattedDate = new Date(postData.reg_date.seconds * 1000)
+            .toLocaleDateString("en-CA")
+            .replace(/-/g, ".");
+          const startDate = new Date(postData.start_date.seconds * 1000);
+          const endDate = new Date(postData.end_date.seconds * 1000);
+          const durationDays = (endDate - startDate) / (1000 * 3600 * 24);
+          const likesSnapshot = await firestore()
+            .collection("like")
+            .where("post_id", "==", doc.id)
+            .get();
+          return {
+            id: doc.id,
+            name: username,
+            date: formattedDate,
+            content1: `${durationDays}일`,
+            content2: `책: ${postData.book}`,
+            content3: postData.result,
+            favorites: likesSnapshot.size,
+            comments: 0,
+          };
+        })
+      );
+      setPosts(fetchedPosts);
+    } catch (error) {
+      Alert.alert("Error", "Failed to fetch posts for this community.");
+      console.error("Error fetching posts:", error);
+    }
+  };
+  useEffect(() => {
+    setLoading(true);
     fetchCommunityInfo();
     fetchPosts();
     setLoading(false);
   }, [communityId]);
+
   const sortPosts = (criteria) => {
     return posts.sort((a, b) => {
       if (criteria === "Popular") {
@@ -139,15 +140,25 @@ const CommunityPost = () => {
   const search = require("/assets/icons/Community/search.png");
   const addfeed = require("/assets/icons/Community/addFeed.png");
   if (loading) {
-    return <Text>Loading...</Text>; // 로딩 중 표시
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
+  const handleExit = () => {
+    setIsSigned(false);
+  };
 
+  const handleJoin = () => {
+    setIsSigned(true);
+  };
   return (
     <View style={styles.mainContainer}>
       <Header
         left={left}
         leftClick={() => navigation.navigate("Community")}
-        title={"정보처리기사"}
+        title={communityInfo.name}
         right={search}
         rightClick={() => navigation.navigate("CommunitySearch")}
       />
@@ -164,8 +175,15 @@ const CommunityPost = () => {
           <Text style={styles.label}>설명</Text>
           <Text style={styles.description}>{communityInfo.introduce}</Text>
         </View>
-        <TouchableOpacity style={styles.exitButton}>
-          <Text style={styles.exitButtonText}>나가기</Text>
+        <TouchableOpacity
+          style={isSigned ? styles.exitButton : styles.joinButton}
+          onPress={isSigned ? handleExit : handleJoin}
+        >
+          <Text
+            style={isSigned ? styles.exitButtonText : styles.joinButtonText}
+          >
+            {isSigned ? "나가기" : "가입"}
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.tabContainer}>
@@ -194,7 +212,7 @@ const CommunityPost = () => {
       </ScrollView>
       <TouchableOpacity
         style={styles.addFeedButton}
-        onPress={() => console.log("Add 페이지로 연결")}
+        onPress={() => navigation.navigate("Add")}
       >
         <Image source={addfeed} style={styles.addFeedIcon} />
       </TouchableOpacity>
@@ -203,6 +221,12 @@ const CommunityPost = () => {
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff", // 배경색 설정
+  },
   mainContainer: {
     flex: 1,
     backgroundColor: "#fff",
@@ -249,8 +273,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "400",
   },
+  joinButton: {
+    paddingVertical: 4,
+    paddingHorizontal: 7,
+    borderRadius: 12,
+    backgroundColor: "rgba(221, 221, 221, 0.12)",
+    alignSelf: "flex-end",
+  },
+  joinButtonText: {
+    color: "#9C9C9C",
+    fontSize: 16,
+    fontWeight: "400",
+  },
   scrollContainer: {
-    flex: 1, // Ensure full height is available for scrolling content
+    flex: 1,
   },
   tabContainer: {
     flexDirection: "row",

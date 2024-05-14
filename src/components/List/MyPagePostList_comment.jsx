@@ -8,40 +8,50 @@ import {
   TouchableOpacity,
   Modal,
 } from "react-native";
-
 import DeleteConfirmationModal from "components/Modal/DeleteConfirmationModal";
-import firestore from "@react-native-firebase/firestore";
+import firestore from "@react-native-firebase/firestore"; // firestore
 
 const BookmarkBorder = require("assets/icons/mypage/PostListIcon/bookmark_border.png");
 const FavoriteIcon = require("assets/icons/mypage/PostListIcon/favorite_border.png");
-const SmsIcon = require("assets/icons/mypage/PostListIcon/sms.png");
+const SmsIcon = require("assets/icons/mypage/PostListIcon/sms2.png");
 const ProfileImage = require("assets/icons/mypage/PostListIcon/Profile.png");
 const morehoriz = require("assets/icons/mypage/PostListIcon/morehoriz.png");
 const close = require("assets/icons/mypage/PostListIcon/close.png");
 const mode = require("assets/icons/mypage/PostListIcon/mode.png");
 
-export function MyPagePostList({ data }) {
-  const loggedInUserId = data.id;
+export function MyPagePostList_comment({ data }) {
+  const loggedInUserId = data.id; // 로그인 아이디
+  const usernickname = data.name;
   const [isModalVisible, setModalVisible] = useState(false);
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+
+  //post
   const [post, setPost] = useState([]);
   const postCollection = firestore().collection("post");
+
+  //community
   const [communities, setCommunities] = useState([]);
   const communityCollection = firestore().collection("community");
+
+  //user
   const [user, setUser] = useState([]);
   const userCollection = firestore().collection("user");
+
+  //comment
+  const [comment, setcomment] = useState([]);
+  const commentCollection = firestore().collection("comment");
 
   useEffect(() => {
     user_api();
     community_api();
     post_api();
+    comment_api();
   }, []);
 
   const user_api = async () => {
     try {
       const user_data = await userCollection.get();
-      setUser(user_data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setUser(user_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.log("user error", error.message);
     }
@@ -51,9 +61,9 @@ export function MyPagePostList({ data }) {
     try {
       const community_data = await communityCollection.get();
       setCommunities(
-        community_data.docs.map((doc) => ({
-          community_id: doc.data().id,
-          community_name: doc.data().name,
+        community_data._docs.map((doc) => ({
+          community_id: doc._data.id,
+          community_name: doc._data.name,
           isClick: false,
         }))
       );
@@ -65,25 +75,32 @@ export function MyPagePostList({ data }) {
   const post_api = async () => {
     try {
       const post_data = await postCollection.get();
-      setPost(post_data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setPost(post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.log("post error", error.message);
     }
   };
 
-  const openModal = (event) => {
-    const { nativeEvent } = event;
-    const { pageX, pageY } = nativeEvent;
-    setModalPosition({ x: pageX, y: pageY });
-    setModalVisible(true);
+  const comment_api = async () => {
+    try {
+      const comment_data = await commentCollection.get();
+      setcomment(
+        comment_data._docs.map((doc) => ({
+          post_id: doc._data.post_id,
+          user_id: doc._data.user_id,
+        }))
+      );
+    } catch (error) {
+      console.log("like error", error.message);
+    }
   };
 
   const onDeletePressed = () => {
-    setModalVisible(false);
-    setDeleteModalVisible(true);
+    setModalVisible(false); // Close the first modal
+    setDeleteModalVisible(true); // Open the delete confirmation modal
   };
 
-  const changeDate = (e) => {
+  changeDate = (e) => {
     let date = e.toDate();
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
@@ -101,9 +118,16 @@ export function MyPagePostList({ data }) {
   };
 
   const renderItem = ({ item, index }) => {
-    if (loggedInUserId === item.user_id) {
+    const commentPost = comment.find(
+      (commentInfo) =>
+        commentInfo.user_id === loggedInUserId &&
+        commentInfo.post_id === item.id
+    );
+
+    if (commentPost) {
       return (
         <View style={styles.root}>
+          {/* ******텍스트 추가******** */}
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -113,7 +137,7 @@ export function MyPagePostList({ data }) {
                   return v.community_name;
               })}
             </Text>
-            <TouchableOpacity onPress={openModal}>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
               <Image source={morehoriz} />
             </TouchableOpacity>
           </View>
@@ -135,7 +159,8 @@ export function MyPagePostList({ data }) {
               1. 준비 기간 : {changeDate(item.start_date)}
             </Text>
             <Text style={styles.contentText}>
-              {truncateText("2. 교재 : " + item.book, 30)}
+              {truncateText("2. 교재 : " + item.book, 30)}{" "}
+              {/* 예시로 최대 길이를 20으로 설정 */}
             </Text>
             <Text style={styles.contentText}>3. 결과 : {item.result}</Text>
           </View>
@@ -151,34 +176,44 @@ export function MyPagePostList({ data }) {
             <Image source={BookmarkBorder} />
           </View>
 
-          <Modal
-            visible={isModalVisible}
-            transparent={true}
-            animationType="fade"
-            statusBarTranslucent={true}
-          >
-            <View
-              style={{ top: modalPosition.y + 33, left: modalPosition.x - 125 }}
-            >
-              <View style={styles.modalContent}>
-                <TouchableOpacity onPress={onDeletePressed}>
-                  <View style={styles.modalButton1}>
-                    <Text style={styles.modaltext}>삭제하기</Text>
-                    <Image source={close} style={styles.modalicon} />
-                  </View>
-                </TouchableOpacity>
-
-                <View style={{ marginLeft: -8 }}>
-                  <View style={styles.modalDivider} />
+          <Modal visible={isModalVisible} transparent={true}>
+            {/* 모달 내용 */}
+            <View style={styles.modalContent}>
+              <TouchableOpacity onPress={onDeletePressed}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={[styles.modaltext, { marginBottom: 3 }]}>
+                    삭제하기
+                  </Text>
+                  <Image
+                    source={close}
+                    style={[styles.modalicon, { marginTop: 5 }]}
+                  />
                 </View>
+              </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
-                  <View style={styles.modalButton2}>
-                    <Text style={styles.modaltext}>수정하기</Text>
-                    <Image source={mode} style={styles.modalicon} />
-                  </View>
-                </TouchableOpacity>
-              </View>
+              <View style={styles.modalDivider} />
+
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={[styles.modaltext, { marginTop: 1 }]}>
+                    수정하기
+                  </Text>
+                  <Image
+                    source={mode}
+                    style={[styles.modalicon, { marginTop: 5 }]}
+                  />
+                </View>
+              </TouchableOpacity>
             </View>
           </Modal>
 
@@ -186,7 +221,6 @@ export function MyPagePostList({ data }) {
             isVisible={isDeleteModalVisible}
             onClose={() => setDeleteModalVisible(false)}
             onDelete={onDeletePressed}
-            postId={loggedInUserId}
           />
         </View>
       );
@@ -202,7 +236,6 @@ export function MyPagePostList({ data }) {
     />
   );
 }
-
 function truncateText(text, maxLength) {
   if (text.length > maxLength) {
     return text.substring(0, maxLength) + "...";
@@ -210,11 +243,10 @@ function truncateText(text, maxLength) {
     return text;
   }
 }
-
 const styles = StyleSheet.create({
   root: {
-    width: "100%",
-    height: 178,
+    width: "100%", // 100% 로 수정함
+    height: 178, // 178로 수정함
     borderBottomColor: "rgba(189, 189, 189, 1)",
     borderBottomWidth: 1,
     backgroundColor: "rgba(255, 255, 255, 1)",
@@ -241,7 +273,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "400",
     lineHeight: 22,
-    marginLeft: 10,
+    marginLeft: 10, // 이미지와 텍스트 사이의 간격
   },
   dateText: {
     color: "rgba(150, 150, 150, 1)",
@@ -259,8 +291,6 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "400",
     lineHeight: 22,
-    numberOfLines: 1,
-    ellipsizeMode: "tail",
   },
   likeCountText: {
     color: "rgba(189, 189, 189, 1)",
@@ -298,30 +328,24 @@ const styles = StyleSheet.create({
     rowGap: 7,
     columnGap: 7,
   },
-  modalButton1: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingBottom: 3,
-  },
-  modalButton2: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingTop: 3,
-  },
   modalContent: {
-    backgroundColor: "#B0B0B0",
-    borderRadius: 8,
-    justifyContent: "center",
-    padding: 8,
+    // 모달 위치 수정중######################################################
+    // top: 335,
+    // left: 220,
+    position: "absolute",
+    top: 1,
+    right: 1,
     width: 129,
     height: 60,
+    justifyContent: "center",
+    backgroundColor: "gray",
+    borderRadius: 8,
+    backgroundColor: "#B0B0B0",
   },
   modalDivider: {
+    width: "100%",
     height: 2,
-    width: 129,
-    backgroundColor: "white",
+    backgroundColor: "white", // 경계선 색상 추가
   },
   modaltext: {
     color: "#FFF",
@@ -329,7 +353,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontStyle: "normal",
     fontWeight: "400",
-    lineHeight: 22,
+    lineHeight: 22, // React Native에서는 lineHeight을 별도로 지정하지 않아도 됩니다.
     marginLeft: 8,
   },
   modalicon: {
@@ -337,4 +361,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyPagePostList;
+// 마이페이지, 커뮤니티 페이지 컴포넌트 따로 만드는게 좋을거 같음 <--------
+// 수정하기 누르면 어떤식으로 동작..?
