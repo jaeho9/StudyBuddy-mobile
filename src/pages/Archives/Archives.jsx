@@ -114,7 +114,7 @@ const Archives = ({ navigation }) => {
     etc();
   }, [bookmark]);
 
-  useEffect(() => {}, [communities]);
+  useEffect(() => { }, [communities]);
 
   useEffect(() => {
     post_api();
