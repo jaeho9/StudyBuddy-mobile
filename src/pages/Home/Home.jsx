@@ -28,12 +28,14 @@ const add = require('assets/icons/home/add.png');
 
 const Home = ({ navigation }) => {
   // Select Picker
-  const [sort, setSort] = useState("");
-  const onChangeSort = (value) => setSort(value);
+  const [sort, setSort] = useState("done");
+  const onChangeSort = (value) => {
+    setSort(value);
+  }
 
   //post
   const [post, setPost] = useState([]);
-  const [diffDate, setDiffDate] = useState();
+  console.log(post)
   const postCollection = firestore().collection("post");
 
   //community
@@ -41,7 +43,6 @@ const Home = ({ navigation }) => {
   const communityCollection = firestore().collection("community");
 
   //join
-  const [join, setJoin] = useState([]);
   const [joinCommunity, setJoinCommunity] = useState([
     {
       community_id: 0,
@@ -49,7 +50,6 @@ const Home = ({ navigation }) => {
       isClick: true,
     },
   ]); // 가입한 커뮤니티 목록
-  const [communities, setCommunities] = useState([]);
   const joinCollection = firestore().collection("join");
 
   //user
@@ -114,10 +114,6 @@ const Home = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    etc();
-  }, [post.length]);
-
-  useEffect(() => {
     modalSelectVisible.map((e, i) => {
       if (e === true) {
         let copiedModal = [...modalSelectVisible];
@@ -155,12 +151,10 @@ const Home = ({ navigation }) => {
     try {
       // user_id: SeDJYBVUGSjQGaWlzPmm 설정
       const join_data = await joinCollection.where('user_id', '==', 'SeDJYBVUGSjQGaWlzPmm').get();
-
-      setJoin(
-        join_data._docs.map((doc) => ({
-          community_id: doc._data.community_id,
-          user_id: doc._data.user_id,
-        })));
+      join_data._docs.map((doc) => ({
+        community_id: doc._data.community_id,
+        user_id: doc._data.user_id,
+      }))
 
       // 사용자가 가입한 커뮤니티의 데이터를 community에서 찾아서 joinCommunity에 추가
       const userJoinCommunities = join_data._docs.map(doc => doc._data.community_id);
@@ -174,10 +168,9 @@ const Home = ({ navigation }) => {
 
   const post_api = async () => {
     try {
-      const post_data = await postCollection.get();
+      const post_data = await postCollection.orderBy('reg_date', 'desc').get();
       setPost(
         post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-
     } catch (error) {
       console.log("post error", error.message);
     }
@@ -218,10 +211,10 @@ const Home = ({ navigation }) => {
         isLiked: likes.some(l => l.post_id === p.id && l.user_id === 'SeDJYBVUGSjQGaWlzPmm')
       }));
 
-      // 계산된 정보를 상태로 설정
       setLikeCounts(likeCounts);
       setUserLikes(userLikes);
       setLikes(likes);
+
     } catch (error) {
       console.log("like error", error.message);
     }
@@ -243,47 +236,6 @@ const Home = ({ navigation }) => {
     } catch (error) {
       console.log("comment error", error.message);
     }
-  };
-
-  etc = () => {
-    setCommunities(whole.concat(community));
-    setLastIndex(post.length - 1);
-    // join.map((v, i) => {
-    //   if (v.user_id === "SeDJYBVUGSjQGaWlzPmm") {
-    //     community.map((a, b) => {
-    //       if (a.community_id === v.community_id) {
-    //         console.log(a);
-    //         왜 set이 안되지이
-    //         setJoinCommunity([...joinCommunity, a]);
-    //       }
-    //     });
-    //   }
-    // });
-  };
-
-  changeDate = (e) => {
-    let date = e.toDate();
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-
-    if (month < 10) {
-      if (day < 10) {
-        return year + ".0" + month + ".0" + day;
-      } else {
-        return year + ".0" + month + "." + day;
-      }
-    } else {
-      return year + "." + month + "." + day;
-    }
-  };
-
-  const countDate = (start, end) => {
-    let startDate = start.toDate();
-    let endDate = end.toDate();
-    const diffMSec = endDate.getTime() - startDate.getTime();
-    const diffDate = diffMSec / (24 * 60 * 60 * 1000);
-    return diffDate;
   };
 
   goodsMoreButtonClicked = (id) => {
@@ -321,8 +273,8 @@ const Home = ({ navigation }) => {
   // };
 
   const handleClickList = (item) => {
-    setCommunities(
-      communities.map((v, i) => {
+    setJoinCommunity(
+      joinCommunity.map((v, i) => {
         if (v.isClick === true) {
           v.isClick = false;
         }
@@ -362,7 +314,7 @@ const Home = ({ navigation }) => {
 
   // 게시물 rander
   const renderCommunityListClick = ({ item, index }) => {
-    return communities?.map((c, d) => {
+    return joinCommunity?.map((c, d) => {
       var detail;
       if (c.isClick === true && c.community_name === "전체") {
         detail = renderCommunityDetail({ item, index });
@@ -456,6 +408,32 @@ const Home = ({ navigation }) => {
     }
   };
 
+  // 준비 기간 일수
+  const countDate = (start, end) => {
+    let startDate = start.toDate();
+    let endDate = end.toDate();
+    const diffMSec = endDate.getTime() - startDate.getTime();
+    const diffDate = diffMSec / (24 * 60 * 60 * 1000);
+    return diffDate;
+  };
+
+  const changeDate = (e) => {
+    let date = e.toDate();
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    if (month < 10) {
+      if (day < 10) {
+        return year + ".0" + month + ".0" + day;
+      } else {
+        return year + ".0" + month + "." + day;
+      }
+    } else {
+      return year + "." + month + "." + day;
+    }
+  };
+
   // 커뮤니티별 게시물
   const renderCommunityDetail = ({ item, index }) => {
     const postId = item.id;
@@ -478,7 +456,7 @@ const Home = ({ navigation }) => {
         }}
       >
         <Text style={{ fontSize: 16, fontWeight: "bold", color: "#ff7474" }}>
-          {communities.map((v, i) => {
+          {joinCommunity.map((v, i) => {
             if (v.community_id === item.community_id) return v.community_name;
           })}
         </Text>
@@ -613,13 +591,13 @@ const Home = ({ navigation }) => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f1f1f1" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#f1f1f1", marginBottom: 70 }}>
       <Header left={menuIcon} title={logo} right={alarmOffIcon} rightClick={() => navigation.navigate('Alarm')} />
 
       {/* 커뮤니티 목록 */}
       <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', marginTop: 8, marginHorizontal: 14 }}>
         <FlatList
-          data={communities}
+          data={joinCommunity}
           renderItem={renderCommunityList}
           keyExtractor={(item) => item.id}
           horizontal
@@ -634,7 +612,7 @@ const Home = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* 게시판 */}
+      {/* 게시물 */}
       <FlatList
         data={post}
         renderItem={renderCommunityListClick}
@@ -652,7 +630,7 @@ const Home = ({ navigation }) => {
       />
 
       {/* Add 버튼 */}
-      <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end', right: 0, bottom: 80, position: 'absolute', zIndex: 10, marginRight: 12 }}>
+      <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end', right: 0, bottom: 20, position: 'absolute', zIndex: 10, marginRight: 12 }}>
         <TouchableOpacity onPress={() => navigation.navigate('Add')}>
           <Image source={add} style={{ width: 72, height: 72 }} />
         </TouchableOpacity>

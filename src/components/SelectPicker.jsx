@@ -1,16 +1,15 @@
 import RNPickerSelect from 'react-native-picker-select';
 
-export const SelectPicker = () => {
+export const SelectPicker = ({ onChangeSort }) => {
     return (
         <RNPickerSelect
-            onValueChange={(value) => console.log(value)}
+            onValueChange={(value) => onChangeSort(value)}
             useNativeAndroidPickerStyle={false}
             placeholder={{
                 label: '정렬',
                 value: 'done'
             }}
             items={[
-                { label: '최신순', value: 'new' },
                 { label: '좋아요순', value: 'like' },
                 { label: '댓글순', value: 'comment' },
             ]}

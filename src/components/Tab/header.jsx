@@ -8,7 +8,7 @@ import {
   SafeAreaView,
 } from "react-native";
 
-const header = ({ left, title, right, leftClick, rightClick, isDuplicate, isReadyToBook }) => {
+const header = ({ left, title, right, leftClick, rightClick, isDuplicate, isReadyToBook, deleteMode }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate, isRead
               style={{
                 fontSize: 16,
                 fontWeight: "bold",
-                color: isDuplicate || isReadyToBook ? "#FF7474" : "#bdbdbd", // isDuplicate 상태에 따라 색상 변경
+                color: isDuplicate || isReadyToBook || deleteMode ? "#FF7474" : "#bdbdbd", // isDuplicate 상태에 따라 색상 변경
               }}
             >
               {right}

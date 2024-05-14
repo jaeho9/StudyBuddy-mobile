@@ -67,7 +67,6 @@ const Add = ({ navigation, route }) => {
     };
 
     // 자료
-
     const [fileVisible, setFileVisible] = useState(false);
     const [filename, setFilename] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null);
