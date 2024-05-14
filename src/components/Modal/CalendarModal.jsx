@@ -16,8 +16,6 @@ const CalendarModal = ({
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  // console.log(startDate, endDate);
-
   useEffect(() => {
     setStartDate(selectedDate?.startDate);
     setEndDate(selectedDate?.endDate);

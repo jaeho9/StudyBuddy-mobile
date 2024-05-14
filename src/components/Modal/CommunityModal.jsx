@@ -22,7 +22,7 @@ const cancel = require("assets/icons/add/cancel.png");
 
 const { width, height } = Dimensions.get("window");
 
-const CustomModal = ({
+const CommunityModal = ({
   isVisible,
   setIsVisible,
   onSelectCommunity,
@@ -48,8 +48,7 @@ const CustomModal = ({
     user_api();
     community_api();
     join_api();
-    console.log("community", selectedCommunity);
-  }, [selectedCommunity]);
+  }, []);
 
   useEffect(() => {
     etc();
@@ -126,9 +125,6 @@ const CustomModal = ({
   };
 
   const ModalItem = ({ item, index }) => {
-    if (item.community_name === selectedCommunity.community_name) {
-      setSelectIndex(index);
-    }
     return (
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
         <View
@@ -143,8 +139,6 @@ const CustomModal = ({
               if (v.community_id === item.community_id) return v.community_name;
             })}
           </Text>
-          {item.community_name === selectedCommunity.community_name &&
-            setSelectIndex(index)}
           <TouchableOpacity
             onPress={() => {
               onSelectCommunity(item);
@@ -289,4 +283,4 @@ const CustomModal = ({
   );
 };
 
-export default CustomModal;
+export default CommunityModal;

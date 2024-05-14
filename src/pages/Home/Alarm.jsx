@@ -11,6 +11,8 @@ import {
 // Header
 import Header from "components/Tab/Header";
 import RemoveModal from "components/Modal/RemoveModal";
+// FireStore
+import firestore from "@react-native-firebase/firestore";
 // Images
 const backIcon = require("assets/icons/home/back.png");
 const deleteIcon = require("assets/icons/home/delete.png");
@@ -62,6 +64,40 @@ const dummy_data = [
 const Alarm = ({ navigation }) => {
   const [deleteMode, setDeleteMode] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+
+  //post
+  const [post, setPost] = useState([]);
+  const [diffDate, setDiffDate] = useState();
+  const postCollection = firestore().collection("post");
+
+  //community
+  const [community, setCommunity] = useState([]);
+  const communityCollection = firestore().collection("community");
+
+  //join
+  const [join, setJoin] = useState([]);
+  const [joinCommunity, setJoinCommunity] = useState([
+    {
+      community_id: 0,
+      community_name: "전체",
+      isClick: true,
+    },
+  ]); // 가입한 커뮤니티 목록
+  const [communities, setCommunities] = useState([]);
+  const joinCollection = firestore().collection("join");
+
+  //user
+  const [user, setUser] = useState([]);
+  const userCollection = firestore().collection("user");
+
+  // like
+  const [likes, setLikes] = useState([]); // 좋아요 데이터
+  const likeCollection = firestore().collection("like");
+
+  // comment
+  const [comments, setComments] = useState([]);
+  const commentCollection = firestore().collection("comment");
+
   // 삭제
   const handleDeleteClick = () => {
     setDeleteMode(true);
@@ -137,9 +173,10 @@ const Alarm = ({ navigation }) => {
       <Header
         left={backIcon}
         title={"알림"}
-        right={deleteMode ? complete : deleteIcon}
+        right={deleteMode ? '완료' : deleteIcon}
         leftClick={() => navigation.goBack()}
         rightClick={deleteMode ? handleCompleteClick : handleDeleteClick}
+        deleteMode={deleteMode}
       />
       <FlatList
         data={dummy_data}

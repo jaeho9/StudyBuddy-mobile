@@ -41,6 +41,16 @@ const Book = ({ navigation }) => {
         }
     }
 
+    // 커뮤니티, 준비 기간, 교재, 결과, 공부 방법을 작성하면 버튼 활성화
+    const isReadyToBook = selectBook;
+
+    // rightClick 함수 정의
+    const rightClick = async () => {
+        if (isReadyToBook) {
+            navigation.navigate('Add', { book: selectBook })
+        }
+    };
+
     // FlatList
     const renderItem = ({ item, index }) => {
         return (
@@ -67,10 +77,11 @@ const Book = ({ navigation }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
             <Header
                 left={arrowLeft}
-                leftClick={"Add"}
+                leftClick={() => navigation.goBack()}
                 title={"교재 검색"}
-                right={select}
-                rightClick={() => navigation.navigate('Add', { book: selectBook })}
+                right={'선택'}
+                rightClick={rightClick}
+                isReadyToBook={isReadyToBook}
             />
 
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

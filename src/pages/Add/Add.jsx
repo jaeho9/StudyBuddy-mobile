@@ -4,6 +4,9 @@ import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View, Dimension
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 // FireStore
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+// Document Picker
+import DocumentPicker from 'react-native-document-picker'
 
 // Import Pages
 import Header from 'components/Tab/Header';
@@ -38,6 +41,7 @@ const Add = ({ navigation, route }) => {
     const onSelectCommunity = (community) => {
         setSelectedCommunity(community);
     };
+    console.log(selectedCommunity)
 
     // 준비 기간
     const [dateVisible, setDateVisible] = useState(false);
@@ -48,7 +52,6 @@ const Add = ({ navigation, route }) => {
 
     // 교재
     const { book } = route.params ? route.params : {};
-    console.log(book)
 
     // 결과
     const [resultVisible, setResultVisible] = useState(false);
@@ -65,14 +68,45 @@ const Add = ({ navigation, route }) => {
 
     // 자료
     const [fileVisible, setFileVisible] = useState(false);
+    const [filename, setFilename] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null);
     const onSelectFile = (file) => {
         setSelectedFile(file);
     };
+    const selectDoc = async () => {
+        try {
+            const doc = await DocumentPicker.pick({
+                type: [DocumentPicker.types.pdf],
+                allowMultiSelection: true,
+            });
+            setSelectedFile(doc.map(item => item.uri));
+            setFilename(doc.map(item => item.name));
+
+            doc.forEach(async (doc) => {
+                await uploadFile(doc.uri, doc.name);
+            });
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                console.log('User canclled the upload', err);
+            } else {
+                console.log(err);
+            }
+        }
+    }
+
+    // 파일 업로드 함수
+    const uploadFile = async (uri, filename) => {
+        try {
+            const reference = storage().ref('/file/' + filename);
+            await reference.putFile(uri); // 파일 업로드
+            console.log('File uploaded successfully!');
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
+    };
 
     // 현재 날짜와 시간을 가져오기
     const currentDate = new Date();
-    const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
 
     // API 연동
     const addCollection = firestore().collection('post');
@@ -81,16 +115,16 @@ const Add = ({ navigation, route }) => {
         try {
             await addCollection.add({
                 book: book,
-                community_id: selectedCommunity.name,
-                data: '',
-                end_date: selectedDate.endDate,
-                id: '1',
-                reg_date: formattedDate,
+                community_id: selectedCommunity.community_id,
+                data: filename[0],
+                end_date: new Date(selectedDate.endDate),
+                id: addCollection.id,
+                reg_date: currentDate,
                 result: selectedResult,
-                start_date: selectedDate.startDate,
+                start_date: new Date(selectedDate.startDate),
                 study: text,
-                update_date: formattedDate,
-                user_id: 'Gsh6TJg50rswXPGaA7Zk'
+                update_date: currentDate,
+                user_id: 'SeDJYBVUGSjQGaWlzPmm'
             });
             setSelectedCommunity('');
             setSelectedDate('');
@@ -129,7 +163,7 @@ const Add = ({ navigation, route }) => {
                     style={{ height: 40, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8, borderBottomWidth: 1, borderBottomColor: '#BDBDBD' }}
                 >
                     {selectedCommunity ? (
-                        <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedCommunity.name}</Text>
+                        <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedCommunity.community_name}</Text>
                     ) : (
                         <Text style={{ fontSize: 16, color: '#BDBDBD' }}>커뮤니티 선택</Text>
                     )}
@@ -221,7 +255,7 @@ const Add = ({ navigation, route }) => {
 
                     {/* 자료 */}
                     <TouchableOpacity
-                        onPress={() => setFileVisible(!fileVisible)}
+                        onPress={selectDoc}
                         style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, padding: 8, borderRadius: 4, borderWidth: 1, borderColor: '#BDBDBD', flex: 1 }}
                     >
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
@@ -229,7 +263,7 @@ const Add = ({ navigation, route }) => {
                                 <>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                         <Image source={attachFileOn} style={{ width: 24, height: 24 }} />
-                                        <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{selectedFile.name}</Text>
+                                        <Text style={{ fontSize: 16, color: '#7A7A7A' }}>{filename}</Text>
                                     </View>
                                     <TouchableOpacity
                                         onPress={() => setSelectedFile(null)}
