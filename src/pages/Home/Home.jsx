@@ -261,18 +261,6 @@ const Home = ({ navigation }) => {
     setModalSelectVisible(copiedModal);
   };
 
-  // const deleteTrueVisible = () => {
-  //   setTimeout(() => {
-  //     deleteVisible.current = true;
-  //   }, 2000);
-  // };
-
-  // const deleteFalseVisible = () => {
-  //   setTimeout(() => {
-  //     deleteVisible.current = false;
-  //   }, 2000);
-  // };
-
   const handleClickList = (item) => {
     setJoinCommunity(
       joinCommunity.map((v, i) => {

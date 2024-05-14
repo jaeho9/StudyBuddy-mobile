@@ -8,7 +8,7 @@ import {
   SafeAreaView,
 } from "react-native";
 
-const header = ({ left, title, right, leftClick, rightClick, isDuplicate, isReadyToBook, deleteMode }) => {
+const Header = ({ left, title, right, leftClick, rightClick, isDuplicate, isReadyToBook, deleteMode }) => {
   const navigation = useNavigation();
 
   useEffect(() => {
