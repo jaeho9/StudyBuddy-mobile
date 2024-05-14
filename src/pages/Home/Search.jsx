@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableWithoutFeedback, View, TouchableOpacity, Image, TextInput, Dimensions, Keyboard, FlatList } from "react-native";
 
+// FireStore
+import firestore from "@react-native-firebase/firestore";
 // Header
-import Header from '../../components/Tab/header';
+import Header from '../../components/Tab/Header';
 
 // Imgaes
 const arrowLeft = require('assets/icons/add/arrow_left.png');
@@ -13,31 +15,48 @@ const logo = require('assets/icons/home/logo.png');
 const close = require('assets/icons/home/close.png');
 
 
-// Dummy_data
-const dummy_data = [
-    {
-        id: 1,
-        name: '정보처리기사',
-    },
-    {
-        id: 2,
-        name: '정보보안기사',
-    }
-]
-
 const { width, height } = Dimensions.get("window");
 
 const Search = ({ navigation }) => {
     const [text, setText] = useState('');
 
+    const [searchList, setSearchList] = useState([]);
+    const searchCollection = firestore().collection("search_list");
+
+    useEffect(() => {
+        search_api();
+    })
+
+    const search_api = async () => {
+        try {
+            const search_data = await searchCollection.where('user_id', '==', 'SeDJYBVUGSjQGaWlzPmm').get();
+            setSearchList(search_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        } catch (error) {
+            console.log("searchList error", error.message);
+        }
+    };
+
+    const addSearch = async () => {
+        try {
+            await searchCollection.add({
+                search: text,
+                id: searchCollection.id,
+                user_id: 'SeDJYBVUGSjQGaWlzPmm'
+            });
+            setText('')
+            console.log('Create Complete!');
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
     const renderItem = ({ item, index }) => {
         return (
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
-                <Text style={{ fontSize: 16, color: '#717171' }}>{item.name}</Text>
+                <Text style={{ fontSize: 16, color: '#717171' }}>{item.search}</Text>
                 <TouchableOpacity>
                     <Image source={close} style={{ width: 24, height: 24 }} />
                 </TouchableOpacity>
-
             </View>
         )
     }
@@ -46,7 +65,7 @@ const Search = ({ navigation }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
             <Header
                 left={arrowLeft}
-                leftClick={"Home"}
+                leftClick={() => navigation.goBack()}
                 title={logo}
             />
 
@@ -66,7 +85,10 @@ const Search = ({ navigation }) => {
                             value={text}
                             onChangeText={(text) => setText(text)}
                             allowFontScaling={false}
-                            onSubmitEditing={() => navigation.navigate('SearchResult', { text })}
+                            onSubmitEditing={() => {
+                                navigation.navigate('SearchResult', { text }); // SearchResult 페이지로 이동
+                                addSearch(); // addSearch 함수 호출
+                            }}
                             style={{
                                 flex: 1,
                                 marginLeft: 4,
@@ -86,14 +108,23 @@ const Search = ({ navigation }) => {
                         )}
                     </View>
                     <View style={{ marginHorizontal: 20, marginVertical: 24, gap: 8 }}>
-                        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#717171' }}>최근 검색어</Text>
-                        <FlatList
-                            data={dummy_data}
-                            renderItem={renderItem}
-                            keyExtractor={item => item.id}
-                            showsVerticalScrollIndicator={false}
-                            removeClippedSubviews
-                        />
+                        {searchList.length > 0 ? (
+                            <>
+                                <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#717171' }}>최근 검색어</Text>
+                                <FlatList
+                                    data={searchList}
+                                    renderItem={renderItem}
+                                    keyExtractor={item => item.id}
+                                    showsVerticalScrollIndicator={false}
+                                    removeClippedSubviews
+                                />
+                            </>
+                        ) : (
+                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ color: '#717171', fontSize: 16, fontWeight: 'bold' }}>커뮤니티나 키워드를 검색해 보세요.</Text>
+                            </View>
+                        )}
+
                     </View>
                 </View>
             </TouchableWithoutFeedback>

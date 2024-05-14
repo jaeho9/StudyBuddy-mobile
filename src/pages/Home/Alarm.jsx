@@ -1,19 +1,29 @@
 import React, { useState } from "react";
-import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+} from "react-native";
 // Header
-import Header from "../../components/Tab/header";
+import Header from "components/Tab/Header";
 import RemoveModal from "components/Modal/RemoveModal";
+// FireStore
+import firestore from "@react-native-firebase/firestore";
 // Images
 const backIcon = require("assets/icons/home/back.png");
 const deleteIcon = require("assets/icons/home/delete.png");
-const writeOn = require('assets/icons/home/write_on.png');
-const writeOff = require('assets/icons/home/write_off.png');
-const heartOn = require('assets/icons/home/heart_on.png');
-const heartOff = require('assets/icons/home/heart_off.png');
-const commentOn = require('assets/icons/home/comment_on.png');
-const commentOff = require('assets/icons/home/comment_off.png');
-const close = require('assets/icons/home/close.png');
-const complete = require('assets/icons/home/complete.png');
+const writeOn = require("assets/icons/home/write_on.png");
+const writeOff = require("assets/icons/home/write_off.png");
+const heartOn = require("assets/icons/home/heart_on.png");
+const heartOff = require("assets/icons/home/heart_off.png");
+const commentOn = require("assets/icons/home/comment_on.png");
+const commentOff = require("assets/icons/home/comment_off.png");
+const close = require("assets/icons/home/close.png");
+const complete = require("assets/icons/home/complete.png");
 
 const { width, height } = Dimensions.get("window");
 
@@ -21,39 +31,73 @@ const { width, height } = Dimensions.get("window");
 const dummy_data = [
   {
     id: 1,
-    name: '정보처리기사',
-    nickname: '김도영',
-    content: 'heart'
+    name: "정보처리기사",
+    nickname: "김도영",
+    content: "heart",
   },
   {
     id: 2,
-    name: '정보보안기사',
-    nickname: '하지혜',
-    content: 'comment'
+    name: "정보보안기사",
+    nickname: "하지혜",
+    content: "comment",
   },
   {
     id: 3,
-    name: '정보처리기사',
-    nickname: '이재호',
-    content: 'feed'
+    name: "정보처리기사",
+    nickname: "이재호",
+    content: "feed",
   },
   {
     id: 4,
-    name: '컴퓨터활용능력',
-    nickname: '김지형',
-    content: 'heart'
+    name: "컴퓨터활용능력",
+    nickname: "김지형",
+    content: "heart",
   },
   {
     id: 5,
-    name: 'TOEIC',
-    nickname: '김상우',
-    content: 'feed'
-  }
-]
+    name: "TOEIC",
+    nickname: "김상우",
+    content: "feed",
+  },
+];
 
-const Alarm = () => {
+const Alarm = ({ navigation }) => {
   const [deleteMode, setDeleteMode] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+
+  //post
+  const [post, setPost] = useState([]);
+  const [diffDate, setDiffDate] = useState();
+  const postCollection = firestore().collection("post");
+
+  //community
+  const [community, setCommunity] = useState([]);
+  const communityCollection = firestore().collection("community");
+
+  //join
+  const [join, setJoin] = useState([]);
+  const [joinCommunity, setJoinCommunity] = useState([
+    {
+      community_id: 0,
+      community_name: "전체",
+      isClick: true,
+    },
+  ]); // 가입한 커뮤니티 목록
+  const [communities, setCommunities] = useState([]);
+  const joinCollection = firestore().collection("join");
+
+  //user
+  const [user, setUser] = useState([]);
+  const userCollection = firestore().collection("user");
+
+  // like
+  const [likes, setLikes] = useState([]); // 좋아요 데이터
+  const likeCollection = firestore().collection("like");
+
+  // comment
+  const [comments, setComments] = useState([]);
+  const commentCollection = firestore().collection("comment");
+
   // 삭제
   const handleDeleteClick = () => {
     setDeleteMode(true);
@@ -66,34 +110,53 @@ const Alarm = () => {
   const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
-        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 16, paddingHorizontal: 24, borderBottomWidth: 1, borderBottomColor: '#DDDDDD' }}
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingVertical: 16,
+          paddingHorizontal: 24,
+          borderBottomWidth: 1,
+          borderBottomColor: "#DDDDDD",
+        }}
       >
-        {item.content === 'heart' ? (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {item.content === "heart" ? (
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image source={heartOn} style={{ width: 32, height: 32 }} />
             <View style={{ marginLeft: 12, gap: 6 }}>
-              <Text style={{ fontSize: 14, fontWeight: 700, color: '#FF7474' }}>{item.name}</Text>
-              <Text style={{ fontSize: 14, color: '#7A7A7A' }}>{item.nickname}님이 회원님의 게시물을 좋아합니다.</Text>
+              <Text style={{ fontSize: 14, fontWeight: 700, color: "#FF7474" }}>
+                {item.name}
+              </Text>
+              <Text style={{ fontSize: 14, color: "#7A7A7A" }}>
+                {item.nickname}님이 회원님의 게시물을 좋아합니다.
+              </Text>
             </View>
           </View>
-        ) : item.content === 'comment' ? (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        ) : item.content === "comment" ? (
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image source={commentOn} style={{ width: 32, height: 32 }} />
             <View style={{ marginLeft: 12, gap: 6 }}>
-              <Text style={{ fontSize: 14, fontWeight: 700, color: '#FF7474' }}>{item.name}</Text>
-              <Text style={{ fontSize: 14, color: '#7A7A7A' }}>{item.nickname}님이 댓글을 남겼습니다.</Text>
+              <Text style={{ fontSize: 14, fontWeight: 700, color: "#FF7474" }}>
+                {item.name}
+              </Text>
+              <Text style={{ fontSize: 14, color: "#7A7A7A" }}>
+                {item.nickname}님이 댓글을 남겼습니다.
+              </Text>
             </View>
           </View>
         ) : (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image source={writeOn} style={{ width: 32, height: 32 }} />
             <View style={{ marginLeft: 12, gap: 6 }}>
-              <Text style={{ fontSize: 14, fontWeight: 700, color: '#FF7474' }}>{item.name}</Text>
-              <Text style={{ fontSize: 14, color: '#7A7A7A' }}>{item.nickname}님이 새 게시물을 작성했습니다.</Text>
+              <Text style={{ fontSize: 14, fontWeight: 700, color: "#FF7474" }}>
+                {item.name}
+              </Text>
+              <Text style={{ fontSize: 14, color: "#7A7A7A" }}>
+                {item.nickname}님이 새 게시물을 작성했습니다.
+              </Text>
             </View>
           </View>
-        )
-        }
+        )}
 
         {/* 삭제모드 */}
         {deleteMode && (
@@ -102,22 +165,23 @@ const Alarm = () => {
           </TouchableOpacity>
         )}
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <Header
         left={backIcon}
         title={"알림"}
-        right={deleteMode ? complete : deleteIcon}
-        leftClick={"Home"}
+        right={deleteMode ? '완료' : deleteIcon}
+        leftClick={() => navigation.goBack()}
         rightClick={deleteMode ? handleCompleteClick : handleDeleteClick}
+        deleteMode={deleteMode}
       />
       <FlatList
         data={dummy_data}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         removeClippedSubviews
       />

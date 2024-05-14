@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, Modal, StyleSheet, Dimensions, } from "react-native";
-import DeleteModal from "./RemoveModal";
+import RemoveModal from "./RemoveModal";
 
 const { width, height } = Dimensions.get("window");
 
+// Images
 const deleteIcon = require("assets/icons/archives/delete.png");
 const editIcon = require("assets/icons/archives/edit.png");
 const moreIcon = require("assets/icons/archives/more.png");
@@ -45,7 +46,7 @@ const ModalSelectorPopup = (props) => {
                     setDeleteVisible(false)
                 }
             >
-                <DeleteModal
+                <RemoveModal
                     x={0}
                     y={height - 80}
                     closeModalPopupMenu={() =>
