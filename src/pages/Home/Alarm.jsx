@@ -173,7 +173,7 @@ const Alarm = ({ navigation }) => {
       <Header
         left={backIcon}
         title={"알림"}
-        right={deleteMode ? '완료' : deleteIcon}
+        right={deleteMode ? "완료" : deleteIcon}
         leftClick={() => navigation.goBack()}
         rightClick={deleteMode ? handleCompleteClick : handleDeleteClick}
         deleteMode={deleteMode}

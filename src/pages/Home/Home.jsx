@@ -1,9 +1,18 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, Image, TouchableOpacity, SafeAreaView, FlatList, StyleSheet, Modal, } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+  FlatList,
+  StyleSheet,
+  Modal,
+} from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 // FireStore
 import firestore from "@react-native-firebase/firestore";
-import storage from '@react-native-firebase/storage';
+import storage from "@react-native-firebase/storage";
 // Components
 import Header from "components/Tab/Header";
 import { ModalSelect } from "components/Modal/CustomModal";
@@ -11,7 +20,7 @@ import { ModalSelect } from "components/Modal/CustomModal";
 import SelectPicker from "components/SelectPicker";
 
 // Images
-const logo = require('assets/icons/home/logo.png');
+const logo = require("assets/icons/home/logo.png");
 const menuIcon = require("assets/icons/archives/menu.png");
 const profileImg = require("assets/icons/archives/profile.png");
 const searchIcon = require("assets/icons/archives/search.png");
@@ -25,18 +34,18 @@ const commentOffIcon = require("assets/icons/archives/comment_off.png");
 const commentOnIcon = require("assets/icons/archives/comment_on.png");
 const bookmarkOnIcon = require("assets/icons/archives/bookmark_on.png");
 const bookmarkOffIcon = require("assets/icons/archives/bookmark_off.png");
-const add = require('assets/icons/home/add.png');
+const add = require("assets/icons/home/add.png");
 
 const Home = ({ navigation }) => {
   // Select Picker
   const [sort, setSort] = useState("done");
   const onChangeSort = (value) => {
     setSort(value);
-  }
+  };
 
   //post
   const [post, setPost] = useState([]);
-  console.log(post)
+  console.log(post);
   const postCollection = firestore().collection("post");
 
   //community
@@ -151,17 +160,22 @@ const Home = ({ navigation }) => {
   const join_api = async () => {
     try {
       // user_id: SeDJYBVUGSjQGaWlzPmm 설정
-      const join_data = await joinCollection.where('user_id', '==', 'SeDJYBVUGSjQGaWlzPmm').get();
+      const join_data = await joinCollection
+        .where("user_id", "==", "SeDJYBVUGSjQGaWlzPmm")
+        .get();
       join_data._docs.map((doc) => ({
         community_id: doc._data.community_id,
         user_id: doc._data.user_id,
-      }))
+      }));
 
       // 사용자가 가입한 커뮤니티의 데이터를 community에서 찾아서 joinCommunity에 추가
-      const userJoinCommunities = join_data._docs.map(doc => doc._data.community_id);
-      const userCommunities = community.filter(item => userJoinCommunities.includes(item.community_id));
+      const userJoinCommunities = join_data._docs.map(
+        (doc) => doc._data.community_id
+      );
+      const userCommunities = community.filter((item) =>
+        userJoinCommunities.includes(item.community_id)
+      );
       setJoinCommunity(whole.concat(userCommunities));
-
     } catch (error) {
       console.log("post error", error.message);
     }
@@ -169,9 +183,8 @@ const Home = ({ navigation }) => {
 
   const post_api = async () => {
     try {
-      const post_data = await postCollection.orderBy('reg_date', 'desc').get();
-      setPost(
-        post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      const post_data = await postCollection.orderBy("reg_date", "desc").get();
+      setPost(post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.log("post error", error.message);
     }
@@ -180,12 +193,17 @@ const Home = ({ navigation }) => {
   const bookmark_api = async () => {
     try {
       const bookmark_data = await bookmarkCollection.get();
-      const bookmarks = bookmark_data._docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      const bookmarks = bookmark_data._docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
 
       // 북마크 상태 확인
-      const userBookmarks = post.map(p => ({
+      const userBookmarks = post.map((p) => ({
         postId: p.id,
-        isBookmark: bookmarks.some(l => l.post_id === p.id && l.user_id === 'SeDJYBVUGSjQGaWlzPmm')
+        isBookmark: bookmarks.some(
+          (l) => l.post_id === p.id && l.user_id === "SeDJYBVUGSjQGaWlzPmm"
+        ),
       }));
 
       setUserBookmarks(userBookmarks);
@@ -198,24 +216,28 @@ const Home = ({ navigation }) => {
   const like_api = async () => {
     try {
       const like_data = await likeCollection.get();
-      const likes = like_data._docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      const likes = like_data._docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
 
       // 각 게시물의 좋아요 개수 계산
-      const likeCounts = post.map(p => ({
+      const likeCounts = post.map((p) => ({
         postId: p.id,
-        count: likes.filter(l => l.post_id === p.id).length
+        count: likes.filter((l) => l.post_id === p.id).length,
       }));
 
       // 좋아요 상태를 확인하여 사용자의 좋아요 여부를 설정
-      const userLikes = post.map(p => ({
+      const userLikes = post.map((p) => ({
         postId: p.id,
-        isLiked: likes.some(l => l.post_id === p.id && l.user_id === 'SeDJYBVUGSjQGaWlzPmm')
+        isLiked: likes.some(
+          (l) => l.post_id === p.id && l.user_id === "SeDJYBVUGSjQGaWlzPmm"
+        ),
       }));
 
       setLikeCounts(likeCounts);
       setUserLikes(userLikes);
       setLikes(likes);
-
     } catch (error) {
       console.log("like error", error.message);
     }
@@ -224,16 +246,18 @@ const Home = ({ navigation }) => {
   const comment_api = async () => {
     try {
       const comment_data = await commentCollection.get();
-      const comments = comment_data._docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      const comments = comment_data._docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
 
       // 각 게시물의 댓글 개수 계산
-      const commentCounts = post.map(p => ({
+      const commentCounts = post.map((p) => ({
         postId: p.id,
-        count: comments.filter(l => l.post_id === p.id).length
+        count: comments.filter((l) => l.post_id === p.id).length,
       }));
 
       setCommentCounts(commentCounts);
-
     } catch (error) {
       console.log("comment error", error.message);
     }
@@ -277,7 +301,11 @@ const Home = ({ navigation }) => {
 
   // 내가 가입한 커뮤니티 리스트만 보여야 함 + 커뮤니티 디비 설계해야 함
   const renderCommunityList = ({ item, index }) => {
-    if (joinCommunity.some(joinItem => joinItem.community_id === item.community_id)) {
+    if (
+      joinCommunity.some(
+        (joinItem) => joinItem.community_id === item.community_id
+      )
+    ) {
       return (
         <TouchableOpacity
           onPress={() => handleClickList(item)}
@@ -288,7 +316,9 @@ const Home = ({ navigation }) => {
             borderColor: item.isClick ? "rgba(255, 116, 116, 0.12)" : "#dddddd",
             alignSelf: "flex-start",
             padding: 8,
-            backgroundColor: item.isClick ? "rgba(255, 116, 116, 0.12)" : "#fff",
+            backgroundColor: item.isClick
+              ? "rgba(255, 116, 116, 0.12)"
+              : "#fff",
           }}
         >
           <Text style={{ color: item.isClick ? "#FF7474" : "#9C9C9C" }}>
@@ -307,10 +337,7 @@ const Home = ({ navigation }) => {
       var detail;
       if (c.isClick === true && c.community_name === "전체") {
         detail = renderCommunityDetail({ item, index });
-      } else if (
-        c.isClick === true &&
-        c.community_id === item.community_id
-      ) {
+      } else if (c.isClick === true && c.community_id === item.community_id) {
         detail = renderCommunityDetail({ item, index });
       }
       return detail;
@@ -320,7 +347,7 @@ const Home = ({ navigation }) => {
   // 좋아요
   const toggleLike = async (postId) => {
     try {
-      const userLiked = userLikes.find(ul => ul.postId === postId)?.isLiked;
+      const userLiked = userLikes.find((ul) => ul.postId === postId)?.isLiked;
 
       if (userLiked) {
         // 이미 좋아요를 누른 상태면 좋아요 취소
@@ -340,8 +367,8 @@ const Home = ({ navigation }) => {
   const likePost = async (postId) => {
     try {
       await likeCollection.add({
-        user_id: 'SeDJYBVUGSjQGaWlzPmm',
-        post_id: postId
+        user_id: "SeDJYBVUGSjQGaWlzPmm",
+        post_id: postId,
       });
     } catch (error) {
       console.error("Like post error:", error);
@@ -350,7 +377,9 @@ const Home = ({ navigation }) => {
 
   const unlikePost = async (postId) => {
     try {
-      const likeId = likes.find(l => l.post_id === postId && l.user_id === 'SeDJYBVUGSjQGaWlzPmm')?.id;
+      const likeId = likes.find(
+        (l) => l.post_id === postId && l.user_id === "SeDJYBVUGSjQGaWlzPmm"
+      )?.id;
       if (likeId) {
         await likeCollection.doc(likeId).delete();
       }
@@ -361,7 +390,9 @@ const Home = ({ navigation }) => {
 
   const toggleBookmark = async (postId) => {
     try {
-      const userBookmark = userBookmarks.find(ul => ul.postId === postId)?.isBookmark;
+      const userBookmark = userBookmarks.find(
+        (ul) => ul.postId === postId
+      )?.isBookmark;
 
       if (userBookmark) {
         await unBookmarkPost(postId);
@@ -378,8 +409,8 @@ const Home = ({ navigation }) => {
   const bookmarkPost = async (postId) => {
     try {
       await bookmarkCollection.add({
-        user_id: 'SeDJYBVUGSjQGaWlzPmm',
-        post_id: postId
+        user_id: "SeDJYBVUGSjQGaWlzPmm",
+        post_id: postId,
       });
     } catch (error) {
       console.error("Bookmark post error:", error);
@@ -388,7 +419,9 @@ const Home = ({ navigation }) => {
 
   const unBookmarkPost = async (postId) => {
     try {
-      const bookmarkId = bookmarks.find(l => l.post_id === postId && l.user_id === 'SeDJYBVUGSjQGaWlzPmm')?.id;
+      const bookmarkId = bookmarks.find(
+        (l) => l.post_id === postId && l.user_id === "SeDJYBVUGSjQGaWlzPmm"
+      )?.id;
       if (bookmarkId) {
         await bookmarkCollection.doc(bookmarkId).delete();
       }
@@ -426,10 +459,13 @@ const Home = ({ navigation }) => {
   // 커뮤니티별 게시물
   const renderCommunityDetail = ({ item, index }) => {
     const postId = item.id;
-    const likeCount = likeCounts.find(lc => lc.postId === postId)?.count || 0;
-    const isLiked = userLikes.find(ul => ul.postId === postId)?.isLiked || false;
-    const commentCount = commentCounts.find(cc => cc.postId === postId)?.count || 0;
-    const isBookmark = userBookmarks.find(ul => ul.postId === postId)?.isBookmark || false;
+    const likeCount = likeCounts.find((lc) => lc.postId === postId)?.count || 0;
+    const isLiked =
+      userLikes.find((ul) => ul.postId === postId)?.isLiked || false;
+    const commentCount =
+      commentCounts.find((cc) => cc.postId === postId)?.count || 0;
+    const isBookmark =
+      userBookmarks.find((ul) => ul.postId === postId)?.isBookmark || false;
 
     return (
       <TouchableOpacity
@@ -472,7 +508,11 @@ const Home = ({ navigation }) => {
             <Text style={{ fontSize: 14, color: "#000000" }}>
               1. 준비 기간 : {countDate(item.start_date, item.end_date)}일
             </Text>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, color: "#000000" }}>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={{ fontSize: 14, color: "#000000" }}
+            >
               2. 교재 : {item.book}
             </Text>
             <Text style={{ fontSize: 14, color: "#000000" }}>
@@ -543,9 +583,14 @@ const Home = ({ navigation }) => {
             }}
           >
             <TouchableOpacity onPress={() => toggleLike(postId)}>
-              <Image source={isLiked ? heartOnIcon : heartOffIcon} style={{ width: 18, height: 18 }} />
+              <Image
+                source={isLiked ? heartOnIcon : heartOffIcon}
+                style={{ width: 18, height: 18 }}
+              />
             </TouchableOpacity>
-            <Text style={{ color: isLiked ? '#FF7474' : '#BDBDBD' }}>{likeCount}</Text>
+            <Text style={{ color: isLiked ? "#FF7474" : "#BDBDBD" }}>
+              {likeCount}
+            </Text>
           </View>
           <View
             style={{
@@ -561,7 +606,9 @@ const Home = ({ navigation }) => {
                 style={{ width: 18, height: 18 }}
               />
             </TouchableOpacity>
-            <Text style={{ color: commentCount > 0 ? '#606060' : '#BDBDBD' }}>{commentCount}</Text>
+            <Text style={{ color: commentCount > 0 ? "#606060" : "#BDBDBD" }}>
+              {commentCount}
+            </Text>
           </View>
           <TouchableOpacity
             onPress={() => toggleBookmark(postId)}
@@ -571,17 +618,26 @@ const Home = ({ navigation }) => {
               alignItems: "center",
             }}
           >
-            <Image source={isBookmark ? bookmarkOnIcon : bookmarkOffIcon} style={{ width: 18, height: 18 }} />
+            <Image
+              source={isBookmark ? bookmarkOnIcon : bookmarkOffIcon}
+              style={{ width: 18, height: 18 }}
+            />
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
     );
   };
 
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f1f1f1", marginBottom: 70 }}>
-      <Header left={menuIcon} title={logo} right={alarmOffIcon} rightClick={() => navigation.navigate('Alarm')} />
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: "#f1f1f1", marginBottom: 70 }}
+    >
+      <Header
+        left={menuIcon}
+        title={logo}
+        right={alarmOffIcon}
+        rightClick={() => navigation.navigate("Alarm")}
+      />
 
       {/* 커뮤니티 목록 */}
       <View
@@ -634,8 +690,19 @@ const Home = ({ navigation }) => {
       />
 
       {/* Add 버튼 */}
-      <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end', right: 0, bottom: 20, position: 'absolute', zIndex: 10, marginRight: 12 }}>
-        <TouchableOpacity onPress={() => navigation.navigate('Add')}>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "flex-end",
+          justifyContent: "flex-end",
+          right: 0,
+          bottom: 20,
+          position: "absolute",
+          zIndex: 10,
+          marginRight: 12,
+        }}
+      >
+        <TouchableOpacity onPress={() => navigation.navigate("Add")}>
           <Image source={add} style={{ width: 72, height: 72 }} />
         </TouchableOpacity>
       </View>
