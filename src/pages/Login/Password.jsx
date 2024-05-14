@@ -1,17 +1,31 @@
-import React from 'react';
-import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, SafeAreaView, StyleSheet } from "react-native";
 // Header
-import Header from 'components/Tab/Header';
+import Header from "components/Tab/Header";
 
 // Images
-const backIcon = require('assets/icons/home/back.png');
+const backIcon = require("assets/icons/home/back.png");
 
 const Password = ({ navigation }) => {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
-      <Header left={backIcon} leftClick={() => navigation.navigate('Login')} title={'비밀번호 찾기'} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
+      <Header
+        left={backIcon}
+        leftClick={() => navigation.navigate("Login")}
+        title={"비밀번호 찾기"}
+      />
       <View style={styles.container}>
-        <Text style={{ fontSize: 16, color: '#ff7474', fontWeight: 'bold', marginVertical: 30, marginRight: 310 }}>비밀번호 찾기</Text>
+        <Text
+          style={{
+            fontSize: 16,
+            color: "#ff7474",
+            fontWeight: "bold",
+            marginVertical: 30,
+            marginRight: 310,
+          }}
+        >
+          비밀번호 찾기
+        </Text>
       </View>
     </SafeAreaView>
   );
@@ -20,8 +34,8 @@ const Password = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 400,
   },
 });

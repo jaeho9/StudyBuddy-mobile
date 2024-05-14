@@ -7,21 +7,13 @@ import { Calendar } from "react-native-calendars";
 
 const { width, height } = Dimensions.get("window");
 
-const CalendarModal = ({
-  isVisible,
-  setIsVisible,
-  onSelectDate,
-  selectedDate,
-}) => {
+const CalendarModal = ({ isVisible, setIsVisible, onSelectDate }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  // console.log(startDate, endDate);
-
   useEffect(() => {
-    setStartDate(selectedDate?.startDate);
-    setEndDate(selectedDate?.endDate);
-  }, [selectedDate]);
+    console.log("calendar");
+  }, []);
 
   const handleSaveResult = () => {
     onSelectDate(startDate, endDate);
@@ -29,6 +21,7 @@ const CalendarModal = ({
   };
 
   const handleDayPress = (day) => {
+    console.log("day", day);
     if (!startDate || (startDate && endDate)) {
       setStartDate(day.dateString);
       setEndDate("");
@@ -114,7 +107,7 @@ const CalendarModal = ({
           onDayPress={handleDayPress}
           markedDates={generateMarkedDates()}
           style={{
-            marginTop: 20,
+            marginTop: 28,
           }}
           theme={{
             backgroundColor: "#ffffff",
