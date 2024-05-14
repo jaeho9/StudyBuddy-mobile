@@ -28,6 +28,7 @@ import CalendarModal from "components/Modal/CalendarModal";
 import FileModal from "components/Modal/FileModal";
 
 // Images
+const clear = require("assets/icons/add/clear.png");
 const backIcon = require("assets/icons/archives/back.png");
 const feedAdd = require("assets/icons/add/feed_add.png");
 const feedAddOff = require("assets/icons/add/feed_add_off.png");
@@ -111,16 +112,18 @@ const Add = ({ navigation, route }) => {
   }, [isFocused]);
 
   const selectDoc = async () => {
+    console.log("selectDoc");
     try {
       const doc = await DocumentPicker.pick({
         type: [DocumentPicker.types.pdf],
+        copyTo: "cachesDirectory",
         allowMultiSelection: true,
       });
       setSelectedFile(doc.map((item) => item.uri));
       setFilename(doc.map((item) => item.name));
 
       doc.forEach(async (doc) => {
-        await uploadFile(doc.uri, doc.name);
+        await uploadFile(doc.fileCopyUri, doc.uri, doc.name);
       });
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -132,10 +135,15 @@ const Add = ({ navigation, route }) => {
   };
 
   // 파일 업로드 함수
-  const uploadFile = async (uri, filename) => {
+  const uploadFile = async (fileCopyUri, uri, filename) => {
     try {
+      // const reference = storage().ref("/file/" + filename);
+      // await reference.putFile(uri); // 파일 업로드
+      // console.log("File uploaded successfully!");
+
+      console.log(fileCopyUri.replace("file://", ""));
       const reference = storage().ref("/file/" + filename);
-      await reference.putFile(uri); // 파일 업로드
+      await reference.putFile(fileCopyUri.replace("file://", ""));
       console.log("File uploaded successfully!");
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -167,6 +175,8 @@ const Add = ({ navigation, route }) => {
       setSelectedBook(edit_post.current.book);
       setSelectedResult(edit_post.current.result);
       setText(edit_post.current.study);
+      setFilename(edit_post.current.data);
+      setSelectedFile(edit_post.current.data);
     } catch (error) {
       console.log("post error", error.message);
     }
@@ -185,6 +195,7 @@ const Add = ({ navigation, route }) => {
             end_date: new Date(selectedDate.endDate),
             book: book ? book : selectedBook,
             result: selectedResult,
+            data: filename,
             study: text,
             update_date: cur_date,
           });

@@ -43,6 +43,7 @@ const Archives = ({ navigation }) => {
 
   //post
   const [post, setPost] = useState([]);
+  const [postBookmark, setPostBookmark] = useState([]);
   const postCollection = firestore().collection("post");
 
   //community
@@ -111,7 +112,6 @@ const Archives = ({ navigation }) => {
 
   useEffect(() => {
     etc();
-    console.log(bookmark);
   }, [bookmark]);
 
   useEffect(() => {}, [communities]);
@@ -169,12 +169,22 @@ const Archives = ({ navigation }) => {
     }
   };
 
-  const bookmark_id_api = async () => {
+  const post_bookmark_api = async () => {
     try {
       const bookmark_id_data = await bookmarkCollection
         .where("user_id", "==", "SeDJYBVUGSjQGaWlzPmm")
         .get();
-      bookmark_id_data._docs.map((doc) => console.log("bookmark", doc));
+      let arr = [];
+      bookmark_id_data._docs.map((doc) =>
+        post?.map((v, i) => {
+          if (v.id === doc._data.post_id) {
+            arr.push(v);
+          }
+        })
+      );
+      setPostBookmark(arr);
+      // console.log(arr.length);
+      // console.log(postBookmark);
     } catch (error) {
       console.log("bookmark id error", error.message);
     }
@@ -192,7 +202,8 @@ const Archives = ({ navigation }) => {
   };
 
   etc = () => {
-    setLastIndex(post.length - 1);
+    // post_bookmark_api()
+    // setLastIndex(postBookmark?.length - 1);
     let arr = [];
     join.map((v, i) => {
       if (v.user_id === "SeDJYBVUGSjQGaWlzPmm") {
@@ -252,7 +263,7 @@ const Archives = ({ navigation }) => {
   };
 
   const onPressLike = () => {
-    // const storage = getStorage();
+    post_bookmark_api();
   };
 
   const onPressCommunityList = (item) => {

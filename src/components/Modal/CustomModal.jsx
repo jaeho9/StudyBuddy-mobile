@@ -27,6 +27,11 @@ export class ModalSelect extends Component {
     super(props);
   }
 
+  state = {
+    deleteVisible: false,
+    delete: "",
+  };
+
   comment_api = async () => {
     try {
       const commentCollection = firestore().collection("comment");
@@ -39,6 +44,10 @@ export class ModalSelect extends Component {
         querySnapshot.forEach(function (doc) {
           doc.ref.delete();
         });
+      });
+      this.setState({
+        deleteVisible: true,
+        delete: "댓글",
       });
       console.log("comment delete complete!");
     } catch (error) {
@@ -57,6 +66,7 @@ export class ModalSelect extends Component {
       });
       this.setState({
         deleteVisible: true,
+        delete: "게시물",
       });
       console.log("post delete complete!");
     } catch (error) {
@@ -64,12 +74,10 @@ export class ModalSelect extends Component {
     }
   };
 
-  state = {
-    deleteVisible: false,
-  };
-
   onPressDelete() {
-    this.props.modalVisible();
+    setTimeout(() => {
+      this.props.modalVisible();
+    }, 3000);
     if (this.props.comment) {
       this.comment_api();
     } else {
@@ -116,6 +124,7 @@ export class ModalSelect extends Component {
                 deleteVisible: false,
               })
             }
+            delete={this.state.delete}
           />
         </Modal>
         <TouchableOpacity

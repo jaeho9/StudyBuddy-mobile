@@ -45,11 +45,15 @@ const CommentEdit = ({ navigation, route }) => {
   };
 
   const rightClick = async () => {
+    var cur_date = new Date();
     try {
       const rows = await commentCollection.where("id", "==", id);
       rows.get().then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
-          doc.ref.update({ comment: commentEdit });
+          doc.ref.update({
+            comment: commentEdit,
+            update_date: cur_date,
+          });
         });
       });
       navigation.navigate("Post_Firebase", { id: post_id });
@@ -66,7 +70,6 @@ const CommentEdit = ({ navigation, route }) => {
         right={"확인"}
         leftClick={() => navigation.goBack()}
         rightClick={() => rightClick()}
-        // rightClick={() => navigation.navigate("Post_Firebase")}
       />
       <View style={{ flex: 1, padding: 18 }}>
         <TextInput
