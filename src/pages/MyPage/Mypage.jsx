@@ -81,79 +81,85 @@ const Mypage = ({}) => {
         leftClick={"Home"}
         rightClick={"Settings"}
       />
-      <View
-        style={{
-          height: dummyData.addtext ? 236 : 166, //addtext 여부에 따라
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <View style={styles.Profilecontainer}>
-          {/* <Image source={dummyData.profileImage} /> */}
-          <Image source={MyPageProfile} />
-        </View>
-        <View style={styles.ProfileTextcontainer}>
-          <Text style={styles.ProfileName}>{dummyData.name}</Text>
-          <Text style={styles.ProfileEmail}>{dummyData.email}</Text>
+      <View style={{ borderBottomWidth: 1, borderBottomColor: "#ddd" }}>
+        <View
+          style={{
+            height: dummyData.addtext ? 236 : 166, //addtext 여부에 따라
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View style={styles.Profilecontainer}>
+            {/* <Image source={dummyData.profileImage} /> */}
+            <Image source={MyPageProfile} />
+          </View>
+          <View style={styles.ProfileTextcontainer}>
+            <Text style={styles.ProfileName}>{dummyData.name}</Text>
+            <Text style={styles.ProfileEmail}>{dummyData.email}</Text>
 
-          {dummyData.addtext && (
-            <View>
-              <Text
-                style={[styles.ProfileText, { marginTop: 10, marginBottom: 8 }]}
-              >
-                {dummyData.introduction}
-              </Text>
-              <View style={{ flexDirection: "row" }}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginRight: 24.71,
-                    marginLeft: -6,
-                  }}
+            {dummyData.addtext && (
+              <View>
+                <Text
+                  style={[
+                    styles.ProfileText,
+                    { marginTop: 10, marginBottom: 8 },
+                  ]}
                 >
-                  <Image source={link} />
-                  <Text style={styles.ProfileText}>{dummyData.link}</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Image source={calendar} style={{ marginRight: 2 }} />
-                  <Text style={styles.ProfileText}>{dummyData.date}</Text>
+                  {dummyData.introduction}
+                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginRight: 24.71,
+                      marginLeft: -6,
+                    }}
+                  >
+                    <Image source={link} />
+                    <Text style={styles.ProfileText}>{dummyData.link}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: 6,
+                    }}
+                  >
+                    <Image source={calendar} />
+                    <Text style={styles.ProfileText}>{dummyData.date}</Text>
+                  </View>
                 </View>
               </View>
-            </View>
-          )}
-        </View>
+            )}
+          </View>
 
-        <TouchableOpacity
-          style={styles.ProfileButton}
-          onPress={handleEditProfile}
-        >
-          <Text style={styles.ProfileButtonText}>프로필 수정</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.MiddleTab}>
-        <MiddleTab
-          text="게시글"
-          selected={selectedTab === 0}
-          onPress={() => handleTabPress(0)}
-        />
-        <MiddleTab
-          text="하트"
-          selected={selectedTab === 1}
-          onPress={() => handleTabPress(1)}
-        />
-        <MiddleTab
-          text="댓글"
-          selected={selectedTab === 2}
-          onPress={() => handleTabPress(2)}
-        />
+          <TouchableOpacity
+            style={styles.ProfileButton}
+            onPress={handleEditProfile}
+          >
+            <Text style={styles.ProfileButtonText}>프로필 수정</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.MiddleTab}>
+          <MiddleTab
+            text="게시글"
+            selected={selectedTab === 0}
+            onPress={() => handleTabPress(0)}
+          />
+          <MiddleTab
+            text="하트"
+            selected={selectedTab === 1}
+            onPress={() => handleTabPress(1)}
+          />
+          <MiddleTab
+            text="댓글"
+            selected={selectedTab === 2}
+            onPress={() => handleTabPress(2)}
+          />
+        </View>
       </View>
       {selectedTab === 0 && <MyPagePostList data={dummyData} type="게시글" />}
       {selectedTab === 1 && (
@@ -217,9 +223,7 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 60,
-    paddingHorizontal: 25,
-    marginTop: 16,
+    paddingHorizontal: 30,
   },
   cardListContainer: {
     flex: 1,

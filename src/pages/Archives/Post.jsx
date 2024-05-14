@@ -15,7 +15,6 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Header from "components/Tab/Header";
 import { DeleteModal } from "components/Modal/DeleteModal";
 import { ModalSelect } from "components/Modal/CustomModal";
-import { dummy_comment } from "dummy_data";
 
 // FireStore && File Download
 import firestore from "@react-native-firebase/firestore";
@@ -76,7 +75,6 @@ const Post = ({ route }) => {
     setTimeout(
       () =>
         more.current.forEach((element) => {
-          // console.log("more", more);
           element.measure((fx, fy, width, height, px, py) => {
             setModalX((modalX) => [...modalX, px - width * 4]);
             setModalY((modalY) => [...modalY, py + height]);
@@ -90,12 +88,12 @@ const Post = ({ route }) => {
     );
   }, []);
 
-  useEffect(() => {}, [comments]);
+  useEffect(() => {
+    console.log(post.current);
+  }, [comments]);
 
   useEffect(() => {
-    console.log("isFocused----------------------");
     setTimeout(() => comment_api(), 1);
-    comment_api();
     modalSelectVisible.map((e, i) => {
       if (e === true) {
         let copiedModal = [...modalSelectVisible];
@@ -109,6 +107,7 @@ const Post = ({ route }) => {
     try {
       const post_data = await postCollection.get();
       post_data._docs.map((doc) => {
+        console.log(doc._data.id);
         if (doc._data.id === post_id) {
           post.current = {
             ...doc.data(),
@@ -227,7 +226,7 @@ const Post = ({ route }) => {
     }
   };
 
-  goodsMoreButtonClicked = (id) => {
+  goodsMoreButtonClickedd = (id) => {
     more.current[id].measure((fx, fy, width, height, px, py) => {
       let copiedX = [...modalX];
       copiedX[id] = px - width * 4;
@@ -327,7 +326,7 @@ const Post = ({ route }) => {
           </View>
           <TouchableOpacity
             ref={(e) => (more.current[index] = e)}
-            onPress={() => this.goodsMoreButtonClicked(index)}
+            onPress={() => this.goodsMoreButtonClickedd(index)}
             style={{
               position: "absolute",
               top: 9,
@@ -353,7 +352,7 @@ const Post = ({ route }) => {
       <Header
         left={backIcon}
         title={"게시물"}
-        leftClick={() => navigation.navigate("Archives")}
+        leftClick={() => navigation.goBack()}
       />
       <View
         // showsVerticalScrollIndicator={false}

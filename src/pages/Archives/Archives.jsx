@@ -9,8 +9,8 @@ import {
   StyleSheet,
   Modal,
 } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
-import { useNavigation, useIsFocused } from "@react-navigation/native";
 // FireStore
 import firestore from "@react-native-firebase/firestore";
 
@@ -19,7 +19,7 @@ import Header from "components/Tab/Header";
 import { ModalSelect } from "components/Modal/CustomModal";
 // SelectPicker
 import SelectPicker from "components/SelectPicker";
-import { Firestore } from "@firebase/firestore";
+
 // Images
 const menuIcon = require("assets/icons/archives/menu.png");
 const profileImg = require("assets/icons/archives/profile.png");
@@ -60,13 +60,19 @@ const Archives = ({ navigation }) => {
   const [user, setUser] = useState([]);
   const userCollection = firestore().collection("user");
 
-  //like
-  const [like, setLike] = useState([]);
+  // like
+  const [likes, setLikes] = useState([]); // 좋아요 데이터
+  const [likeCounts, setLikeCounts] = useState([]); // 각 게시물 좋아요 개수
+  const [userLikes, setUserLikes] = useState([]); // 좋아요 여부
   const likeCollection = firestore().collection("like");
+
+  // comment
+  const [commentCounts, setCommentCounts] = useState([]);
+  const commentCollection = firestore().collection("comment");
 
   //bookmark
   const [bookmark, setBookmark] = useState([]);
-  const [bookmarkPost, setBookmarkPost] = useState([]);
+  const [userBookmarks, setUserBookmarks] = useState([]);
   const bookmarkCollection = firestore().collection("bookmark");
 
   const [whole, setWhole] = useState([
@@ -76,8 +82,6 @@ const Archives = ({ navigation }) => {
       isClick: true,
     },
   ]);
-
-  const [lastIndex, setLastIndex] = useState(0);
 
   // custom modal
   var more = useRef([]);
@@ -92,7 +96,8 @@ const Archives = ({ navigation }) => {
     community_api();
     join_api();
     post_api();
-    // like_api();
+    like_api();
+    comment_api();
     bookmark_api();
     setTimeout(
       () =>
@@ -114,10 +119,8 @@ const Archives = ({ navigation }) => {
     etc();
   }, [bookmark]);
 
-  useEffect(() => {}, [communities]);
-
   useEffect(() => {
-    post_api();
+    setTimeout(() => post_api(), 1);
     modalSelectVisible.map((e, i) => {
       if (e === true) {
         let copiedModal = [...modalSelectVisible];
@@ -162,31 +165,60 @@ const Archives = ({ navigation }) => {
 
   const post_api = async () => {
     try {
-      const post_data = await postCollection.get();
+      const post_data = await postCollection.orderBy("reg_date", "desc").get();
       setPost(post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.log("post error", error.message);
     }
   };
 
-  const post_bookmark_api = async () => {
+  const like_api = async () => {
     try {
-      const bookmark_id_data = await bookmarkCollection
-        .where("user_id", "==", "SeDJYBVUGSjQGaWlzPmm")
-        .get();
-      let arr = [];
-      bookmark_id_data._docs.map((doc) =>
-        post?.map((v, i) => {
-          if (v.id === doc._data.post_id) {
-            arr.push(v);
-          }
-        })
-      );
-      setPostBookmark(arr);
-      // console.log(arr.length);
-      // console.log(postBookmark);
+      const like_data = await likeCollection.get();
+      const likes = like_data._docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      // 각 게시물의 좋아요 개수 계산
+      const likeCounts = post.map((p) => ({
+        postId: p.id,
+        count: likes.filter((l) => l.post_id === p.id).length,
+      }));
+
+      // 좋아요 상태를 확인하여 사용자의 좋아요 여부를 설정
+      const userLikes = post.map((p) => ({
+        postId: p.id,
+        isLiked: likes.some(
+          (l) => l.post_id === p.id && l.user_id === "SeDJYBVUGSjQGaWlzPmm"
+        ),
+      }));
+
+      setLikeCounts(likeCounts);
+      setUserLikes(userLikes);
+      setLikes(likes);
     } catch (error) {
-      console.log("bookmark id error", error.message);
+      console.log("like error", error.message);
+    }
+  };
+
+  const comment_api = async () => {
+    try {
+      const comment_data = await commentCollection.get();
+      const comments = comment_data._docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      // 각 게시물의 댓글 개수 계산
+      const commentCounts = post.map((p) => ({
+        postId: p.id,
+        count: comments.filter((l) => l.post_id === p.id).length,
+      }));
+
+      setCommentCounts(commentCounts);
+    } catch (error) {
+      console.log("comment error", error.message);
     }
   };
 
@@ -202,8 +234,6 @@ const Archives = ({ navigation }) => {
   };
 
   etc = () => {
-    // post_bookmark_api()
-    // setLastIndex(postBookmark?.length - 1);
     let arr = [];
     join.map((v, i) => {
       if (v.user_id === "SeDJYBVUGSjQGaWlzPmm") {
@@ -218,12 +248,19 @@ const Archives = ({ navigation }) => {
         });
       }
     });
-    // setCommunities(whole.concat(community));
     setCommunities(whole.concat(arr));
     setJoinCommunities(arr);
   };
 
-  changeDate = (e) => {
+  const countDate = (start, end) => {
+    let startDate = start.toDate();
+    let endDate = end.toDate();
+    const diffMSec = endDate.getTime() - startDate.getTime();
+    const diffDate = diffMSec / (24 * 60 * 60 * 1000);
+    return diffDate;
+  };
+
+  const changeDate = (e) => {
     let date = e.toDate();
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
@@ -260,10 +297,6 @@ const Archives = ({ navigation }) => {
     let copiedModal = [...modalSelectVisible];
     copiedModal[id] = false;
     setModalSelectVisible(copiedModal);
-  };
-
-  const onPressLike = () => {
-    post_bookmark_api();
   };
 
   const onPressCommunityList = (item) => {
@@ -304,6 +337,13 @@ const Archives = ({ navigation }) => {
 
   //내가 북마크 누른 게시물이 보여짐
   const renderCommunityDetail = ({ item, index }) => {
+    const postId = item.id;
+    const likeCount = likeCounts.find((lc) => lc.postId === postId)?.count || 0;
+    const isLiked =
+      userLikes.find((ul) => ul.postId === postId)?.isLiked || false;
+    const commentCount =
+      commentCounts.find((cc) => cc.postId === postId)?.count || 0;
+
     return (
       <TouchableOpacity
         onPress={() =>
@@ -314,7 +354,6 @@ const Archives = ({ navigation }) => {
         style={{
           backgroundColor: "#fff",
           marginHorizontal: 20,
-          // marginBottom: lastIndex === index ? 80 : 12,
           marginBottom: 12,
           paddingVertical: 20,
           paddingHorizontal: 16,
@@ -347,10 +386,13 @@ const Archives = ({ navigation }) => {
           </View>
           <View style={{ marginHorizontal: 40, gap: 8, marginTop: 8 }}>
             <Text style={{ fontSize: 14, color: "#000000" }}>
-              1. 준비 기간 : {changeDate(item.start_date)} ~{" "}
-              {changeDate(item.end_date)}
+              1. 준비 기간 : {countDate(item.start_date, item.end_date)}일
             </Text>
-            <Text style={{ fontSize: 14, color: "#000000" }}>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={{ fontSize: 14, color: "#000000" }}
+            >
               2. 교재 : {item.book}
             </Text>
             <Text style={{ fontSize: 14, color: "#000000" }}>
@@ -417,9 +459,15 @@ const Archives = ({ navigation }) => {
               gap: 3,
             }}
           >
-            <TouchableOpacity onPress={() => onPressLike(item)}>
-              <Image source={heartOffIcon} style={{ width: 18, height: 18 }} />
+            <TouchableOpacity onPress={() => toggleLike(postId)}>
+              <Image
+                source={isLiked ? heartOnIcon : heartOffIcon}
+                style={{ width: 18, height: 18 }}
+              />
             </TouchableOpacity>
+            <Text style={{ color: isLiked ? "#FF7474" : "#BDBDBD" }}>
+              {likeCount}
+            </Text>
           </View>
           <View
             style={{
@@ -431,10 +479,13 @@ const Archives = ({ navigation }) => {
           >
             <TouchableOpacity>
               <Image
-                source={commentOffIcon}
+                source={commentCount > 0 ? commentOnIcon : commentOffIcon}
                 style={{ width: 18, height: 18 }}
               />
             </TouchableOpacity>
+            <Text style={{ color: commentCount > 0 ? "#606060" : "#BDBDBD" }}>
+              {commentCount}
+            </Text>
           </View>
           <TouchableOpacity
             style={{
@@ -470,8 +521,54 @@ const Archives = ({ navigation }) => {
     });
   };
 
+  // 좋아요
+  const toggleLike = async (postId) => {
+    try {
+      const userLiked = userLikes.find((ul) => ul.postId === postId)?.isLiked;
+
+      if (userLiked) {
+        // 이미 좋아요를 누른 상태면 좋아요 취소
+        await unlikePost(postId);
+      } else {
+        // 좋아요를 누르지 않은 상태면 좋아요
+        await likePost(postId);
+      }
+
+      // 좋아요 상태 갱신
+      await like_api();
+    } catch (error) {
+      console.error("Toggle like error:", error);
+    }
+  };
+
+  const likePost = async (postId) => {
+    try {
+      await likeCollection.add({
+        user_id: "SeDJYBVUGSjQGaWlzPmm",
+        post_id: postId,
+      });
+    } catch (error) {
+      console.error("Like post error:", error);
+    }
+  };
+
+  const unlikePost = async (postId) => {
+    try {
+      const likeId = likes.find(
+        (l) => l.post_id === postId && l.user_id === "SeDJYBVUGSjQGaWlzPmm"
+      )?.id;
+      if (likeId) {
+        await likeCollection.doc(likeId).delete();
+      }
+    } catch (error) {
+      console.error("Unlike post error:", error);
+    }
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f1f1f1" }}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: "#f1f1f1", marginBottom: 70 }}
+    >
       <Header
         left={menuIcon}
         title={"Archives"}
@@ -536,7 +633,7 @@ const Archives = ({ navigation }) => {
           alignItems: "flex-end",
           justifyContent: "flex-end",
           right: 0,
-          bottom: 80,
+          bottom: 20,
           position: "absolute",
           zIndex: 10,
           marginRight: 12,

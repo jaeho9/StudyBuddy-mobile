@@ -110,13 +110,13 @@ const CommunitySearch = () => {
       <Header
         left={require("/assets/icons/Community/chevron_left.png")}
         leftClick={() => navigation.goBack()}
-        title={"Search Communities"}
+        title={"커뮤니티 찾기"}
         right={require("/assets/icons/Community/search.png")}
         rightClick={fetchCommunities} // 검색 아이콘 클릭 시 검색 실행
       />
       <TextInput
         style={styles.searchInput}
-        placeholder="Search by name"
+        placeholder="커뮤니티 검색하기"
         value={searchTerm}
         onChangeText={setSearchTerm}
         onSubmitEditing={fetchCommunities} // 엔터를 눌렀을 때도 검색 실행
@@ -133,7 +133,6 @@ const CommunitySearch = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    padding: 10,
     backgroundColor: "#f9f9f9",
   },
   communityCard: {
@@ -204,7 +203,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "#F1F1F1",
     borderWidth: 1,
     padding: 10,
     marginBottom: 20,
