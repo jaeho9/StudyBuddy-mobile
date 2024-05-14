@@ -48,8 +48,8 @@ const CommunityPost = () => {
           name: data.name || "이름 없음",
           startDate: data.reg_date
             ? new Date(data.reg_date.seconds * 1000)
-                .toLocaleDateString("en-CA")
-                .replace(/-/g, ".")
+              .toLocaleDateString("en-CA")
+              .replace(/-/g, ".")
             : "날짜 없음",
           introduce: data.introduce || "소개 정보 없음",
           membersCount: joinSnapshot.size,
