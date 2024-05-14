@@ -10,11 +10,11 @@ import {
 import Header from "components/Tab/header";
 
 const backIcon = require("assets/icons/home/back.png");
-const phone = require("assets/mypage/SettingsIcon/phone.png");
-const message = require("assets/mypage/SettingsIcon/message.png");
-const security = require("assets/mypage/SettingsIcon/security.png");
-const info = require("assets/mypage/SettingsIcon/info.png");
-const arrow = require("assets/mypage/SettingsIcon/arrow.png");
+const phone = require("assets/icons/mypage/SettingsIcon/phone.png");
+const message = require("assets/icons/mypage/SettingsIcon/message.png");
+const security = require("assets/icons/mypage/SettingsIcon/security.png");
+const info = require("assets/icons/mypage/SettingsIcon/info.png");
+const arrow = require("assets/icons/mypage/SettingsIcon/arrow.png");
 
 const Settings = () => {
   return (

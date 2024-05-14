@@ -1,6 +1,9 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 
+const Line = require("assets/icons/mypage/Line.png");
+const emptyLine = require("assets/icons/mypage/emptyLine.png");
+
 const MiddleTab = ({ text, selected, onPress }) => {
   return (
     <View style={{ flexDirection: "column" }}>
@@ -11,15 +14,9 @@ const MiddleTab = ({ text, selected, onPress }) => {
         <Text style={styles.MiddleTabText}>{text}</Text>
       </TouchableOpacity>
       {selected ? (
-        <Image
-          source={require("assets/mypage/Line.png")}
-          style={styles.Image}
-        />
+        <Image source={Line} style={styles.Image} />
       ) : (
-        <Image
-          source={require("assets/mypage/emptyLine.png")}
-          style={styles.Image}
-        />
+        <Image source={emptyLine} style={styles.Image} />
       )}
     </View>
   );

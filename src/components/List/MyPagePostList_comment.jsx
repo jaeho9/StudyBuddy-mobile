@@ -11,13 +11,13 @@ import {
 import DeleteConfirmationModal from "components/Modal/DeleteConfirmationModal";
 import firestore from "@react-native-firebase/firestore"; // firestore
 
-const BookmarkBorder = require("assets/mypage/PostListIcon/bookmark_border.png");
-const FavoriteIcon = require("assets/mypage/PostListIcon/favorite_border.png");
-const SmsIcon = require("assets/mypage/PostListIcon/sms2.png");
-const ProfileImage = require("assets/mypage/PostListIcon/Profile.png");
-const morehoriz = require("assets/mypage/PostListIcon/morehoriz.png");
-const close = require("assets/mypage/PostListIcon/close.png");
-const mode = require("assets/mypage/PostListIcon/mode.png");
+const BookmarkBorder = require("assets/icons/mypage/PostListIcon/bookmark_border.png");
+const FavoriteIcon = require("assets/icons/mypage/PostListIcon/favorite_border.png");
+const SmsIcon = require("assets/icons/mypage/PostListIcon/sms2.png");
+const ProfileImage = require("assets/icons/mypage/PostListIcon/Profile.png");
+const morehoriz = require("assets/icons/mypage/PostListIcon/morehoriz.png");
+const close = require("assets/icons/mypage/PostListIcon/close.png");
+const mode = require("assets/icons/mypage/PostListIcon/mode.png");
 
 export function MyPagePostList_comment({ data }) {
   const loggedInUserId = data.id; // 로그인 아이디

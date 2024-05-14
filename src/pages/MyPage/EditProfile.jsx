@@ -16,10 +16,10 @@ import BirthdateModal from "components/Modal/BirthdateModal";
 import firestore from "@react-native-firebase/firestore"; // firestore
 
 const backIcon = require("assets/icons/home/back.png");
-const settings = require("assets/mypage/settings.png");
-const error_red = require("assets/mypage/error_red.png");
-const error_blue = require("assets/mypage/error_blue.png");
-const MyPageProfile = require("assets/mypage/Image/MyPageProfile.png");
+const settings = require("assets/icons/mypage/settings.png");
+const error_red = require("assets/icons/mypage/error_red.png");
+const error_blue = require("assets/icons/mypage/error_blue.png");
+const MyPageProfile = require("assets/icons/mypage/MyPageProfile.png");
 const loggedInUserId = "SeDJYBVUGSjQGaWlzPmm";
 
 const EditProfile = () => {

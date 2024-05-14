@@ -8,8 +8,8 @@ import {
   Image,
 } from "react-native";
 
-const photo = require("assets/mypage/photo.png");
-const camera = require("assets/mypage/camera.png");
+const photo = require("assets/icons/mypage/photo.png");
+const camera = require("assets/icons/mypage/camera.png");
 
 const MyModal = ({ isVisible, onClose, onSelectLibrary, onTakePhoto }) => {
   return (
@@ -22,7 +22,7 @@ const MyModal = ({ isVisible, onClose, onSelectLibrary, onTakePhoto }) => {
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Image
-            source={require("assets/mypage/Line.png")}
+            source={require("assets/icons/mypage/Line.png")}
             style={styles.Image}
           />
           <TouchableOpacity style={styles.button} onPress={onSelectLibrary}>

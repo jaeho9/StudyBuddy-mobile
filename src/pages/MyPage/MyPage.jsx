@@ -17,10 +17,10 @@ import { MyPagePostList_comment } from "components/List/MyPagePostList_comment";
 import firestore from "@react-native-firebase/firestore"; // firestore
 
 const menuIcon = require("assets/icons/home/menu.png");
-const settings = require("assets/mypage/settings.png");
-const link = require("assets/mypage/link.png");
-const calendar = require("assets/mypage/calendar.png");
-const MyPageProfile = require("assets/mypage/Image/MyPageProfile.png");
+const settings = require("assets/icons/mypage/settings.png");
+const link = require("assets/icons/mypage/link.png");
+const calendar = require("assets/icons/mypage/calendar.png");
+const MyPageProfile = require("assets/icons/mypage/MyPageProfile.png");
 
 const loggedInUserId = "test_id";
 
