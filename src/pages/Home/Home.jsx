@@ -45,7 +45,6 @@ const Home = ({ navigation }) => {
 
   //post
   const [post, setPost] = useState([]);
-  console.log(post);
   const postCollection = firestore().collection("post");
 
   //community
@@ -185,6 +184,7 @@ const Home = ({ navigation }) => {
     try {
       const post_data = await postCollection.orderBy("reg_date", "desc").get();
       setPost(post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+
     } catch (error) {
       console.log("post error", error.message);
     }
@@ -469,7 +469,13 @@ const Home = ({ navigation }) => {
 
     return (
       <TouchableOpacity
-        // onPress={() => navigation.navigate("Post_Firebase")}
+        onPress={() =>
+          navigation.navigate("Post", {
+            post_id: item.id,
+            likeCount: likeCounts.find((lc) => lc.postId === postId)?.count,
+            isLiked: userLikes.find((ul) => ul.postId === postId)?.isLiked,
+            isBookmark: userBookmarks.find((ul) => ul.postId === postId)?.isBookmark
+          })}
         style={{
           backgroundColor: "#fff",
           marginHorizontal: 20,

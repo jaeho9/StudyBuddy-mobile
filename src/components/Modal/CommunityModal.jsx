@@ -48,7 +48,7 @@ const CommunityModal = ({
     user_api();
     community_api();
     join_api();
-  }, []);
+  }, [joinCommunities]);
 
   useEffect(() => {
     etc();

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Image, StyleSheet } from "react-native";
+import { View, TextInput, Image, StyleSheet, SafeAreaView } from "react-native";
 // Header
 import Header from "components/Tab/Header";
 import firestore from "@react-native-firebase/firestore";
@@ -75,7 +75,7 @@ const CommunityAdd = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header
         left={clear}
         leftClick={() => navigation.navigate("Community")}
@@ -110,7 +110,7 @@ const CommunityAdd = () => {
           multiline={false} // Multiline을 false로 설정
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -42,7 +42,7 @@ import PostEdit from "pages/Archives/PostEdit";
 import PostEditBook from "pages/Archives/PostEditBook";
 
 // MyPage
-import Mypage from "pages/MyPage/MyPage";
+import Mypage from "pages/MyPage/Mypage";
 import EditProfile from "pages/MyPage/EditProfile";
 import Settings from "pages/MyPage/Settings";
 import Library from "pages/MyPage/Library";

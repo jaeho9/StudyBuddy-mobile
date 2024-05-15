@@ -41,7 +41,6 @@ const Add = ({ navigation, route }) => {
     const onSelectCommunity = (community) => {
         setSelectedCommunity(community);
     };
-    console.log(selectedCommunity)
 
     // 준비 기간
     const [dateVisible, setDateVisible] = useState(false);

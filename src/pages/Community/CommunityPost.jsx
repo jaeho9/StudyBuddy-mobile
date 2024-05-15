@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import firestore from "@react-native-firebase/firestore";
@@ -154,7 +155,7 @@ const CommunityPost = () => {
     setIsSigned(true);
   };
   return (
-    <View style={styles.mainContainer}>
+    <SafeAreaView style={styles.mainContainer}>
       <Header
         left={left}
         leftClick={() => navigation.navigate("Community")}
@@ -216,7 +217,7 @@ const CommunityPost = () => {
       >
         <Image source={addfeed} style={styles.addFeedIcon} />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
