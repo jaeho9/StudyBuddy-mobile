@@ -9,29 +9,26 @@ import {
   Alert,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-// Header
 import Header from "components/Tab/Header";
-// Images
+
 const backIcon = require("assets/icons/home/back.png");
 
-const checkExistingData = async (nickname, email) => {
-  const existingNickname = "rlawlgud";
-  const existingEmail = "wlgud@naver.com";
+const existingData = {
+  nickname: "testuser",
+  email: "test@example.com"
+};
 
-  if (nickname === existingNickname) {
+const checkExistingData = async (nickname, email) => {
+  if (nickname === existingData.nickname) {
     return "이미 존재하는 닉네임입니다.";
   }
-  if (email === existingEmail) {
+  if (email === existingData.email) {
     return "이미 존재하는 이메일입니다.";
   }
-
   return null;
 };
 
 const Signup3 = ({ navigation }) => {
-  const login = () => {
-    navigation.navigate("Login");
-  };
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,85 +41,53 @@ const Signup3 = ({ navigation }) => {
 
   useEffect(() => {
     const checkAvailability = async () => {
-      if (!nickname.trim()) {
-        setNicknameError("닉네임을 입력하세요.");
-        return;
-      }
-      // Check if nickname is available
-      const existingDataMsg = await checkExistingData(nickname, email);
-      if (!existingDataMsg) {
-        setNicknameError("사용 가능한 닉네임입니다.");
-      } else {
-        setNicknameError(existingDataMsg);
+      if (currentFocus === "nickname" && nickname.trim()) {
+        const errorMsg = await checkExistingData(nickname, email);
+        setNicknameError(errorMsg || "사용 가능한 닉네임입니다.");
+      } else if (currentFocus === "email" && email.trim()) {
+        const errorMsg = await checkExistingData(nickname, email);
+        setEmailError(errorMsg || "사용 가능한 이메일입니다.");
       }
     };
 
     checkAvailability();
-  }, [nickname, email]);
-
-  useEffect(() => {
-    const checkAvailability = async () => {
-      if (!email.trim()) {
-        setEmailError("이메일을 입력하세요.");
-        return;
-      }
-
-      // Check if email is available
-      const existingDataMsg = await checkExistingData(nickname, email);
-      if (!existingDataMsg) {
-        setEmailError("사용 가능한 이메일입니다.");
-      } else {
-        setEmailError(existingDataMsg);
-      }
-    };
-
-    checkAvailability();
-  }, [nickname, email]);
+  }, [nickname, email, currentFocus]);
 
   const handleNicknameChange = (value) => {
     setNickname(value);
     setNicknameError("");
     setCurrentFocus("nickname");
-    if (value.trim() === "") {
-      setNicknameError("닉네임을 입력하세요.");
-    } else {
-      setNicknameError("");
-    }
   };
 
   const handleEmailChange = (value) => {
     setEmail(value);
     setEmailError("");
     setCurrentFocus("email");
-    if (value.trim() === "") {
-      setEmailError("이메일을 입력하세요.");
-    } else {
-      setEmailError("");
-    }
   };
 
   const handlePasswordChange = (value) => {
     setPassword(value);
     setPasswordError("");
-    setCurrentFocus("");
-    if (value.trim() === "") {
-      setPasswordError("비밀번호를 입력하세요.");
+    if (confirmPassword && value !== confirmPassword) {
+      setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
+    } else {
+      setConfirmPasswordError("");
     }
   };
 
   const handleConfirmPasswordChange = (value) => {
     setConfirmPassword(value);
     setConfirmPasswordError("");
-    setCurrentFocus("");
-    if (value.trim() === "") {
-      setConfirmPasswordError("비밀번호를 확인해주세요.");
-    } else if (value !== password) {
+    if (value !== password) {
       setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
+    } else {
+      setConfirmPasswordError("");
     }
   };
 
   const handleSignup = async () => {
     let isValid = true;
+
     if (!nickname.trim()) {
       setNicknameError("닉네임을 입력하세요.");
       isValid = false;
@@ -143,6 +108,7 @@ const Signup3 = ({ navigation }) => {
       setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
       isValid = false;
     }
+
     if (!isValid) return;
 
     const existingDataMsg = await checkExistingData(nickname, email);
@@ -150,15 +116,14 @@ const Signup3 = ({ navigation }) => {
       Alert.alert(existingDataMsg);
       return;
     }
-    login();
+
+    Alert.alert("회원가입 성공", "회원가입이 완료되었습니다.");
+    navigation.navigate("Login");
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
-      <Header
-        left={backIcon}
-        leftClick={() => navigation.navigate("Signup2")}
-      />
+      <Header left={backIcon} leftClick={() => navigation.navigate("Signup2")} />
       <KeyboardAwareScrollView>
         <View style={styles.container}>
           <View>
@@ -166,16 +131,7 @@ const Signup3 = ({ navigation }) => {
             <Text style={[styles.title, { color: "#ff7474" }]}>회원가입</Text>
             <View style={{ marginTop: 60 }}>
               <View>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    color: "#ff7474",
-                    fontWeight: "bold",
-                    marginBottom: 20,
-                  }}
-                >
-                  계정
-                </Text>
+                <Text style={styles.sectionTitle}>계정</Text>
               </View>
               <TextInput
                 style={styles.input}
@@ -184,19 +140,11 @@ const Signup3 = ({ navigation }) => {
                 value={nickname}
                 onFocus={() => setCurrentFocus("nickname")}
               />
-              {nicknameError &&
-              (currentFocus === "nickname" || !email.trim()) ? (
-                <Text
-                  style={[
-                    styles.errorText,
-                    nicknameError === "사용 가능한 닉네임입니다."
-                      ? styles.successText
-                      : null,
-                  ]}
-                >
+              {nicknameError && (currentFocus === "nickname" || !email.trim()) && (
+                <Text style={[styles.errorText, nicknameError === "사용 가능한 닉네임입니다." ? styles.successText : null]}>
                   {nicknameError}
                 </Text>
-              ) : null}
+              )}
               <TextInput
                 style={styles.input}
                 placeholder="이메일 입력"
@@ -204,18 +152,11 @@ const Signup3 = ({ navigation }) => {
                 value={email}
                 onFocus={() => setCurrentFocus("email")}
               />
-              {emailError && (currentFocus === "email" || !nickname.trim()) ? (
-                <Text
-                  style={[
-                    styles.errorText,
-                    emailError === "사용 가능한 이메일입니다."
-                      ? styles.successText
-                      : null,
-                  ]}
-                >
+              {emailError && (currentFocus === "email" || !nickname.trim()) && (
+                <Text style={[styles.errorText, emailError === "사용 가능한 이메일입니다." ? styles.successText : null]}>
                   {emailError}
                 </Text>
-              ) : null}
+              )}
               <TextInput
                 style={styles.input}
                 placeholder="비밀번호 입력"
@@ -223,9 +164,9 @@ const Signup3 = ({ navigation }) => {
                 onChangeText={handlePasswordChange}
                 value={password}
               />
-              {passwordError ? (
+              {passwordError && (
                 <Text style={styles.errorText}>{passwordError}</Text>
-              ) : null}
+              )}
               <TextInput
                 style={styles.input}
                 placeholder="비밀번호 확인"
@@ -233,9 +174,9 @@ const Signup3 = ({ navigation }) => {
                 onChangeText={handleConfirmPasswordChange}
                 value={confirmPassword}
               />
-              {confirmPasswordError ? (
+              {confirmPasswordError && (
                 <Text style={styles.errorText}>{confirmPasswordError}</Text>
-              ) : null}
+              )}
             </View>
           </View>
           <TouchableOpacity
@@ -264,6 +205,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: "#777777",
     marginLeft: 10,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    color: "#ff7474",
+    fontWeight: "bold",
+    marginBottom: 20,
   },
   input: {
     width: 337,
