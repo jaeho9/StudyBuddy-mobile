@@ -22,9 +22,9 @@ const link = require("assets/icons/mypage/link.png");
 const calendar = require("assets/icons/mypage/calendar.png");
 const MyPageProfile = require("assets/icons/mypage/MyPageProfile.png");
 
-const loggedInUserId = "test_id";
+const loggedInUserId = "Gsh6TJg50rswXPGaA7Zk";
 
-const Mypage = ({}) => {
+const Mypage = ({ }) => {
   //user
   const [user, setUser] = useState([]);
   const [dummyData, setDummyData] = useState({});

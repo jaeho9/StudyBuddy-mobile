@@ -58,7 +58,15 @@ const Search = ({ navigation }) => {
         user_id: "SeDJYBVUGSjQGaWlzPmm",
       });
       setText("");
-      console.log("Create Complete!");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const removeSearch = async (id) => {
+    try {
+      await searchCollection.doc(id).delete();
+      setSearchList(searchList.filter(item => item.id !== id));
     } catch (error) {
       console.log(error.message);
     }
@@ -75,7 +83,7 @@ const Search = ({ navigation }) => {
         }}
       >
         <Text style={{ fontSize: 16, color: "#717171" }}>{item.search}</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => removeSearch(item.id)}>
           <Image source={close} style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
       </View>

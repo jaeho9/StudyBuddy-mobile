@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   Modal,
+  SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import firestore from "@react-native-firebase/firestore";
@@ -43,8 +44,8 @@ const Community = () => {
         const data = doc.data();
         const formattedDate = data.reg_date
           ? new Date(data.reg_date.seconds * 1000)
-              .toLocaleDateString("en-CA")
-              .replace(/-/g, ".")
+            .toLocaleDateString("en-CA")
+            .replace(/-/g, ".")
           : "날짜 없음";
         // Fetch members count
         const joinSnapshot = await firestore()
@@ -126,7 +127,7 @@ const Community = () => {
   );
 
   return (
-    <View style={styles.root}>
+    <SafeAreaView style={styles.root}>
       <Header
         left={require("/assets/icons/Community/search.png")}
         leftClick={() => navigation.navigate("CommunitySearch")}
@@ -166,7 +167,7 @@ const Community = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 
