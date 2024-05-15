@@ -592,7 +592,7 @@ const Archives = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f1f1f1" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#f1f1f1", marginBottom: 70 }}>
       <Header
         left={menuIcon}
         title={"Archives"}
@@ -657,7 +657,7 @@ const Archives = ({ navigation }) => {
           alignItems: "flex-end",
           justifyContent: "flex-end",
           right: 0,
-          bottom: 80,
+          bottom: 20,
           position: "absolute",
           zIndex: 10,
           marginRight: 12,
