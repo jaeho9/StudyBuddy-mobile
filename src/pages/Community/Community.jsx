@@ -135,11 +135,16 @@ const Community = () => {
         right={require("/assets/icons/Community/group_add.png")}
         rightClick={() => navigation.navigate("CommunityAdd")}
       />
-      <FlatList
-        data={communities}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-      />
+      <View style={{ marginTop: 10, marginBottom: 130 }}>
+        <FlatList
+          data={communities}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+          removeClippedSubviews
+        />
+      </View>
+
       <Text style={styles.moreLink}>더보기</Text>
       <Modal visible={modalVisible} transparent animationType="slide">
         <View style={styles.modalContainer}>
@@ -174,24 +179,20 @@ const Community = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    padding: 10,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#f1f1f1",
   },
   communityCard: {
-    width: "90%",
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 10,
-    marginBottom: 10,
+    marginHorizontal: 20,
+    marginBottom: 12,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    borderRadius: 12,
     backgroundColor: "#fff",
-    alignSelf: "center",
-    position: "relative",
   },
   communityTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 5,
+    marginBottom: 12,
     color: "#FF7474",
   },
   bookmarkIcon: {

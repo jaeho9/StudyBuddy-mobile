@@ -56,7 +56,7 @@ const CommentEdit = ({ navigation, route }) => {
           });
         });
       });
-      navigation.navigate("Post_Firebase", { id: post_id });
+      navigation.navigate("Post", { id: post_id });
     } catch (error) {
       console.log("community error", error.message);
     }
