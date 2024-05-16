@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
   TextInput,
+  Alert
 } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // 네비게이션 훅 가져오기
 import Header from "components/Tab/Header";
@@ -136,7 +137,7 @@ const EditProfile = () => {
         left={backIcon}
         title={"프로필 수정"}
         right={"저장"}
-        leftClick={"MyPage"}
+        leftClick={() => navigation.goBack()}
         isDuplicate={isDuplicate}
         onSave={handleSaveProfile}
       />

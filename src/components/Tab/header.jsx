@@ -61,7 +61,14 @@ const Header = ({
           <Image source={title} style={{ width: 40, height: 40 }} />
         )}
       </TouchableOpacity>
-      <TouchableOpacity onPress={rightClick}>
+      <TouchableOpacity onPress={() => {
+        if (onSave) {
+          onSave();
+          navigation.goBack();
+        } else if (rightClick) {
+          navigation.navigate(rightClick);
+        }
+      }}>
         {right ? (
           typeof right === "string" ? (
             <Text
@@ -69,7 +76,7 @@ const Header = ({
                 fontSize: 16,
                 fontWeight: "bold",
                 color:
-                  isDuplicate || isReadyToBook || deleteMode
+                  !isDuplicate || isReadyToBook || deleteMode
                     ? "#FF7474"
                     : "#bdbdbd", // isDuplicate 상태에 따라 색상 변경
               }}
