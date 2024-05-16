@@ -113,24 +113,25 @@ const CommunityPost = () => {
     setLoading(false);
   }, [communityId]);
 
-  const sortPosts = (criteria) => {
-    return posts.sort((a, b) => {
-      if (criteria === "Popular") {
-        return b.favorites - a.favorites;
-      } else if (criteria === "Recent") {
-        return new Date(b.date) - new Date(a.date);
-      }
-    });
-  };
+  useEffect(() => {
+    const sortPosts = (criteria) => {
+      const sorted = [...posts].sort((a, b) => {
+        if (criteria === "Popular") {
+          return b.favorites - a.favorites;
+        } else if (criteria === "Recent") {
+          return new Date(b.date) - new Date(a.date);
+        }
+      });
+      return sorted;
+    };
+
+    const sortResults = sortPosts(selectedTab);
+    setSortedPosts(sortResults);
+  }, [selectedTab, posts]);
 
   const handleTabPress = (tabId) => {
     setSelectedTab(tabId);
   };
-
-  useEffect(() => {
-    const sortResults = sortPosts(selectedTab);
-    setSortedPosts(sortResults);
-  }, [selectedTab, posts]);
 
   const contentComponent =
     selectedTab === "Rules" ? (
