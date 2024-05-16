@@ -7,7 +7,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import firestore from "@react-native-firebase/firestore";
@@ -61,8 +61,8 @@ const CommunitySearch = () => {
         const data = doc.data();
         const formattedDate = data.reg_date
           ? new Date(data.reg_date.seconds * 1000)
-            .toLocaleDateString("en-CA")
-            .replace(/-/g, ".")
+              .toLocaleDateString("en-CA")
+              .replace(/-/g, ".")
           : "날짜 없음";
         return {
           id: doc.id,
