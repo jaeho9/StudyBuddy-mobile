@@ -87,7 +87,6 @@ const Post = ({ route }) => {
     setTimeout(
       () =>
         more.current.forEach((element) => {
-          // console.log("more", more);
           element.measure((fx, fy, width, height, px, py) => {
             setModalX((modalX) => [...modalX, px - width * 4]);
             setModalY((modalY) => [...modalY, py + height]);
@@ -104,9 +103,7 @@ const Post = ({ route }) => {
   useEffect(() => { }, [comments]);
 
   useEffect(() => {
-    console.log("isFocused----------------------");
     setTimeout(() => comment_api(), 1);
-    comment_api();
     modalSelectVisible.map((e, i) => {
       if (e === true) {
         let copiedModal = [...modalSelectVisible];
@@ -120,6 +117,7 @@ const Post = ({ route }) => {
     try {
       const post_data = await postCollection.get();
       post_data._docs.map((doc) => {
+        console.log(doc._data.id);
         if (doc._data.id === post_id) {
           post.current = {
             ...doc.data(),
@@ -130,7 +128,9 @@ const Post = ({ route }) => {
             update_date: changeDate(doc._data.update_date).replaceAll(".", "-"),
           };
 
-          setPostData(post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+          setPostData(
+            post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+          );
         }
       });
     } catch (error) {
@@ -323,7 +323,7 @@ const Post = ({ route }) => {
     }
   };
 
-  goodsMoreButtonClicked = (id) => {
+  goodsMoreButtonClickedd = (id) => {
     more.current[id].measure((fx, fy, width, height, px, py) => {
       let copiedX = [...modalX];
       copiedX[id] = px - width * 4;
@@ -426,7 +426,7 @@ const Post = ({ route }) => {
           </View>
           <TouchableOpacity
             ref={(e) => (more.current[index] = e)}
-            onPress={() => this.goodsMoreButtonClicked(index)}
+            onPress={() => this.goodsMoreButtonClickedd(index)}
             style={{
               position: "absolute",
               top: 9,
@@ -446,7 +446,6 @@ const Post = ({ route }) => {
       </View>
     );
   };
-
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f1f1f1" }}>

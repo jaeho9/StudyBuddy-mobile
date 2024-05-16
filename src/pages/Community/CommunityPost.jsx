@@ -17,6 +17,8 @@ import MiddleTab from "components/Tab/MiddleTab";
 import CommunityRulesAndMembers from "components/Community/CommunityRulesandMembers";
 import { PostList } from "components/Post";
 
+const add = require("assets/icons/home/add.png");
+
 const CommunityPost = () => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -49,8 +51,8 @@ const CommunityPost = () => {
           name: data.name || "이름 없음",
           startDate: data.reg_date
             ? new Date(data.reg_date.seconds * 1000)
-              .toLocaleDateString("en-CA")
-              .replace(/-/g, ".")
+                .toLocaleDateString("en-CA")
+                .replace(/-/g, ".")
             : "날짜 없음",
           introduce: data.introduce || "소개 정보 없음",
           membersCount: joinSnapshot.size,
@@ -91,7 +93,7 @@ const CommunityPost = () => {
             name: username,
             date: formattedDate,
             content1: `${durationDays}일`,
-            content2: `책: ${postData.book}`,
+            content2: `${postData.book}`,
             content3: postData.result,
             favorites: likesSnapshot.size,
             comments: 0,
@@ -164,46 +166,54 @@ const CommunityPost = () => {
         rightClick={() => navigation.navigate("CommunitySearch")}
       />
       <View style={styles.infoContainer}>
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>인원</Text>
-          <Text style={styles.value}>{communityInfo.membersCount}명</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>시작일</Text>
-          <Text style={styles.value}>{communityInfo.startDate}</Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <View style={{ gap: 13 }}>
+            <View style={styles.infoRow}>
+              <Text style={styles.label}>인원</Text>
+              <Text style={styles.value}>{communityInfo.membersCount}명</Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.label}>시작일</Text>
+              <Text style={styles.value}>{communityInfo.startDate}</Text>
+            </View>
+          </View>
+          <View>
+            <TouchableOpacity
+              style={isSigned ? styles.exitButton : styles.joinButton}
+              onPress={isSigned ? handleExit : handleJoin}
+            >
+              <Text
+                style={isSigned ? styles.exitButtonText : styles.joinButtonText}
+              >
+                {isSigned ? "나가기" : "가입"}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.label}>설명</Text>
           <Text style={styles.description}>{communityInfo.introduce}</Text>
         </View>
-        <TouchableOpacity
-          style={isSigned ? styles.exitButton : styles.joinButton}
-          onPress={isSigned ? handleExit : handleJoin}
-        >
-          <Text
-            style={isSigned ? styles.exitButtonText : styles.joinButtonText}
-          >
-            {isSigned ? "나가기" : "가입"}
-          </Text>
-        </TouchableOpacity>
+
+        <View style={styles.tabContainer}>
+          <MiddleTab
+            text="인기"
+            selected={selectedTab === "Popular"}
+            onPress={() => handleTabPress("Popular")}
+          />
+          <MiddleTab
+            text="최근"
+            selected={selectedTab === "Recent"}
+            onPress={() => handleTabPress("Recent")}
+          />
+          <MiddleTab
+            text="소개"
+            selected={selectedTab === "Rules"}
+            onPress={() => handleTabPress("Rules")}
+          />
+        </View>
       </View>
-      <View style={styles.tabContainer}>
-        <MiddleTab
-          text="인기"
-          selected={selectedTab === "Popular"}
-          onPress={() => handleTabPress("Popular")}
-        />
-        <MiddleTab
-          text="최근"
-          selected={selectedTab === "Recent"}
-          onPress={() => handleTabPress("Recent")}
-        />
-        <MiddleTab
-          text="소개"
-          selected={selectedTab === "Rules"}
-          onPress={() => handleTabPress("Rules")}
-        />
-      </View>
+
       <ScrollView
         horizontal={true}
         style={styles.scrollContainer}
@@ -231,19 +241,18 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingHorizontal: 10,
   },
   infoContainer: {
     flexDirection: "column",
-    padding: 10,
+    paddingTop: 20,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    marginBottom: 20,
+    gap: 13,
   },
   infoRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 6,
   },
   label: {
     color: "#606060",
@@ -277,9 +286,9 @@ const styles = StyleSheet.create({
   joinButton: {
     paddingVertical: 4,
     paddingHorizontal: 7,
+    borderWidth: 1,
     borderRadius: 12,
-    backgroundColor: "rgba(221, 221, 221, 0.12)",
-    alignSelf: "flex-end",
+    borderColor: "#DDDDDD",
   },
   joinButtonText: {
     color: "#9C9C9C",
@@ -292,8 +301,7 @@ const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: "#f8f8f8",
-    paddingVertical: 10,
+    backgroundColor: "#fff",
   },
   addFeedButton: {
     position: "absolute", // 절대 위치

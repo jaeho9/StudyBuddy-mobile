@@ -50,16 +50,12 @@ const Home = ({ navigation }) => {
 
   //community
   const [community, setCommunity] = useState([]);
+  const [joinCommunities, setJoinCommunities] = useState([]);
+  const [communities, setCommunities] = useState([]);
   const communityCollection = firestore().collection("community");
 
   //join
-  const [joinCommunity, setJoinCommunity] = useState([
-    {
-      community_id: 0,
-      community_name: "전체",
-      isClick: true,
-    },
-  ]); // 가입한 커뮤니티 목록
+  const [join, setJoin] = useState([]);
   const joinCollection = firestore().collection("join");
 
   //user
@@ -86,11 +82,8 @@ const Home = ({ navigation }) => {
   const likeCollection = firestore().collection("like");
 
   // comment
-  const [comments, setComments] = useState([]);
   const [commentCounts, setCommentCounts] = useState([]);
   const commentCollection = firestore().collection("comment");
-
-  const [lastIndex, setLastIndex] = useState(0);
 
   var more = useRef([]);
   const [modalSelectVisible, setModalSelectVisible] = useState([]);
@@ -125,6 +118,13 @@ const Home = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
+    etc();
+  }, [post]);
+
+  useEffect(() => {
+    console.log("isFocused");
+    setTimeout(() => post_api(), 1);
+    setTimeout(() => comment_api(), 1);
     modalSelectVisible.map((e, i) => {
       if (e === true) {
         let copiedModal = [...modalSelectVisible];
@@ -160,23 +160,8 @@ const Home = ({ navigation }) => {
 
   const join_api = async () => {
     try {
-      // user_id: SeDJYBVUGSjQGaWlzPmm 설정
-      const join_data = await joinCollection
-        .where("user_id", "==", "SeDJYBVUGSjQGaWlzPmm")
-        .get();
-      join_data._docs.map((doc) => ({
-        community_id: doc._data.community_id,
-        user_id: doc._data.user_id,
-      }));
-
-      // 사용자가 가입한 커뮤니티의 데이터를 community에서 찾아서 joinCommunity에 추가
-      const userJoinCommunities = join_data._docs.map(
-        (doc) => doc._data.community_id
-      );
-      const userCommunities = community.filter((item) =>
-        userJoinCommunities.includes(item.community_id)
-      );
-      setJoinCommunity(whole.concat(userCommunities));
+      const join_data = await joinCollection.get();
+      setJoin(join_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.log("post error", error.message);
     }
@@ -186,7 +171,6 @@ const Home = ({ navigation }) => {
     try {
       const post_data = await postCollection.orderBy("reg_date", "desc").get();
       setPost(post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-
     } catch (error) {
       console.log("post error", error.message);
     }
@@ -308,6 +292,18 @@ const Home = ({ navigation }) => {
     setModalSelectVisible(copiedModal);
   };
 
+  // const deleteTrueVisible = () => {
+  //   setTimeout(() => {
+  //     deleteVisible.current = true;
+  //   }, 2000);
+  // };
+
+  // const deleteFalseVisible = () => {
+  //   setTimeout(() => {
+  //     deleteVisible.current = false;
+  //   }, 2000);
+  // };
+
   const handleClickList = (item) => {
     setJoinCommunity(
       joinCommunity.map((v, i) => {
@@ -324,39 +320,29 @@ const Home = ({ navigation }) => {
 
   // 내가 가입한 커뮤니티 리스트만 보여야 함 + 커뮤니티 디비 설계해야 함
   const renderCommunityList = ({ item, index }) => {
-    if (
-      joinCommunity.some(
-        (joinItem) => joinItem.community_id === item.community_id
-      )
-    ) {
-      return (
-        <TouchableOpacity
-          onPress={() => handleClickList(item)}
-          style={{
-            marginRight: 8,
-            borderRadius: 16,
-            borderWidth: item.isClick ? 0 : 1,
-            borderColor: item.isClick ? "rgba(255, 116, 116, 0.12)" : "#dddddd",
-            alignSelf: "flex-start",
-            padding: 8,
-            backgroundColor: item.isClick
-              ? "rgba(255, 116, 116, 0.12)"
-              : "#fff",
-          }}
-        >
-          <Text style={{ color: item.isClick ? "#FF7474" : "#9C9C9C" }}>
-            {item.community_name}
-          </Text>
-        </TouchableOpacity>
-      );
-    } else {
-      return null; // 사용자가 가입한 커뮤니티가 아니면 null 반환하여 렌더링하지 않음
-    }
+    return (
+      <TouchableOpacity
+        onPress={() => onPressCommunityList(item)}
+        style={{
+          marginRight: 8,
+          borderRadius: 16,
+          borderWidth: item.isClick ? 0 : 1,
+          borderColor: item.isClick ? "rgba(255, 116, 116, 0.12)" : "#dddddd",
+          alignSelf: "flex-start",
+          padding: 8,
+          backgroundColor: item.isClick ? "rgba(255, 116, 116, 0.12)" : "#fff",
+        }}
+      >
+        <Text style={{ color: item.isClick ? "#FF7474" : "#9C9C9C" }}>
+          {item.community_name}
+        </Text>
+      </TouchableOpacity>
+    );
   };
 
-  // 게시물 rander
+  // 게시물 render
   const renderCommunityListClick = ({ item, index }) => {
-    return joinCommunity?.map((c, d) => {
+    return communities?.map((c, d) => {
       var detail;
       if (c.isClick === true && c.community_name === "전체") {
         detail = renderCommunityDetail({ item, index });
@@ -453,6 +439,25 @@ const Home = ({ navigation }) => {
     }
   };
 
+  etc = () => {
+    let arr = [];
+    join.map((v, i) => {
+      if (v.user_id === "SeDJYBVUGSjQGaWlzPmm") {
+        community.map((a, b) => {
+          if (a.community_id === v.community_id) {
+            arr.push({
+              community_id: a.community_id,
+              community_name: a.community_name,
+              isClick: a.isClick,
+            });
+          }
+        });
+      }
+    });
+    setCommunities(whole.concat(arr));
+    setJoinCommunities(arr);
+  };
+
   // 준비 기간 일수
   const countDate = (start, end) => {
     let startDate = start.toDate();
@@ -503,7 +508,6 @@ const Home = ({ navigation }) => {
         style={{
           backgroundColor: "#fff",
           marginHorizontal: 20,
-          // marginBottom: lastIndex === index ? 80 : 12,
           marginBottom: 12,
           paddingVertical: 20,
           paddingHorizontal: 16,
@@ -511,7 +515,7 @@ const Home = ({ navigation }) => {
         }}
       >
         <Text style={{ fontSize: 16, fontWeight: "bold", color: "#ff7474" }}>
-          {joinCommunity.map((v, i) => {
+          {communities.map((v, i) => {
             if (v.community_id === item.community_id) return v.community_name;
           })}
         </Text>
@@ -683,7 +687,7 @@ const Home = ({ navigation }) => {
         }}
       >
         <FlatList
-          data={joinCommunity}
+          data={communities}
           renderItem={renderCommunityList}
           keyExtractor={(item) => item.id}
           horizontal
