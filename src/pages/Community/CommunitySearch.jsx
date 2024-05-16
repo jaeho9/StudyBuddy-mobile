@@ -203,12 +203,13 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     height: 40,
-    borderColor: "#F1F1F1",
+    borderColor: "#FFF",
     borderWidth: 1,
     padding: 10,
     marginBottom: 20,
     width: "90%",
     alignSelf: "center",
+    backgroundColor: "#fff",
   },
 });
 
