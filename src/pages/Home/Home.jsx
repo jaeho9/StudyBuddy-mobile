@@ -43,6 +43,7 @@ const Home = ({ navigation }) => {
     setSort(value);
   };
 
+
   //post
   const [post, setPost] = useState([]);
   const postCollection = firestore().collection("post");
@@ -99,6 +100,7 @@ const Home = ({ navigation }) => {
     like_api();
     comment_api();
     bookmark_api();
+    getUserProfileImages();
     setTimeout(
       () =>
         more.current.forEach((element) => {
@@ -244,6 +246,27 @@ const Home = ({ navigation }) => {
       setCommentCounts(commentCounts);
     } catch (error) {
       console.log("comment error", error.message);
+    }
+  };
+
+  // 사용자 프로필 이미지 URL을 저장할 상태 변수
+  const [userProfileImages, setUserProfileImages] = useState({});
+
+  // 사용자 데이터와 함께 프로필 이미지 URL을 가져오는 함수
+  const getUserProfileImages = async () => {
+    try {
+      const imageUrls = {};
+      // 모든 사용자 데이터를 순회하며 프로필 이미지 URL을 가져옴
+      await Promise.all(
+        user.map(async (u) => {
+          const imageRef = storage().ref(u.profile_img); // 프로필 이미지 경로를 사용하여 이미지 참조
+          const url = await imageRef.getDownloadURL(); // 이미지 URL 가져오기
+          imageUrls[u.id] = url; // 사용자 ID를 키로하여 이미지 URL 저장
+        })
+      );
+      setUserProfileImages(imageUrls); // 상태 변수에 이미지 URL 저장
+    } catch (error) {
+      console.log("Error fetching user profile images:", error.message);
     }
   };
 
@@ -474,7 +497,14 @@ const Home = ({ navigation }) => {
 
     return (
       <TouchableOpacity
-        // onPress={() => navigation.navigate("Post_Firebase")}
+        onPress={() =>
+          navigation.navigate("Post", {
+            post_id: item.id,
+            likeCount: likeCounts.find((lc) => lc.postId === postId)?.count,
+            isLiked: userLikes.find((ul) => ul.postId === postId)?.isLiked,
+            isBookmark: userBookmarks.find((ul) => ul.postId === postId)?.isBookmark,
+            profileImg: userProfileImages[item.user_id]
+          })}
         style={{
           backgroundColor: "#fff",
           marginHorizontal: 20,
@@ -497,7 +527,10 @@ const Home = ({ navigation }) => {
               gap: 6,
             }}
           >
-            <Image source={profileImg} style={{ width: 32, height: 32 }} />
+            <Image
+              source={{ uri: userProfileImages[item.user_id] }} // 해당하는 사용자의 프로필 이미지 URL 사용
+              style={{ width: 32, height: 32 }}
+            />
 
             <Text style={{ fontSize: 16, color: "#000000" }}>
               {user.map((v, i) => {

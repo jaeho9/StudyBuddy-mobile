@@ -1,17 +1,7 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  TextInput,
-  Alert,
-  Image,
-  Linking,
-} from "react-native";
-import Header from "components/Tab/Header";
-import { signIn } from "../lib/auth";
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, TextInput, Alert, Image, Linking } from 'react-native';
+import Header from 'components/Tab/Header';
+import { signIn } from '../lib/auth';
 
 const backIcon = require("assets/icons/home/back.png");
 const googleIcon = require("assets/icons/signupandlogin/google.png");
