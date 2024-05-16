@@ -45,13 +45,14 @@ const Post = ({ route }) => {
   const communityCollection = firestore().collection("community");
 
   //post
-  const { post_id, isBookmarked, likeCount, isLiked, commentCount } = route.params;
+  const { post_id, isBookmarked, likeCount, isLiked, commentCount, profileImg } = route.params;
   const post = useRef({});
   const [postData, setPostData] = useState([]);
   const postCollection = firestore().collection("post");
 
   //user
   const user = useRef({});
+  const [userImage, setUserImage] = useState([]);
   const userCollection = firestore().collection("user");
 
   //users
@@ -82,6 +83,7 @@ const Post = ({ route }) => {
     community_api();
     bookmark_api();
     comment_api();
+    getUserProfileImages();
     setTimeout(
       () =>
         more.current.forEach((element) => {
@@ -156,6 +158,7 @@ const Post = ({ route }) => {
           };
         }
       });
+      setUserImage(user_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.log("user error", error.message);
     }
@@ -219,6 +222,26 @@ const Post = ({ route }) => {
     }
   };
 
+  // 사용자 프로필 이미지 URL을 저장할 상태 변수
+  const [userProfileImages, setUserProfileImages] = useState({});
+  // 사용자 데이터와 함께 프로필 이미지 URL을 가져오는 함수
+  const getUserProfileImages = async () => {
+    try {
+      const imageUrls = {};
+      // 모든 사용자 데이터를 순회하며 프로필 이미지 URL을 가져옴
+      await Promise.all(
+        userImage.map(async (u) => {
+          const imageRef = storage().ref(u.profile_img); // 프로필 이미지 경로를 사용하여 이미지 참조
+          const url = await imageRef.getDownloadURL(); // 이미지 URL 가져오기
+          imageUrls[u.id] = url; // 사용자 ID를 키로하여 이미지 URL 저장
+        })
+      );
+      setUserProfileImages(imageUrls); // 상태 변수에 이미지 URL 저장
+    } catch (error) {
+      console.log("Error fetching user profile images:", error.message);
+    }
+  };
+
   const toggleBookmark = async (postId, isBookmarked) => {
     try {
       if (isBookmarked) {
@@ -257,7 +280,6 @@ const Post = ({ route }) => {
       console.error("UnBookmark post error:", error);
     }
   };
-
 
   //댓글 등록
   const commentSubmit = (e) => {
@@ -386,7 +408,10 @@ const Post = ({ route }) => {
             gap: 5,
           }}
         >
-          <Image source={item.profileImg} style={{ width: 32, height: 32 }} />
+          <Image
+            source={{ uri: userProfileImages[item.user_id] }}
+            style={{ width: 32, height: 32 }}
+          />
           <View>
             <Text style={{ fontSize: 14, color: "#000000" }}>
               {users.map((v, i) => {
@@ -453,10 +478,10 @@ const Post = ({ route }) => {
               gap: 6,
             }}
           >
-            {/* <Image
-              source={require(user.current?.profile_img)}
+            <Image
+              source={{ uri: profileImg }}
               style={{ width: 32, height: 32 }}
-            /> */}
+            />
             <Text style={{ marginBottom: 4, fontSize: 16, color: "#000000" }}>
               {user.current?.nickname}
             </Text>
