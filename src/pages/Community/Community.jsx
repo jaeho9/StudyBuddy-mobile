@@ -44,8 +44,8 @@ const Community = () => {
         const data = doc.data();
         const formattedDate = data.reg_date
           ? new Date(data.reg_date.seconds * 1000)
-              .toLocaleDateString("en-CA")
-              .replace(/-/g, ".")
+            .toLocaleDateString("en-CA")
+            .replace(/-/g, ".")
           : "날짜 없음";
         // Fetch members count
         const joinSnapshot = await firestore()

@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
-// Images
+
 const studybuddyIcon = require("assets/icons/home/studybuddy.png");
 
 const Splash = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate("Onboarding");
+      navigation.navigate("Onboarding1");
     }, 2000);
   }, [navigation]);
 

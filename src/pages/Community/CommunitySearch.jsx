@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  SafeAreaView
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import firestore from "@react-native-firebase/firestore";
@@ -60,8 +61,8 @@ const CommunitySearch = () => {
         const data = doc.data();
         const formattedDate = data.reg_date
           ? new Date(data.reg_date.seconds * 1000)
-              .toLocaleDateString("en-CA")
-              .replace(/-/g, ".")
+            .toLocaleDateString("en-CA")
+            .replace(/-/g, ".")
           : "날짜 없음";
         return {
           id: doc.id,
@@ -84,7 +85,7 @@ const CommunitySearch = () => {
     <TouchableOpacity
       style={styles.communityCard}
       onPress={() =>
-        navigation.navigate("CommunityDetails", { communityId: item.id })
+        navigation.navigate("CommunityPost", { communityId: item.id })
       }
     >
       <Text style={styles.communityTitle}>{item.title}</Text>
@@ -106,7 +107,7 @@ const CommunitySearch = () => {
   );
 
   return (
-    <View style={styles.root}>
+    <SafeAreaView style={styles.root}>
       <Header
         left={require("/assets/icons/Community/chevron_left.png")}
         leftClick={() => navigation.goBack()}
@@ -126,7 +127,7 @@ const CommunitySearch = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

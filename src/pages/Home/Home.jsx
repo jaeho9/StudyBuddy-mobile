@@ -117,11 +117,11 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     etc();
-    console.log(userBookmarks);
   }, [post]);
 
   useEffect(() => {
-    setTimeout(() => post_api, 1);
+    console.log("isFocused");
+    setTimeout(() => post_api(), 1);
     setTimeout(() => comment_api(), 1);
     modalSelectVisible.map((e, i) => {
       if (e === true) {
@@ -269,9 +269,21 @@ const Home = ({ navigation }) => {
     setModalSelectVisible(copiedModal);
   };
 
-  const onPressCommunityList = (item) => {
-    setCommunities(
-      communities.map((v, i) => {
+  // const deleteTrueVisible = () => {
+  //   setTimeout(() => {
+  //     deleteVisible.current = true;
+  //   }, 2000);
+  // };
+
+  // const deleteFalseVisible = () => {
+  //   setTimeout(() => {
+  //     deleteVisible.current = false;
+  //   }, 2000);
+  // };
+
+  const handleClickList = (item) => {
+    setJoinCommunity(
+      joinCommunity.map((v, i) => {
         if (v.isClick === true) {
           v.isClick = false;
         }
@@ -462,11 +474,7 @@ const Home = ({ navigation }) => {
 
     return (
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("Post", {
-            post_id: item.id,
-          })
-        }
+        // onPress={() => navigation.navigate("Post_Firebase")}
         style={{
           backgroundColor: "#fff",
           marginHorizontal: 20,

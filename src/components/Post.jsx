@@ -9,83 +9,39 @@ import {
 } from "react-native";
 
 export function PostList({ posts }) {
-  const heartOffIcon = require("assets/icons/archives/heart_off.png");
-  const heartOnIcon = require("assets/icons/archives/heart_on.png");
-  const commentOffIcon = require("assets/icons/archives/comment_off.png");
-  const commentOnIcon = require("assets/icons/archives/comment_on.png");
-  const bookmarkOnIcon = require("assets/icons/archives/bookmark_on.png");
-  const bookmarkOffIcon = require("assets/icons/archives/bookmark_off.png");
+  const BookmarkBorder = require("/assets/icons/Community/bookmark_border.png");
+  const FavoriteIcon = require("/assets/icons/Community/favorite.png");
+  const SmsIcon = require("/assets/icons/Community/sms.png");
   const ProfileImage = require("/assets/icons/Community/Profile.png");
 
   const renderItem = ({ item }) => (
     <View style={styles.root}>
       <View style={styles.profileContainer}>
-        <Image source={ProfileImage} style={{ width: 32, height: 32 }} />
+        <Image
+          source={ProfileImage}
+          style={{ width: 35.22, height: 33.72 }}
+          resizeMode="cover"
+        />
         <Text style={styles.usernameText}>{item.name}</Text>
         <Text style={styles.dateText}>{item.date}</Text>
       </View>
-
-      <View style={{ marginHorizontal: 40, gap: 8, marginTop: 8 }}>
-        <Text style={{ fontSize: 14, color: "#000000" }}>
-          1. 준비 기간 : {item.content1}
-        </Text>
-        <Text
-          numberOfLines={1}
-          ellipsizeMode="tail"
-          style={{ fontSize: 14, color: "#000000" }}
-        >
-          2. 교재 : {item.content2}
-        </Text>
-        <Text style={{ fontSize: 14, color: "#000000" }}>
-          3. 결과 : {item.content3}
-        </Text>
-      </View>
-
-      <View style={{ width: 24, height: 24 }} />
-      <View
-        style={{
-          flexDirection: "row",
-          position: "absolute",
-          right: 12,
-          bottom: 10,
-          gap: 12,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 3,
-          }}
-        >
-          <TouchableOpacity>
-            <Image source={heartOffIcon} style={{ width: 18, height: 18 }} />
-          </TouchableOpacity>
-          <Text style={{ color: "#BDBDBD" }}>{item.favorites}</Text>
+      <Text style={styles.contentText}>
+        {item.content1}
+        {"\n"}
+        {item.content2}
+        {"\n"}
+        {item.content3}
+      </Text>
+      <View style={styles.iconsContainer}>
+        <View style={styles.likesContainer}>
+          <Image source={FavoriteIcon} style={{ width: 24, height: 24 }} />
+          <Text style={styles.likeCountText}>{item.favorites}</Text>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 3,
-          }}
-        >
-          <TouchableOpacity>
-            <Image source={commentOffIcon} style={{ width: 18, height: 18 }} />
-          </TouchableOpacity>
-          <Text style={{ color: "#BDBDBD" }}>{item.comments}</Text>
+        <View style={styles.commentsContainer}>
+          <Image source={SmsIcon} style={{ width: 24, height: 24 }} />
+          <Text style={styles.commentCountText}>{item.comments}</Text>
         </View>
-        <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Image source={bookmarkOffIcon} style={{ width: 18, height: 18 }} />
-        </TouchableOpacity>
+        <Image source={BookmarkBorder} style={{ width: 24, height: 24 }} />
       </View>
     </View>
   );
@@ -95,8 +51,6 @@ export function PostList({ posts }) {
       data={posts}
       renderItem={renderItem}
       keyExtractor={(item, index) => item.id || String(index)} // id가 없는 경우 인덱스 사용
-      showsVerticalScrollIndicator={false}
-      removeClippedSubviews
     />
   );
 }
@@ -108,7 +62,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "rgba(189, 189, 189, 1)",
     borderBottomWidth: 1,
     backgroundColor: "rgba(255, 255, 255, 1)",
-    padding: 16,
+    padding: 10,
   },
   backgroundRectangle: {
     width: 137.541,
@@ -120,6 +74,7 @@ const styles = StyleSheet.create({
   profileContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 10,
   },
   imageContainer: {
     width: 137.541,

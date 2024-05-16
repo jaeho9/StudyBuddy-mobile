@@ -67,6 +67,7 @@ const Archives = ({ navigation }) => {
   const likeCollection = firestore().collection("like");
 
   // comment
+  const [comments, setComments] = useState([]);
   const [commentCounts, setCommentCounts] = useState([]);
   const commentCollection = firestore().collection("comment");
 
@@ -118,6 +119,8 @@ const Archives = ({ navigation }) => {
   useEffect(() => {
     etc();
   }, [bookmark]);
+
+  useEffect(() => {}, [communities]);
 
   useEffect(() => {
     setTimeout(() => post_api(), 1);
@@ -252,6 +255,7 @@ const Archives = ({ navigation }) => {
     setJoinCommunities(arr);
   };
 
+  // 준비 기간 일수
   const countDate = (start, end) => {
     let startDate = start.toDate();
     let endDate = end.toDate();
@@ -299,6 +303,10 @@ const Archives = ({ navigation }) => {
     setModalSelectVisible(copiedModal);
   };
 
+  const onPressLike = () => {
+    post_bookmark_api();
+  };
+
   const onPressCommunityList = (item) => {
     setCommunities(
       communities.map((v, i) => {
@@ -338,11 +346,11 @@ const Archives = ({ navigation }) => {
   //내가 북마크 누른 게시물이 보여짐
   const renderCommunityDetail = ({ item, index }) => {
     const postId = item.id;
+    const commentCount =
+      commentCounts.find((cc) => cc.postId === postId)?.count || 0;
     const likeCount = likeCounts.find((lc) => lc.postId === postId)?.count || 0;
     const isLiked =
       userLikes.find((ul) => ul.postId === postId)?.isLiked || false;
-    const commentCount =
-      commentCounts.find((cc) => cc.postId === postId)?.count || 0;
 
     return (
       <TouchableOpacity
@@ -459,7 +467,7 @@ const Archives = ({ navigation }) => {
               gap: 3,
             }}
           >
-            <TouchableOpacity onPress={() => toggleLike(postId)}>
+            <TouchableOpacity onPress={() => onPressLike(item)}>
               <Image
                 source={isLiked ? heartOnIcon : heartOffIcon}
                 style={{ width: 18, height: 18 }}

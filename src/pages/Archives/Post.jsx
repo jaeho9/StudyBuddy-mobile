@@ -9,6 +9,7 @@ import {
   TextInput,
   Dimensions,
   ScrollView,
+  KeyboardAvoidingView,
   Modal,
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
@@ -32,6 +33,8 @@ const bookmarkOnIcon = require("assets/icons/archives/bookmark_on.png");
 const bookmarkOffIcon = require("assets/icons/archives/bookmark_off.png");
 const moreIcon = require("assets/icons/archives/more.png");
 
+const { width, height } = Dimensions.get("window");
+
 const Post = ({ route }) => {
   //navigation
   const navigation = useNavigation();
@@ -42,8 +45,10 @@ const Post = ({ route }) => {
   const communityCollection = firestore().collection("community");
 
   //post
-  const { post_id } = route.params;
+  const { post_id, isBookmarked, likeCount, isLiked, commentCount } =
+    route.params;
   const post = useRef({});
+  const [postData, setPostData] = useState([]);
   const postCollection = firestore().collection("post");
 
   //user
@@ -59,6 +64,11 @@ const Post = ({ route }) => {
   const [comments, setComments] = useState([]);
   const commentCollection = firestore().collection("comment");
 
+  //bookmark
+  const [bookmarks, setBookmarks] = useState([]); // 북마크 데이터
+  const [userBookmarks, setUserBookmarks] = useState([]); // 사용자가 북마크한 게시물 정보
+  const bookmarkCollection = firestore().collection("bookmark");
+
   //custom modal
   var more = useRef([]);
   const [modalSelectVisible, setModalSelectVisible] = useState([]);
@@ -71,6 +81,7 @@ const Post = ({ route }) => {
     user_api();
     users_api();
     community_api();
+    bookmark_api();
     comment_api();
     setTimeout(
       () =>
@@ -88,9 +99,7 @@ const Post = ({ route }) => {
     );
   }, []);
 
-  useEffect(() => {
-    console.log(post.current);
-  }, [comments]);
+  useEffect(() => {}, [comments]);
 
   useEffect(() => {
     setTimeout(() => comment_api(), 1);
@@ -117,6 +126,10 @@ const Post = ({ route }) => {
             reg_date: changeDate(doc._data.reg_date).replaceAll(".", "-"),
             update_date: changeDate(doc._data.update_date).replaceAll(".", "-"),
           };
+
+          setPostData(
+            post_data._docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+          );
         }
       });
     } catch (error) {
@@ -181,6 +194,68 @@ const Post = ({ route }) => {
       setComments(arr);
     } catch (error) {
       console.log("comment error", error.message);
+    }
+  };
+
+  const bookmark_api = async () => {
+    try {
+      const bookmark_data = await bookmarkCollection.get();
+      const bookmarks = bookmark_data._docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      // 북마크 상태 확인
+      const userBookmarks = postData.map((p) => ({
+        postId: p.id,
+        isBookmark: bookmarks.some(
+          (l) => l.post_id === p.id && l.user_id === "SeDJYBVUGSjQGaWlzPmm"
+        ),
+      }));
+
+      setUserBookmarks(userBookmarks);
+      setBookmarks(bookmarks);
+    } catch (error) {
+      console.log("bookmark error", error.message);
+    }
+  };
+
+  const toggleBookmark = async (postId, isBookmarked) => {
+    try {
+      if (isBookmarked) {
+        await unBookmarkPost(postId);
+      } else {
+        await bookmarkPost(postId);
+      }
+
+      await bookmark_api();
+    } catch (error) {
+      console.error("Toggle bookmark error:", error);
+    }
+  };
+
+  const bookmarkPost = async (postId) => {
+    try {
+      await bookmarkCollection.add({
+        id: bookmarkCollection.id,
+        user_id: "SeDJYBVUGSjQGaWlzPmm",
+        post_id: postId,
+      });
+    } catch (error) {
+      console.error("Bookmark post error:", error);
+    }
+  };
+
+  const unBookmarkPost = async (postId) => {
+    try {
+      const bookmarkId = bookmarks.find(
+        (l) => l.post_id === postId && l.user_id === "SeDJYBVUGSjQGaWlzPmm"
+      )?.id;
+      if (bookmarkId) {
+        await bookmarkCollection.doc(bookmarkId).delete();
+      }
+    } catch (error) {
+      console.error("UnBookmark post error:", error);
     }
   };
 
@@ -365,71 +440,74 @@ const Post = ({ route }) => {
           borderTopRightRadius: 12,
         }}
       >
-        <View style={{ paddingTop: 15, paddingHorizontal: 27 }}>
-          <Text style={{ fontSize: 14, fontWeight: "bold", color: "#ff7474" }}>
+        <View style={{ paddingTop: 24, paddingHorizontal: 27 }}>
+          <Text style={{ fontSize: 16, fontWeight: "bold", color: "#ff7474" }}>
             {pre_community?.current.name}
           </Text>
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              marginTop: 8,
-              gap: 5,
+              marginTop: 16,
+              gap: 6,
             }}
           >
             {/* <Image
               source={require(user.current?.profile_img)}
               style={{ width: 32, height: 32 }}
             /> */}
-            <Text style={{ fontSize: 14, color: "#000000" }}>
+            <Text style={{ marginBottom: 4, fontSize: 16, color: "#000000" }}>
               {user.current?.nickname}
             </Text>
-            <Text style={{ fontSize: 10, color: "#969696" }}>
+            <Text style={{ fontSize: 12, color: "#969696" }}>
               {post.current?.update_date}
             </Text>
           </View>
-          <View style={{ marginTop: 11, gap: 7 }}>
-            <Text style={{ fontSize: 12, color: "#000000" }}>
+          <View style={{ marginTop: 12, gap: 7 }}>
+            <Text style={{ fontSize: 14, color: "#000000" }}>
               1. 준비 기간 : {post.current?.start_date} ~{" "}
               {post.current?.end_date}
             </Text>
-            <Text style={{ fontSize: 12, color: "#000000" }}>
+            <Text style={{ marginTop: 4, fontSize: 14, color: "#000000" }}>
               2. 교재 : {post.current?.book}
             </Text>
-            <Text style={{ fontSize: 12, color: "#000000" }}>
+            <Text style={{ marginTop: 4, fontSize: 14, color: "#000000" }}>
               3. 결과 : {post.current?.result}
             </Text>
             <View style={{ gap: 7 }}>
-              <Text style={{ fontSize: 12, color: "#000000" }}>
+              <Text style={{ marginTop: 4, fontSize: 14, color: "#000000" }}>
                 4. 공부 방법
               </Text>
-              <Text style={{ paddingLeft: 11, fontSize: 12, color: "#000000" }}>
+              <Text style={{ paddingLeft: 11, fontSize: 14, color: "#000000" }}>
                 {post.current?.study}
               </Text>
             </View>
           </View>
+
+          {post.current?.data && (
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 15,
+                padding: 6,
+                gap: 4,
+                borderWidth: 1,
+                borderColor: "#ddd",
+                borderRadius: 8,
+              }}
+            >
+              <Image source={fileIcon} style={{ width: 16, height: 16 }} />
+              <TouchableOpacity onPress={() => onPressData(post.current?.data)}>
+                <Text style={{ fontSize: 12, color: "#606060" }}>
+                  {post.current?.data}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
           <View
             style={{
               flexDirection: "row",
-              marginTop: 15,
-              padding: 6,
-              gap: 4,
-              borderWidth: 1,
-              borderColor: "#ddd",
-              borderRadius: 8,
-            }}
-          >
-            <Image source={fileIcon} style={{ width: 16, height: 16 }} />
-            <TouchableOpacity onPress={() => onPressData(post.current?.data)}>
-              <Text style={{ fontSize: 12, color: "#606060" }}>
-                {post.current?.data}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              marginVertical: 14,
+              marginVertical: 16,
               gap: 11,
             }}
           >
@@ -445,10 +523,13 @@ const Post = ({ route }) => {
               // onPress={() => handleClickHeart(post)}
               >
                 <Image
-                  source={heartOffIcon}
+                  source={isLiked ? heartOnIcon : heartOffIcon}
                   style={{ width: 18, height: 18 }}
                 />
               </TouchableOpacity>
+              <Text style={{ color: isLiked ? "#FF7474" : "#BDBDBD" }}>
+                {likeCount}
+              </Text>
             </View>
             <View
               style={{
@@ -460,16 +541,16 @@ const Post = ({ route }) => {
             >
               <TouchableOpacity>
                 <Image
-                  source={commentOffIcon}
+                  source={commentCount > 0 ? commentOnIcon : commentOffIcon}
                   style={{ width: 18, height: 18 }}
                 />
               </TouchableOpacity>
+              <Text style={{ color: commentCount > 0 ? "#606060" : "#BDBDBD" }}>
+                {commentCount}
+              </Text>
             </View>
             <TouchableOpacity
-              onPress={() => {
-                // handleClickBookmark(item.id);
-                handleClickBookmark();
-              }}
+              onPress={() => toggleBookmark(post_id, isBookmarked)}
               style={{
                 flexDirection: "row",
                 justifyContent: "center",
@@ -478,7 +559,7 @@ const Post = ({ route }) => {
             >
               <Image
                 // source={item.bookmark ? bookmarkOnIcon : bookmarkOffIcon}
-                source={bookmarkOnIcon}
+                source={isBookmarked ? bookmarkOnIcon : bookmarkOffIcon}
                 style={{ width: 18, height: 18 }}
               />
             </TouchableOpacity>
@@ -500,6 +581,7 @@ const Post = ({ route }) => {
             <FlatList
               data={comments}
               renderItem={renderComment}
+              nestedScrollEnabled={true}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
               removeClippedSubviews

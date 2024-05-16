@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import firestore from "@react-native-firebase/firestore";
@@ -156,7 +157,7 @@ const CommunityPost = () => {
     setIsSigned(true);
   };
   return (
-    <View style={styles.mainContainer}>
+    <SafeAreaView style={styles.mainContainer}>
       <Header
         left={left}
         leftClick={() => navigation.navigate("Community")}
@@ -220,24 +221,13 @@ const CommunityPost = () => {
       >
         {contentComponent}
       </ScrollView>
-      {/* Add 버튼 */}
-      <View
-        style={{
-          flex: 1,
-          alignItems: "flex-end",
-          justifyContent: "flex-end",
-          right: 0,
-          bottom: 20,
-          position: "absolute",
-          zIndex: 10,
-          marginRight: 12,
-        }}
+      <TouchableOpacity
+        style={styles.addFeedButton}
+        onPress={() => navigation.navigate("Add")}
       >
-        <TouchableOpacity onPress={() => navigation.navigate("Add")}>
-          <Image source={add} style={{ width: 72, height: 72 }} />
-        </TouchableOpacity>
-      </View>
-    </View>
+        <Image source={addfeed} style={styles.addFeedIcon} />
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 };
 
