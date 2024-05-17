@@ -7,7 +7,18 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
+
+const Header = ({
+  left,
+  title,
+  right,
+  leftClick,
+  rightClick,
+  isDuplicate,
+  isReadyToBook,
+  deleteMode,
+  onSave,
+}) => {
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -24,10 +35,10 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
         paddingHorizontal: 18,
         borderBottomWidth: 1,
         borderBottomColor: "#dddddd",
-        backgroundColor: '#fff'
+        backgroundColor: "#fff",
       }}
     >
-      <TouchableOpacity onPress={() => navigation.navigate(leftClick)}>
+      <TouchableOpacity onPress={leftClick}>
         {left ? (
           <Image source={left} style={{ width: 24, height: 24 }} />
         ) : (
@@ -50,8 +61,24 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
           <Image source={title} style={{ width: 40, height: 40 }} />
         )}
       </TouchableOpacity>
+
       <TouchableOpacity
-        onPress={() => rightClick && navigation.navigate(rightClick)}
+        // onPress={() => {
+        //   if (onSave) {
+        //     onSave();
+        //     navigation.goBack();
+        //   } else if (rightClick) {
+        //     return rightClick;
+        //   }
+        // }}
+        onPress={
+          onSave
+            ? () => {
+                onSave();
+                navigation.goBack();
+              }
+            : rightClick
+        }
       >
         {right ? (
           typeof right === "string" ? (
@@ -59,7 +86,10 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
               style={{
                 fontSize: 16,
                 fontWeight: "bold",
-                color: isDuplicate ? "#FF7474" : "#bdbdbd", // isDuplicate 상태에 따라 색상 변경
+                color:
+                  !isDuplicate || isReadyToBook || deleteMode
+                    ? "#FF7474"
+                    : "#bdbdbd", // isDuplicate 상태에 따라 색상 변경
               }}
             >
               {right}
@@ -74,4 +104,4 @@ const header = ({ left, title, right, leftClick, rightClick, isDuplicate }) => {
     </View>
   );
 };
-export default header;
+export default Header;
