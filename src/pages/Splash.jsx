@@ -6,7 +6,7 @@ const studybuddyIcon = require("assets/icons/home/studybuddy.png");
 const Splash = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate("Onboarding1");
+      navigation.navigate("Onboarding");
     }, 2000);
   }, [navigation]);
 

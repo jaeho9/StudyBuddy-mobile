@@ -255,7 +255,7 @@ const Add = ({ navigation, route }) => {
   const rightClick = async () => {
     if (isReadyToAddFeed) {
       await post_update_api();
-      navigation.navigate("Archives");
+      navigation.goBack();
     } else {
       console.log(
         "else",

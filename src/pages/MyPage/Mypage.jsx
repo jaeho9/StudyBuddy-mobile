@@ -13,22 +13,23 @@ import MiddleTab from "components/Tab/MiddleTab"; // MiddleTab 컴포넌트 임�
 import { MyPagePostList } from "components/List/MyPagePostList";
 import { MyPagePostList_heart } from "components/List/MyPagePostList_heart";
 import { MyPagePostList_comment } from "components/List/MyPagePostList_comment";
-
+import { useIsFocused } from "@react-navigation/native";
 import firestore from "@react-native-firebase/firestore"; // firestore
 
 const menuIcon = require("assets/icons/home/menu.png");
 const settings = require("assets/icons/mypage/settings.png");
 const link = require("assets/icons/mypage/link.png");
 const calendar = require("assets/icons/mypage/calendar.png");
-const MyPageProfile = require("assets/icons/mypage/MyPageProfile.png");
+const MyPageProfile = require("assets/icons/mypage/profile3.png");
 
 const loggedInUserId = "Gsh6TJg50rswXPGaA7Zk";
 
-const Mypage = ({ }) => {
+const Mypage = ({}) => {
   //user
   const [user, setUser] = useState([]);
   const [dummyData, setDummyData] = useState({});
   const userCollection = firestore().collection("user");
+  const isFocused = useIsFocused();
 
   const user_api = async () => {
     try {
@@ -55,7 +56,7 @@ const Mypage = ({ }) => {
   useEffect(() => {
     // 컴포넌트가 처음으로 렌더링될 때 사용자 데이터를 가져옴
     user_api();
-  }, []); // 빈 배열을 전달하여 컴포넌트가 처음으로 렌더링될 때 한 번만 실행되도록 함
+  }, [isFocused]); // 빈 배열을 전달하여 컴포넌트가 처음으로 렌더링될 때 한 번만 실행되도록 함
 
   const navigation = useNavigation();
   const [selectedTab, setSelectedTab] = useState(0);
@@ -79,7 +80,7 @@ const Mypage = ({ }) => {
         title={"MyPage"}
         right={settings}
         leftClick={"Home"}
-        rightClick={"Settings"}
+        rightClick={() => navigation.navigate("Settings")}
       />
       <View style={{ borderBottomWidth: 1, borderBottomColor: "#ddd" }}>
         <View
@@ -90,7 +91,6 @@ const Mypage = ({ }) => {
           }}
         >
           <View style={styles.Profilecontainer}>
-            {/* <Image source={dummyData.profileImage} /> */}
             <Image source={MyPageProfile} />
           </View>
           <View style={styles.ProfileTextcontainer}>

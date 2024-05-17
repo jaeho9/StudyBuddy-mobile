@@ -11,11 +11,13 @@ import {
 
 import DeleteConfirmationModal from "components/Modal/DeleteConfirmationModal";
 import firestore from "@react-native-firebase/firestore";
+import { useIsFocused } from "@react-navigation/native";
 
 const BookmarkBorder = require("assets/icons/mypage/PostListIcon/bookmark_border.png");
 const FavoriteIcon = require("assets/icons/mypage/PostListIcon/favorite_border.png");
 const SmsIcon = require("assets/icons/mypage/PostListIcon/sms.png");
-const ProfileImage = require("assets/icons/mypage/PostListIcon/Profile.png");
+// const ProfileImage = require("assets/icons/mypage/PostListIcon/Profile.png");
+const ProfileImage = require("assets/icons/mypage/profile3.png");
 const morehoriz = require("assets/icons/mypage/PostListIcon/morehoriz.png");
 const close = require("assets/icons/mypage/PostListIcon/close.png");
 const mode = require("assets/icons/mypage/PostListIcon/mode.png");
@@ -31,12 +33,13 @@ export function MyPagePostList({ data }) {
   const communityCollection = firestore().collection("community");
   const [user, setUser] = useState([]);
   const userCollection = firestore().collection("user");
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     user_api();
     community_api();
     post_api();
-  }, []);
+  }, [isFocused]);
 
   const user_api = async () => {
     try {

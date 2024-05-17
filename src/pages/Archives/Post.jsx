@@ -45,7 +45,14 @@ const Post = ({ route }) => {
   const communityCollection = firestore().collection("community");
 
   //post
-  const { post_id, isBookmarked, likeCount, isLiked, commentCount, profileImg } = route.params;
+  const {
+    post_id,
+    isBookmarked,
+    likeCount,
+    isLiked,
+    commentCount,
+    profileImg,
+  } = route.params;
   const post = useRef({});
   const [postData, setPostData] = useState([]);
   const postCollection = firestore().collection("post");
@@ -100,7 +107,7 @@ const Post = ({ route }) => {
     );
   }, []);
 
-  useEffect(() => { }, [comments]);
+  useEffect(() => {}, [comments]);
 
   useEffect(() => {
     setTimeout(() => comment_api(), 1);
@@ -158,7 +165,9 @@ const Post = ({ route }) => {
           };
         }
       });
-      setUserImage(user_data._docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setUserImage(
+        user_data._docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
     } catch (error) {
       console.log("user error", error.message);
     }
@@ -291,7 +300,7 @@ const Post = ({ route }) => {
       .set({
         id: commentRef.id,
         post_id: post_id,
-        user_id: "SeDJYBVUGSjQGaWlzPmm",
+        user_id: "Gsh6TJg50rswXPGaA7Zk",
         comment: comment,
         reg_date: today,
         update_date: today,
@@ -435,7 +444,7 @@ const Post = ({ route }) => {
               borderColor: "rgba(0,0,0,0)",
             }}
           >
-            {item.user_id === "SeDJYBVUGSjQGaWlzPmm" && (
+            {item.user_id === "Gsh6TJg50rswXPGaA7Zk" && (
               <Image source={moreIcon} style={{ width: 24, height: 24 }} />
             )}
           </TouchableOpacity>

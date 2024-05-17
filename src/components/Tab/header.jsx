@@ -61,14 +61,25 @@ const Header = ({
           <Image source={title} style={{ width: 40, height: 40 }} />
         )}
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => {
-        if (onSave) {
-          onSave();
-          navigation.goBack();
-        } else if (rightClick) {
-          navigation.navigate(rightClick);
+
+      <TouchableOpacity
+        // onPress={() => {
+        //   if (onSave) {
+        //     onSave();
+        //     navigation.goBack();
+        //   } else if (rightClick) {
+        //     return rightClick;
+        //   }
+        // }}
+        onPress={
+          onSave
+            ? () => {
+                onSave();
+                navigation.goBack();
+              }
+            : rightClick
         }
-      }}>
+      >
         {right ? (
           typeof right === "string" ? (
             <Text

@@ -7,7 +7,7 @@ import {
   Image,
   StyleSheet,
   TextInput,
-  Alert
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // 네비게이션 훅 가져오기
 import Header from "components/Tab/Header";
@@ -20,7 +20,7 @@ const settings = require("assets/icons/mypage/settings.png");
 const error_red = require("assets/icons/mypage/error_red.png");
 const error_blue = require("assets/icons/mypage/error_blue.png");
 const MyPageProfile = require("assets/icons/mypage/MyPageProfile.png");
-const loggedInUserId = "SeDJYBVUGSjQGaWlzPmm";
+const loggedInUserId = "Gsh6TJg50rswXPGaA7Zk";
 
 const EditProfile = () => {
   const navigation = useNavigation();

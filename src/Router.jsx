@@ -76,7 +76,7 @@ const Router = () => {
       screenOptions={{ headerShown: false }}
     >
       {/* Login */}
-      {/* <Stack.Screen name="Splash" component={Splash} />
+      <Stack.Screen name="Splash" component={Splash} />
       <Stack.Screen name="Onboarding" component={Onboarding} />
       <Stack.Screen name="Start" component={Start} />
       <Stack.Screen name="Signup1" component={Signup1} />
@@ -84,7 +84,8 @@ const Router = () => {
       <Stack.Screen name="Signup3" component={Signup3} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Account" component={Account} />
-      <Stack.Screen name="Password" component={Password} /> */}
+      <Stack.Screen name="Password" component={Password} />
+
       {/* MainTab */}
       <Stack.Screen name="MainTab" component={MainTab} />
       {/* Home */}

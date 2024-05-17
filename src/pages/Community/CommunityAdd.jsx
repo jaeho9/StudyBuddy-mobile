@@ -53,7 +53,7 @@ const CommunityAdd = () => {
           id: newDocRef.id,
           ...newCommunity,
           reg_date: formattedDate,
-          user_id: "1vfLu0QlpF6ZVigXb1GE",
+          user_id: "Gsh6TJg50rswXPGaA7Zk",
         });
 
         console.log("Community successfully added with ID:", newDocRef.id);

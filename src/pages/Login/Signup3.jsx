@@ -15,7 +15,7 @@ const backIcon = require("assets/icons/home/back.png");
 
 const existingData = {
   nickname: "testuser",
-  email: "test@example.com"
+  email: "test1@example.com",
 };
 
 const checkExistingData = async (nickname, email) => {
@@ -123,7 +123,10 @@ const Signup3 = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
-      <Header left={backIcon} leftClick={() => navigation.navigate("Signup2")} />
+      <Header
+        left={backIcon}
+        leftClick={() => navigation.navigate("Signup2")}
+      />
       <KeyboardAwareScrollView>
         <View style={styles.container}>
           <View>
@@ -140,11 +143,19 @@ const Signup3 = ({ navigation }) => {
                 value={nickname}
                 onFocus={() => setCurrentFocus("nickname")}
               />
-              {nicknameError && (currentFocus === "nickname" || !email.trim()) && (
-                <Text style={[styles.errorText, nicknameError === "사용 가능한 닉네임입니다." ? styles.successText : null]}>
-                  {nicknameError}
-                </Text>
-              )}
+              {nicknameError &&
+                (currentFocus === "nickname" || !email.trim()) && (
+                  <Text
+                    style={[
+                      styles.errorText,
+                      nicknameError === "사용 가능한 닉네임입니다."
+                        ? styles.successText
+                        : null,
+                    ]}
+                  >
+                    {nicknameError}
+                  </Text>
+                )}
               <TextInput
                 style={styles.input}
                 placeholder="이메일 입력"
@@ -153,7 +164,14 @@ const Signup3 = ({ navigation }) => {
                 onFocus={() => setCurrentFocus("email")}
               />
               {emailError && (currentFocus === "email" || !nickname.trim()) && (
-                <Text style={[styles.errorText, emailError === "사용 가능한 이메일입니다." ? styles.successText : null]}>
+                <Text
+                  style={[
+                    styles.errorText,
+                    emailError === "사용 가능한 이메일입니다."
+                      ? styles.successText
+                      : null,
+                  ]}
+                >
                   {emailError}
                 </Text>
               )}

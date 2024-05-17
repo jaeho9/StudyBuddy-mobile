@@ -324,10 +324,6 @@ const Archives = ({ navigation }) => {
     setModalSelectVisible(copiedModal);
   };
 
-  const onPressLike = () => {
-    post_bookmark_api();
-  };
-
   const onPressCommunityList = (item) => {
     setCommunities(
       communities.map((v, i) => {
@@ -468,7 +464,7 @@ const Archives = ({ navigation }) => {
             borderColor: "rgba(0,0,0,0)",
           }}
         >
-          {item.user_id === "SeDJYBVUGSjQGaWlzPmm" && (
+          {item.user_id === "Gsh6TJg50rswXPGaA7Zk" && (
             <Image source={moreIcon} style={{ width: 24, height: 24 }} />
           )}
         </TouchableOpacity>
@@ -491,7 +487,7 @@ const Archives = ({ navigation }) => {
               gap: 3,
             }}
           >
-            <TouchableOpacity onPress={() => onPressLike(item)}>
+            <TouchableOpacity onPress={() => toggleLike(postId)}>
               <Image
                 source={isLiked ? heartOnIcon : heartOffIcon}
                 style={{ width: 18, height: 18 }}
@@ -537,7 +533,7 @@ const Archives = ({ navigation }) => {
   const renderCommunityListClick = ({ item, index }) => {
     return bookmark?.map((a, b) => {
       var detail;
-      if (item.id === a.post_id && a.user_id === "SeDJYBVUGSjQGaWlzPmm") {
+      if (item.id === a.post_id && a.user_id === "Gsh6TJg50rswXPGaA7Zk") {
         communities?.map((c, d) => {
           if (c.isClick === true && c.community_name === "전체") {
             detail = renderCommunityDetail({ item, index });

@@ -1,7 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, TextInput, Alert, Image, Linking } from 'react-native';
-import Header from 'components/Tab/Header';
-import { signIn } from '../lib/auth';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  TextInput,
+  Alert,
+  Image,
+  Linking,
+} from "react-native";
+import Header from "components/Tab/Header";
+// import { signIn } from '../lib/auth';
 
 const backIcon = require("assets/icons/home/back.png");
 const googleIcon = require("assets/icons/signupandlogin/google.png");
@@ -32,11 +42,11 @@ const Login = ({ navigation }) => {
     } else if (!password) {
       setErrorMessages("비밀번호를 입력하세요.");
     } else if (email === DUMMY_EMAIL && password === DUMMY_PASSWORD) {
-      navigation.navigate("Home");
+      navigation.navigate("MainTab");
     } else {
       try {
         await signIn({ email, password });
-        navigation.navigate("Home");
+        navigation.navigate("MainTab");
       } catch (error) {
         Alert.alert("로그인에 실패하였습니다.");
       }

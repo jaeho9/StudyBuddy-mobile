@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import firestore from "@react-native-firebase/firestore";
+import storage from "@react-native-firebase/storage";
 import Header from "components/Tab/Header";
 import MiddleTab from "components/Tab/MiddleTab";
 import CommunityRulesAndMembers from "components/Community/CommunityRulesandMembers";
@@ -222,12 +223,23 @@ const CommunityPost = () => {
       >
         {contentComponent}
       </ScrollView>
-      <TouchableOpacity
-        style={styles.addFeedButton}
-        onPress={() => navigation.navigate("Add")}
+      {/* Add 버튼 */}
+      <View
+        style={{
+          flex: 1,
+          alignItems: "flex-end",
+          justifyContent: "flex-end",
+          right: 0,
+          bottom: 20,
+          position: "absolute",
+          zIndex: 10,
+          marginRight: 12,
+        }}
       >
-        <Image source={addfeed} style={styles.addFeedIcon} />
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Add")}>
+          <Image source={add} style={{ width: 72, height: 72 }} />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

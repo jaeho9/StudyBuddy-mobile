@@ -43,7 +43,6 @@ const Home = ({ navigation }) => {
     setSort(value);
   };
 
-
   //post
   const [post, setPost] = useState([]);
   const postCollection = firestore().collection("post");
@@ -119,7 +118,8 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     etc();
-  }, [post]);
+    console.log(userProfileImages);
+  }, [post, userProfileImages]);
 
   useEffect(() => {
     console.log("isFocused");
@@ -188,7 +188,7 @@ const Home = ({ navigation }) => {
       const userBookmarks = post.map((p) => ({
         postId: p.id,
         isBookmark: bookmarks.some(
-          (l) => l.post_id === p.id && l.user_id === "SeDJYBVUGSjQGaWlzPmm"
+          (l) => l.post_id === p.id && l.user_id === "Gsh6TJg50rswXPGaA7Zk"
         ),
       }));
 
@@ -217,7 +217,7 @@ const Home = ({ navigation }) => {
       const userLikes = post.map((p) => ({
         postId: p.id,
         isLiked: likes.some(
-          (l) => l.post_id === p.id && l.user_id === "SeDJYBVUGSjQGaWlzPmm"
+          (l) => l.post_id === p.id && l.user_id === "Gsh6TJg50rswXPGaA7Zk"
         ),
       }));
 
@@ -304,9 +304,9 @@ const Home = ({ navigation }) => {
   //   }, 2000);
   // };
 
-  const handleClickList = (item) => {
-    setJoinCommunity(
-      joinCommunity.map((v, i) => {
+  const onPressCommunityList = (item) => {
+    setCommunities(
+      communities.map((v, i) => {
         if (v.isClick === true) {
           v.isClick = false;
         }
@@ -387,7 +387,7 @@ const Home = ({ navigation }) => {
   const unlikePost = async (postId) => {
     try {
       const likeId = likes.find(
-        (l) => l.post_id === postId && l.user_id === "SeDJYBVUGSjQGaWlzPmm"
+        (l) => l.post_id === postId && l.user_id === "Gsh6TJg50rswXPGaA7Zk"
       )?.id;
       if (likeId) {
         await likeCollection.doc(likeId).delete();
@@ -429,7 +429,7 @@ const Home = ({ navigation }) => {
   const unBookmarkPost = async (postId) => {
     try {
       const bookmarkId = bookmarks.find(
-        (l) => l.post_id === postId && l.user_id === "SeDJYBVUGSjQGaWlzPmm"
+        (l) => l.post_id === postId && l.user_id === "Gsh6TJg50rswXPGaA7Zk"
       )?.id;
       if (bookmarkId) {
         await bookmarkCollection.doc(bookmarkId).delete();
@@ -442,7 +442,7 @@ const Home = ({ navigation }) => {
   etc = () => {
     let arr = [];
     join.map((v, i) => {
-      if (v.user_id === "SeDJYBVUGSjQGaWlzPmm") {
+      if (v.user_id === "Gsh6TJg50rswXPGaA7Zk") {
         community.map((a, b) => {
           if (a.community_id === v.community_id) {
             arr.push({
@@ -502,9 +502,11 @@ const Home = ({ navigation }) => {
             post_id: item.id,
             likeCount: likeCounts.find((lc) => lc.postId === postId)?.count,
             isLiked: userLikes.find((ul) => ul.postId === postId)?.isLiked,
-            isBookmark: userBookmarks.find((ul) => ul.postId === postId)?.isBookmark,
-            profileImg: userProfileImages[item.user_id]
-          })}
+            isBookmark: userBookmarks.find((ul) => ul.postId === postId)
+              ?.isBookmark,
+            profileImg: userProfileImages[item.user_id],
+          })
+        }
         style={{
           backgroundColor: "#fff",
           marginHorizontal: 20,
@@ -596,7 +598,7 @@ const Home = ({ navigation }) => {
             borderColor: "rgba(0,0,0,0)",
           }}
         >
-          {item.user_id !== "SeDJYBVUGSjQGaWlzPmm" && (
+          {item.user_id === "Gsh6TJg50rswXPGaA7Zk" && (
             <Image source={moreIcon} style={{ width: 24, height: 24 }} />
           )}
         </TouchableOpacity>
