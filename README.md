@@ -12,7 +12,10 @@
 - ⭐ **커뮤니티**: 시험 또는 학습 분야에 대해 관심이 있는 다른 사용자들과 함께 커뮤니티에 가입할 수 있습니다.
 - ⭐ **자료 저장**: 특정 자료를 보고 나중에 다시 확인하고 싶을 때를 위해 북마크 기능을 추가할 수 있습니다.
 
+<br />
+
 🔥**프로젝트 기획서**: https://billowy-singer-131.notion.site/5-Study-Buddy-314685f8ae1b484eaf47dd91fceb7c22
+🔥**발표 자료**: https://www.canva.com/design/DAGFRL8bfw8/6wkQwIV02tEJaKG0Eo8gXw/view?utm_content=DAGFRL8bfw8&utm_campaign=share_your_design&utm_medium=link&utm_source=shareyourdesignpanel#1
 
 <br/><br/><br/>
 
