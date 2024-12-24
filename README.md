@@ -15,6 +15,7 @@
 <br />
 
 🔥**프로젝트 기획서**: https://billowy-singer-131.notion.site/5-Study-Buddy-314685f8ae1b484eaf47dd91fceb7c22
+<br />
 🔥**발표 자료**: https://www.canva.com/design/DAGFRL8bfw8/6wkQwIV02tEJaKG0Eo8gXw/view?utm_content=DAGFRL8bfw8&utm_campaign=share_your_design&utm_medium=link&utm_source=shareyourdesignpanel#1
 
 <br/><br/><br/>
