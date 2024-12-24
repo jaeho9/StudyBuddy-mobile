@@ -40,11 +40,15 @@
 
 **Development**
 <br/>
-<img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img  src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src="https://img.shields.io/badge/react native-black?style=for-the-badge&logo=react&logoColor=61DAFB"> <img  src="https://img.shields.io/badge/firebase-DD2C00?style=for-the-badge&logo=firebase&logoColor=white"> <img  src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
+<img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img  src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src="https://img.shields.io/badge/react-black?style=for-the-badge&logo=react&logoColor=61DAFB"> <img src="https://img.shields.io/badge/react query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white"> <img  src="https://img.shields.io/badge/supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white"> <img  src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
 
 **Communication**
 <br/>
 <img src="https://img.shields.io/badge/SLACK-4A154B?style=for-the-badge&logo=slack&logoColor=white"> <img src="https://img.shields.io/badge/NOTION-black?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/DISCORD-5865F2?style=for-the-badge&logo=discord&logoColor=white">
+
+**Deployment**
+<br/>
+<img src="https://img.shields.io/badge/vercel-000000?style=for-the-badge&logo=vercel&logoColor=white">
 
 <br/><br/>
 
@@ -282,15 +286,19 @@
 3. **북마크 추가**: 커뮤니티 상세 페이지에서 북마크 아이콘을 클릭하여 게시글을 추가할 수 있으며 Bookmarks 페이지에 나열되어 쉽게 관리할 수 있습니다.
 4. **북마크 해제**: 해제 시 해당 게시글이 즉시 북마크 목록에서 제거됩니다.
    <br/>
-   
+
+### MyPage 기능
+- 사용자가 **업로드한** 게시물을 보여줌.
+- 사용자가 **좋아요를 누른** 게시물을 보여줌.
+- 사용자가 **댓글을 단** 게시물을 보여줌.
+- 게시물 **삭제하기**를 누르면 해당 게시물을 삭제함.
+- 게시물 **수정하기**를 누르면 게시물 수정 페이지로 이동.
+   <br />
+
 ### Profile
-1. **사용자 프로필**: 사용자 닉네임, 한 줄 소개, 생일, 활동 탭 정보를 확인할 수 있으며, 프로필 수정 버튼을 통해 정보를 변경할 수 있습니다.
-<br />
-
-2. **프로필 수정**: 프로필 사진, 닉네임, 한 줄 소개, 생일을 수정할 수 있는 폼(Form)이 제공됩니다.
-<br />
-
-3. **다른 사용자 프로필**: 상세 게시글에서 프로필을 클릭하면, 해당 사용자의 닉네임, 한 줄 소개, 생일, 활동 탭 정보를 확인할 수 있습니다.
+- 닉네임 입력 시 **중복 여부** 판별 후 안내 메시지를 보여줌
+- 닉네임, 자기소개 , 생년월일 , 링크 입력시 MyPage 의 프로필에 입력한 정보 **추가** 또는 **갱신**.
+- 사진 수정 버튼 클릭시 라이브러리에서 사진 가져와서 **프로필 사진 수정**
 <br />
 
 ### Post
